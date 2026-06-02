@@ -34,12 +34,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1100px; margin: 0 auto; }
 
-        /* Header */
         .header {
             display: flex;
             align-items: center;
@@ -48,11 +44,7 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .brand { display: flex; align-items: center; gap: 10px; }
         .brand h1 {
             font-size: 1.6rem;
             font-weight: 700;
@@ -61,7 +53,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .logout-btn {
+        .logout-btn, .update-progress-btn {
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             color: var(--text-secondary);
@@ -71,18 +63,20 @@
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition);
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
+        .logout-btn:hover { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; }
+        .update-progress-btn {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.2);
+            color: #d8b4fe;
+            margin-right: 8px;
         }
+        .update-progress-btn:hover { background: rgba(168, 85, 247, 0.2); }
 
-        /* Navbar */
         .navbar {
             display: flex;
             flex-wrap: wrap;
@@ -110,15 +104,13 @@
             gap: 6px;
             letter-spacing: 0.3px;
         }
-        .nav-link:hover,
-        .nav-link.active {
+        .nav-link:hover, .nav-link.active {
             background: rgba(168, 85, 247, 0.12);
             border-color: rgba(168, 85, 247, 0.3);
             color: #d8b4fe;
             box-shadow: 0 0 12px rgba(168, 85, 247, 0.1);
         }
 
-        /* Card */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -129,25 +121,10 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
             overflow-x: auto;
         }
+        .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.2px; }
 
-        .card h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 18px;
-            letter-spacing: -0.2px;
-        }
-
-        /* Table */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: var(--radius-md);
-        }
-        table {
-            width: 100%;
-            min-width: 850px;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
+        .table-wrapper { overflow-x: auto; border-radius: var(--radius-md); }
+        table { width: 100%; min-width: 850px; border-collapse: collapse; font-size: 0.85rem; }
         th {
             text-align: left;
             color: var(--text-secondary);
@@ -158,14 +135,9 @@
             padding: 12px 10px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        td {
-            padding: 14px 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            vertical-align: middle;
-        }
+        td { padding: 14px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
 
-        /* Status Badge */
         .status {
             display: inline-block;
             padding: 4px 12px;
@@ -180,23 +152,9 @@
         .status.belum-mulai { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.2); }
         .status.selesai { background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); }
 
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            max-width: 120px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #a855f7, #7c3aed);
-            transition: width 0.4s;
-        }
+        .progress-container { width: 100%; max-width: 120px; height: 6px; background: rgba(255, 255, 255, 0.06); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #a855f7, #7c3aed); transition: width 0.4s; }
 
-        /* Edit Button */
         .edit-btn {
             background: none;
             border: 1px solid rgba(255,255,255,0.1);
@@ -219,6 +177,14 @@
 
         .pembayaran-badge { color: #a3e635; font-weight: 500; font-size: 0.8rem; }
 
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
         @media (max-width: 600px) {
             .header { flex-direction: column; align-items: flex-start; }
             .navbar { gap: 6px; }
@@ -228,24 +194,23 @@
     </style>
 </head>
 <body>
+    <div class="toast" id="toast"></div>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <div class="brand">
                 <span style="font-size:1.8rem;">🎮</span>
                 <h1>OGURI STORE</h1>
             </div>
-            <button class="logout-btn" id="logoutBtn">
-                <span>🚪</span> Logout
-            </button>
+            <div style="display: flex; align-items: center;">
+                <button class="update-progress-btn" id="updateProgressBtn" style="display: none;">🔄 Perbarui Progress</button>
+                <button class="logout-btn" id="logoutBtn">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="navbar" id="navbar">
-            <!-- Menu akan diisi oleh JS berdasarkan role -->
-        </nav>
+        <nav class="navbar" id="navbar"></nav>
 
-        <!-- Dashboard Joki Progress -->
         <div class="card">
             <h2>📋 Progres Joki</h2>
             <div class="table-wrapper">
@@ -272,30 +237,31 @@
 
     <script>
         (function() {
+            // --- Toast ---
+            const toast = document.getElementById('toast');
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
             // --- Cek login & role ---
             let currentUser = null;
             try {
                 currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
             } catch(e) {}
             if (!currentUser) {
-                // Jika belum login, redirect ke login
                 window.location.href = 'index.html';
                 return;
             }
-
             const isAdmin = currentUser.role === 'admin';
 
-            // --- Data joki dari localStorage ---
-            const JOKI_DATA_KEY = 'shiroha_joki_data';
-            function getJokiData() {
-                try {
-                    return JSON.parse(localStorage.getItem(JOKI_DATA_KEY)) || [];
-                } catch(e) {
-                    return [];
-                }
+            // --- Tampilkan tombol "Perbarui Progress" hanya untuk admin ---
+            if (isAdmin) {
+                document.getElementById('updateProgressBtn').style.display = 'inline-flex';
             }
 
-            // --- Render Navigasi ---
+            // --- Navigasi ---
             const navbar = document.getElementById('navbar');
             const menuItems = [
                 { href: 'detail-akun.html', icon: '👤', text: 'Detail Akun' },
@@ -307,45 +273,41 @@
                 { href: 'struk.html', icon: '🧾', text: 'Struk' },
                 { href: 'transaksi.html', icon: '💳', text: 'Transaksi' }
             ];
-
-            // Tambahkan pengaturan hanya jika admin
             if (isAdmin) {
                 menuItems.push({ href: 'pengaturan.html', icon: '⚙️', text: 'Pengaturan' });
             }
-
-            navbar.innerHTML = menuItems.map(item =>
-                `<a href="${item.href}" class="nav-link">${item.icon} ${item.text}</a>`
-            ).join('');
+            navbar.innerHTML = menuItems.map(item => `<a href="${item.href}" class="nav-link">${item.icon} ${item.text}</a>`).join('');
 
             // --- Logout ---
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 localStorage.removeItem('shiroha_currentUser');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             });
 
-            // --- Filter data joki berdasarkan user ---
-            const allData = getJokiData();
-            let filteredData;
-            if (isAdmin) {
-                // Admin melihat semua data
-                filteredData = allData;
-            } else {
-                // User hanya melihat data miliknya
-                filteredData = allData.filter(j => j.userId === currentUser.id);
+            // --- Data Joki ---
+            const JOKI_DATA_KEY = 'shiroha_joki_data';
+            function getJokiData() {
+                try { return JSON.parse(localStorage.getItem(JOKI_DATA_KEY)) || []; }
+                catch(e) { return []; }
+            }
+            function saveJokiData(data) {
+                localStorage.setItem(JOKI_DATA_KEY, JSON.stringify(data));
             }
 
-            // --- Render Tabel ---
-            const tableBody = document.getElementById('tableBody');
-            const editColHeader = document.getElementById('editColHeader');
+            function renderTable() {
+                const allData = getJokiData();
+                const filteredData = isAdmin ? allData : allData.filter(j => j.userId === currentUser.id);
+                const tableBody = document.getElementById('tableBody');
+                const editColHeader = document.getElementById('editColHeader');
 
-            // Tampilkan/sembunyikan kolom edit
-            if (!isAdmin) {
-                editColHeader.style.display = 'none';
-            }
+                if (!isAdmin) editColHeader.style.display = 'none';
+                else editColHeader.style.display = '';
 
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Belum ada data joki.</td></tr>';
-            } else {
+                if (filteredData.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Belum ada data joki.</td></tr>';
+                    return;
+                }
+
                 tableBody.innerHTML = filteredData.map(joki => {
                     const statusClass = {
                         'sedang': 'sedang-joki',
@@ -359,8 +321,6 @@
                         'belum_mulai': 'Belum Mulai',
                         'selesai': 'Selesai'
                     }[joki.status] || 'Belum Mulai';
-
-                    // Untuk pembayaran, kita bisa set default 'Lunas' atau ambil dari data jika ada
                     const pembayaran = joki.pembayaran || 'Lunas ✓';
                     const pembayaranClass = pembayaran.includes('Lunas') ? 'pembayaran-badge' : '';
 
@@ -383,24 +343,28 @@
                     `;
                 }).join('');
 
-                // Jika admin, pasang event listener untuk tombol edit
+                // Event: Edit status (admin)
                 if (isAdmin) {
                     document.querySelectorAll('.edit-btn').forEach(btn => {
                         btn.addEventListener('click', function() {
-                            const jokiId = this.dataset.id;
-                            // Untuk demo: tampilkan prompt edit sederhana
-                            const newStatus = prompt('Ubah status (sedang/istirahat/belum_mulai/selesai):');
+                            const id = this.dataset.id;
+                            const allJoki = getJokiData();
+                            const target = allJoki.find(j => j.id == id);
+                            if (!target) return;
+                            const newStatus = prompt('Ubah status (sedang/istirahat/belum_mulai/selesai):', target.status);
                             if (newStatus && ['sedang','istirahat','belum_mulai','selesai'].includes(newStatus)) {
-                                // Update di localStorage
-                                const allJoki = getJokiData();
-                                const target = allJoki.find(j => j.id == jokiId);
-                                if (target) {
-                                    target.status = newStatus;
-                                    if (newStatus === 'selesai') target.progress = 100;
-                                    localStorage.setItem(JOKI_DATA_KEY, JSON.stringify(allJoki));
-                                    // Reload halaman untuk memperbarui tampilan
-                                    location.reload();
+                                target.status = newStatus;
+                                if (newStatus === 'selesai') {
+                                    target.progress = 100;
+                                    target.tglBerakhir = new Date().toLocaleDateString('id-ID');
+                                } else if (newStatus === 'belum_mulai') {
+                                    target.progress = 0;
+                                    target.tglMulai = new Date().toLocaleDateString('id-ID');
+                                    target.tglBerakhir = '-';
                                 }
+                                saveJokiData(allJoki);
+                                renderTable();
+                                showToast('Status berhasil diubah.');
                             } else if (newStatus !== null) {
                                 alert('Status tidak valid.');
                             }
@@ -409,12 +373,32 @@
                 }
             }
 
-            // Tandai menu aktif (opsional)
+            // --- Perbarui Progress (Admin) ---
+            document.getElementById('updateProgressBtn').addEventListener('click', function() {
+                const allJoki = getJokiData();
+                let updated = 0;
+                allJoki.forEach(joki => {
+                    if (joki.status === 'sedang') {
+                        joki.progress = Math.min(99, (joki.progress || 0) + 5);
+                        updated++;
+                    }
+                });
+                if (updated > 0) {
+                    saveJokiData(allJoki);
+                    renderTable();
+                    showToast(`Progress diperbarui untuk ${updated} joki.`);
+                } else {
+                    showToast('Tidak ada joki dengan status "Sedang Joki".');
+                }
+            });
+
+            // --- Inisialisasi ---
+            renderTable();
+
+            // Tandai menu aktif
             const currentPage = window.location.pathname.split('/').pop();
             document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href') === currentPage) link.classList.add('active');
             });
         })();
     </script>
