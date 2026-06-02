@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Pengaturan Admin</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+        .btn-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .btn-small { padding: 6px 14px; font-size: 0.75rem; }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
+            margin-bottom: 20px;
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .setting-group {
+            margin-bottom: 16px;
+        }
+        .setting-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+        .setting-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .setting-input:focus { border-color: var(--accent); }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle-switch.active { background: var(--accent); }
+        .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: left 0.2s;
+        }
+        .toggle-switch.active .toggle-knob { left: 27px; }
+
+        .external-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .external-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: #d4d4e0;
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .external-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .log-list {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: #a0a0b8;
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="toast" id="toast"></div>
+    <div class="container" id="mainContent">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand"><h2>⚙️ Pengaturan Admin</h2></div>
+            <a href="dashboard.html" class="btn">⬅ Kembali</a>
+        </div>
+
+        <!-- Versi Aplikasi -->
+        <div class="card">
+            <h3>📱 Versi Aplikasi</h3>
+            <div class="setting-group">
+                <label class="setting-label" for="versionInput">Versi Saat Ini</label>
+                <input type="text" class="setting-input" id="versionInput" placeholder="1.0.0">
+            </div>
+            <button class="btn btn-primary btn-small" id="saveVersion">💾 Simpan Versi</button>
+        </div>
+
+        <!-- Mode Maintenance -->
+        <div class="card">
+            <h3>🛠️ Mode Maintenance</h3>
+            <div class="toggle-row">
+                <span class="setting-label" style="margin-bottom:0;">Status Maintenance</span>
+                <div class="toggle-switch" id="maintenanceToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+            </div>
+            <p style="font-size:0.75rem; color:#6b6b80; margin-top:8px;">
+                * Saat aktif, user lain tidak dapat login atau membuat tiket.
+            </p>
+        </div>
+
+        <!-- Link Eksternal -->
+        <div class="card">
+            <h3>🔗 Tautan Eksternal</h3>
+            <div class="external-buttons">
+                <a href="https://github.com" target="_blank" class="external-btn">🐙 GitHub</a>
+                <a href="https://firebase.google.com" target="_blank" class="external-btn">🔥 Firebase</a>
+                <a href="https://drive.google.com" target="_blank" class="external-btn">📁 Google Drive</a>
+                <a href="https://sheets.google.com" target="_blank" class="external-btn">📊 Google Sheet</a>
+                <a href="https://facebook.com" target="_blank" class="external-btn">📘 Facebook</a>
+            </div>
+            <p style="font-size:0.7rem; color:#6b6b80; margin-top:8px;">Klik ikon untuk membuka di tab baru.</p>
+        </div>
+
+        <!-- Log Aktivitas -->
+        <div class="card">
+            <h3>📜 Log Aktivitas Admin</h3>
+            <div class="log-list" id="logContainer">
+                <div style="color:#6b6b80;">Belum ada aktivitas tercatat.</div>
+            </div>
+            <button class="btn btn-danger btn-small" id="clearLog" style="margin-top:10px;">🗑 Hapus Log</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- Cek Akses Admin ---
+            let currentUser = null;
+            try {
+                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
+            } catch(e) {}
+            if (!currentUser || currentUser.role !== 'admin') {
+                document.body.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#fca5a5;font-family:Inter,sans-serif;">
+                        🔒 Akses Ditolak. Hanya admin yang dapat mengakses halaman ini.
+                    </div>`;
+                return;
+            }
+
+            // --- State ---
+            const VERSION_KEY = 'shiroha_version';
+            const MAINTENANCE_KEY = 'shiroha_maintenance';
+            const LOG_KEY = 'shiroha_admin_log';
+
+            // --- DOM ---
+            const versionInput = document.getElementById('versionInput');
+            const saveVersionBtn = document.getElementById('saveVersion');
+            const maintenanceToggle = document.getElementById('maintenanceToggle');
+            const logContainer = document.getElementById('logContainer');
+            const clearLogBtn = document.getElementById('clearLog');
+            const toast = document.getElementById('toast');
+
+            // --- Toast ---
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            // --- Fungsi Log ---
+            function addLog(action) {
+                const logs = getLogs();
+                logs.push({
+                    time: new Date().toLocaleString('id-ID'),
+                    action: action,
+                    admin: currentUser.username
+                });
+                localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+                renderLogs();
+            }
+
+            function getLogs() {
+                try {
+                    return JSON.parse(localStorage.getItem(LOG_KEY)) || [];
+                } catch(e) {
+                    return [];
+                }
+            }
+
+            function renderLogs() {
+                const logs = getLogs();
+                logContainer.innerHTML = '';
+                if (logs.length === 0) {
+                    logContainer.innerHTML = '<div style="color:#6b6b80;">Belum ada aktivitas tercatat.</div>';
+                    return;
+                }
+                // Tampilkan 20 terakhir
+                const recent = logs.slice(-20).reverse();
+                recent.forEach(log => {
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.textContent = `[${log.time}] ${log.admin} - ${log.action}`;
+                    logContainer.appendChild(entry);
+                });
+            }
+
+            // --- Inisialisasi ---
+            function init() {
+                // Load versi
+                const savedVersion = localStorage.getItem(VERSION_KEY) || '1.0.0';
+                versionInput.value = savedVersion;
+
+                // Load maintenance
+                const isMaintenance = localStorage.getItem(MAINTENANCE_KEY) === 'true';
+                if (isMaintenance) {
+                    maintenanceToggle.classList.add('active');
+                } else {
+                    maintenanceToggle.classList.remove('active');
+                }
+
+                renderLogs();
+            }
+
+            // --- Event: Simpan Versi ---
+            saveVersionBtn.addEventListener('click', () => {
+                const newVersion = versionInput.value.trim();
+                if (!newVersion) {
+                    showToast('Versi tidak boleh kosong.');
+                    return;
+                }
+                localStorage.setItem(VERSION_KEY, newVersion);
+                addLog(`Mengubah versi aplikasi menjadi ${newVersion}`);
+                showToast('Versi berhasil disimpan.');
+            });
+
+            // --- Event: Toggle Maintenance ---
+            maintenanceToggle.addEventListener('click', () => {
+                const isActive = maintenanceToggle.classList.contains('active');
+                if (isActive) {
+                    // Nonaktifkan
+                    maintenanceToggle.classList.remove('active');
+                    localStorage.setItem(MAINTENANCE_KEY, 'false');
+                    addLog('Menonaktifkan mode maintenance');
+                    showToast('Mode maintenance dimatikan.');
+                } else {
+                    // Aktifkan
+                    maintenanceToggle.classList.add('active');
+                    localStorage.setItem(MAINTENANCE_KEY, 'true');
+                    addLog('Mengaktifkan mode maintenance');
+                    showToast('Mode maintenance diaktifkan. User lain akan logout.');
+                    // Opsional: hapus sesi user lain (kita tidak bisa, tapi flag akan dicek di login)
+                }
+            });
+
+            // --- Event: Hapus Log ---
+            clearLogBtn.addEventListener('click', () => {
+                if (confirm('Hapus seluruh log aktivitas?')) {
+                    localStorage.removeItem(LOG_KEY);
+                    renderLogs();
+                    addLog('Menghapus log aktivitas');
+                    showToast('Log aktivitas dihapus.');
+                }
+            });
+
+            // --- Event: Tombol eksternal mencatat log (opsional) ---
+            document.querySelectorAll('.external-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const url = btn.getAttribute('href');
+                    addLog(`Membuka tautan eksternal: ${url}`);
+                    // tidak perlu preventDefault, biarkan terbuka
+                });
+            });
+
+            // --- Start ---
+            init();
+            // Catat log akses halaman
+            addLog('Mengakses halaman pengaturan');
+        })();
+    </script>
+</body>
+</html>
