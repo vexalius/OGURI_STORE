@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OGURI STORE - Buat Tiket</title>
     <style>
-        /* ... (style sama seperti sebelumnya, tidak berubah) ... */
         :root {
             --bg: #06060e;
             --card-bg: rgba(18, 18, 30, 0.85);
@@ -31,7 +30,9 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
-            background-image: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168, 85, 247, 0.08) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 15% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168, 85, 247, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 15% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -40,14 +41,140 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-        /* ... semua style sama seperti sebelumnya ... */
+
+        .bg-orb {
+            position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0; opacity: 0.45;
+            animation: floatOrb 12s ease-in-out infinite;
+        }
+        .bg-orb.orb-1 { width: 260px; height: 260px; background: rgba(168, 85, 247, 0.12); top: -8%; left: -6%; }
+        .bg-orb.orb-2 { width: 180px; height: 180px; background: rgba(99, 102, 241, 0.09); bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 15s; }
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(22px, -28px) scale(1.07); }
+            50% { transform: translate(-14px, 18px) scale(0.95); }
+            75% { transform: translate(-22px, -14px) scale(1.04); }
+        }
+
+        .toast {
+            position: fixed;
+            top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3;
+            padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+            z-index: 200;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
+
+        .app-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius-xl);
+            padding: 36px 28px 32px;
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            animation: cardAppear 0.5s ease-out;
+        }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(28px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .step-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .step-subtitle { font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 24px; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; padding: 15px 20px; border: none; border-radius: var(--radius-pill);
+            font-size: 0.95rem; font-weight: 600; font-family: inherit; letter-spacing: 0.3px;
+            cursor: pointer; transition: all var(--transition); text-decoration: none; background: transparent;
+        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: #fff; box-shadow: 0 6px 24px rgba(168, 85, 247, 0.3); }
+        .btn-primary:hover { box-shadow: 0 10px 32px rgba(168, 85, 247, 0.45); transform: translateY(-1px); }
+        .btn-outline { border: 1.5px solid rgba(255,255,255,0.15); color: #d4d4e0; }
+        .btn-outline:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.03); color: #fff; }
+        .btn-small { padding: 10px 16px; font-size: 0.85rem; width: auto; }
+        .btn-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-row .btn { flex: 1; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.4px; color: #c4c4d4; margin-bottom: 6px; text-transform: uppercase; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper input, .input-wrapper .fake-input {
+            width: 100%; padding: 13px 14px;
+            background: var(--input-bg); border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-md); color: #e8e8f0; font-size: 0.9rem;
+            font-family: inherit; transition: all var(--transition); outline: none;
+        }
+        .fake-input {
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; user-select: none; padding: 13px 14px; min-height: 48px;
+        }
+        .fake-input span { color: #f1f1f3; }
+        .fake-input .placeholder { color: #55556a; }
+        .input-wrapper input:focus {
+            border-color: var(--input-focus-border);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08);
+        }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .tag {
+            background: rgba(168, 85, 247, 0.15); color: #d8b4fe;
+            padding: 6px 12px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 500; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .tag button { background: none; border: none; color: #fca5a5; cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
+
+        .total-display { font-size: 1rem; font-weight: 600; color: #ffffff; margin-top: 8px; background: rgba(168, 85, 247, 0.08); padding: 10px 14px; border-radius: var(--radius-md); }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+            animation: fadeIn 0.2s;
+        }
+        .modal { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); width: 100%; max-width: 360px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .modal h4 { font-size: 1.1rem; color: #fff; margin-bottom: 16px; }
+        .modal-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+        .modal-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: background 0.2s; }
+        .modal-item:hover { background: rgba(255,255,255,0.06); }
+        .modal-item span { color: #ffffff; }
+        .modal-item input[type="radio"], .modal-item input[type="checkbox"] { accent-color: #a855f7; width: 18px; height: 18px; }
+        .modal-qty { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+        .modal-qty input { width: 50px; padding: 6px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: #fff; text-align: center; font-size: 0.85rem; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+        .receipt-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+            padding: 20px; color: #f1f1f3; font-size: 0.9rem; line-height: 1.9;
+        }
+        .receipt-card .label { color: #a0a0b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .receipt-card .value { color: #ffffff; font-weight: 500; }
+
+        .hidden { display: none !important; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 480px) {
+            .app-card { padding: 24px 18px; }
+            .step-title { font-size: 1.3rem; }
+        }
     </style>
 </head>
 <body>
-    <!-- Toast dan background orbs -->
-    <div class="toast" id="toast"></div>
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
+
+    <div class="toast" id="toast"></div>
 
     <div class="app-card" id="appCard">
         <!-- Step 1: Choice -->
@@ -62,6 +189,7 @@
         <!-- Step 2: Register -->
         <div id="stepRegister" class="step hidden">
             <h2 class="step-title">📝 Daftar Akun Baru</h2>
+            <p class="step-subtitle">Buat ID & PIN Anda</p>
             <div class="form-group"><label>ID Pengguna</label><div class="input-wrapper"><input type="text" id="regId" placeholder="Masukkan ID"></div></div>
             <div class="form-group"><label>Username</label><div class="input-wrapper"><input type="text" id="regUsername" placeholder="Nama panggilan"></div></div>
             <div class="form-group"><label>PIN (min. 4 digit angka)</label><div class="input-wrapper"><input type="password" id="regPin" placeholder="PIN" maxlength="6" inputmode="numeric"></div></div>
@@ -74,6 +202,7 @@
         <!-- Step 3: Login Existing -->
         <div id="stepLoginExisting" class="step hidden">
             <h2 class="step-title">🔐 Login</h2>
+            <p class="step-subtitle">Masukkan ID & PIN Anda</p>
             <div class="form-group"><label>ID</label><div class="input-wrapper"><input type="text" id="loginId" placeholder="ID Anda"></div></div>
             <div class="form-group"><label>PIN</label><div class="input-wrapper"><input type="password" id="loginPin" placeholder="PIN" maxlength="6"></div></div>
             <div class="btn-row">
@@ -83,14 +212,38 @@
         </div>
 
         <!-- Step 4: Informasi Order -->
-        <!-- ... (sama seperti sebelumnya) ... -->
+        <div id="stepOrder" class="step hidden">
+            <h2 class="step-title">📦 Informasi Order</h2>
+            <p class="step-subtitle">Lengkapi detail joki</p>
+            <div class="form-group"><label>Nama Pembeli</label><div class="input-wrapper"><input type="text" id="namaPembeli" placeholder="Nama Anda"></div></div>
+            <div class="form-group"><label>Game</label><div class="input-wrapper fake-input" id="gameSelector"><span id="gameSelectedText" class="placeholder">Pilih game...</span><span>🔽</span></div></div>
+            <div class="form-group"><label>Layanan Joki (bisa pilih lebih dari satu)</label><div class="input-wrapper fake-input" id="jokiSelector"><span id="jokiSelectedText" class="placeholder">Pilih layanan...</span><span>🔽</span></div><div id="selectedJokiTags" class="tag-list"></div></div>
+            <div class="total-display" id="totalOrderDisplay">Total: Rp 0</div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="orderBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="orderNext">Lanjut ➡</button>
+            </div>
+        </div>
 
         <!-- Step 5: Informasi Pembayaran -->
-        <!-- ... (sama seperti sebelumnya) ... -->
+        <div id="stepPayment" class="step hidden">
+            <h2 class="step-title">💳 Informasi Pembayaran</h2>
+            <p class="step-subtitle">Pilih metode & rekening</p>
+            <div class="form-group"><label>Via Pembayaran</label><div class="input-wrapper fake-input" id="viaSelector"><span id="viaSelectedText" class="placeholder">Pilih Bank/E-wallet...</span><span>🔽</span></div></div>
+            <div class="form-group" id="rekAdminGroup"><label>Rekening Admin Tujuan</label><div class="input-wrapper fake-input" id="rekAdminSelector"><span id="rekAdminSelectedText" class="placeholder">Pilih rekening admin...</span><span>🔽</span></div></div>
+            <div class="form-group"><label>Nama Pengirim</label><div class="input-wrapper"><input type="text" id="namaPengirim" placeholder="Nama Anda"></div></div>
+            <div class="form-group"><label>Nomor Rekening Pengirim</label><div class="input-wrapper"><input type="text" id="norekPengirim" placeholder="Nomor rekening/HP"></div></div>
+            <div class="form-group"><label>Total Nominal</label><div class="input-wrapper"><input type="text" id="totalNominal" readonly placeholder="Otomatis terisi"></div></div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="paymentBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="paymentNext">Lanjut ➡</button>
+            </div>
+        </div>
 
         <!-- Step 6: Receipt -->
         <div id="stepReceipt" class="step hidden">
             <h2 class="step-title">🧾 Struk Pemesanan</h2>
+            <p class="step-subtitle">Ringkasan data Anda</p>
             <div id="receiptContent" class="receipt-card"></div>
             <div class="btn-row" style="margin-top:20px;">
                 <button class="btn btn-primary" id="toDashboard">🏠 Menu Utama</button>
@@ -106,25 +259,35 @@
 
     <script>
         (function() {
-            // --- Database User & Transaksi ---
+            // --- Data statis game & joki ---
+            const gameList = [
+                { id: 'genshin', name: 'Genshin Impact' },
+                { id: 'starrail', name: 'Honkai Star Rail' },
+                { id: 'mlbb', name: 'Mobile Legends' },
+                { id: 'pubg', name: 'PUBG Mobile' },
+                { id: 'valorant', name: 'Valorant' }
+            ];
+            const jokiServices = [
+                { id: 'explore1', name: 'Explore x1', price: 15000 },
+                { id: 'explore2', name: 'Explore x2', price: 25000 },
+                { id: 'rawat1bulan', name: 'Rawat akun 1 bulan', price: 80000 },
+                { id: 'pushrank', name: 'Push Rank', price: 50000 },
+                { id: 'event', name: 'Selesaikan Event', price: 35000 }
+            ];
+            const bankAdmins = [
+                { id: 'bca', name: 'BCA - 1234567890 a/n Admin OGURI', via: 'bank' },
+                { id: 'bri', name: 'BRI - 0987654321 a/n Admin OGURI', via: 'bank' },
+                { id: 'mandiri', name: 'Mandiri - 1122334455 a/n Admin OGURI', via: 'bank' }
+            ];
+            const ewalletAdmins = [
+                { id: 'dana', name: 'DANA - 08123456789 a/n Admin OGURI', via: 'ewallet' },
+                { id: 'ovo', name: 'OVO - 08129876543 a/n Admin OGURI', via: 'ewallet' },
+                { id: 'gopay', name: 'GoPay - 08135558888 a/n Admin OGURI', via: 'ewallet' }
+            ];
+
+            // --- Database dan state ---
             const USERS_KEY = 'shiroha_users';
             const PENDING_KEY = 'shiroha_transaksi_pending';
-
-            // Fungsi bantu
-            function getUsers() { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
-            function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-            function getPendingTransactions() { return JSON.parse(localStorage.getItem(PENDING_KEY)) || []; }
-            function savePendingTransaction(ticket) {
-                const pending = getPendingTransactions();
-                pending.push(ticket);
-                localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
-            }
-
-            // Data game dan joki statis (sama seperti sebelumnya)
-            const gameList = [ /* ... */ ];
-            const jokiServices = [ /* ... */ ];
-            const bankAdmins = [ /* ... */ ];
-            const ewalletAdmins = [ /* ... */ ];
 
             const state = {
                 currentStep: 'choice',
@@ -133,9 +296,85 @@
                 payment: { via: '', rekAdmin: null, namaPengirim: '', norekPengirim: '' }
             };
 
-            // ... (logika step, modal, dll. Sama seperti sebelumnya, dengan penyesuaian) ...
+            // --- Utility ---
+            function getUsers() {
+                try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+                catch(e) { return []; }
+            }
+            function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+            function savePending(ticket) {
+                const pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
+                pending.push(ticket);
+                localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+            }
 
-            // Register
+            // --- Toast ---
+            const toast = document.getElementById('toast');
+            let toastTimer;
+            function showToast(msg, isError = false) {
+                clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.className = 'toast ' + (isError ? 'error' : '');
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            // --- Cek maintenance ---
+            function isMaintenanceActive() {
+                return localStorage.getItem('shiroha_maintenance') === 'true';
+            }
+            function isUserBlocked() {
+                if (!isMaintenanceActive()) return false;
+                if (state.user && state.user.role === 'admin') return false;
+                return true;
+            }
+
+            // --- Navigasi step ---
+            const steps = {
+                choice: document.getElementById('stepChoice'),
+                register: document.getElementById('stepRegister'),
+                loginExisting: document.getElementById('stepLoginExisting'),
+                order: document.getElementById('stepOrder'),
+                payment: document.getElementById('stepPayment'),
+                receipt: document.getElementById('stepReceipt')
+            };
+
+            function showStep(name) {
+                if (name === 'register' || name === 'loginExisting' || name === 'order') {
+                    if (isUserBlocked()) {
+                        showToast('🔧 Aplikasi sedang maintenance. Hanya admin yang bisa mengakses.', true);
+                        return;
+                    }
+                }
+                Object.values(steps).forEach(s => s.classList.add('hidden'));
+                steps[name].classList.remove('hidden');
+                state.currentStep = name;
+
+                if (name === 'order') updateOrderTotal();
+                if (name === 'payment') {
+                    document.getElementById('totalNominal').value = 'Rp ' + state.order.total.toLocaleString('id-ID');
+                    updateRekAdminVisibility();
+                }
+                if (name === 'receipt') renderReceipt();
+            }
+
+            // --- Modal ---
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalBox = document.getElementById('modalBox');
+            function showModal(html) {
+                modalBox.innerHTML = html;
+                modalOverlay.classList.remove('hidden');
+            }
+            function closeModal() { modalOverlay.classList.add('hidden'); }
+            modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+            // --- Step Choice ---
+            document.getElementById('btnAlreadyHave').addEventListener('click', () => showStep('loginExisting'));
+            document.getElementById('btnNewUser').addEventListener('click', () => showStep('register'));
+
+            // --- Register ---
+            document.getElementById('regBack').addEventListener('click', () => showStep('choice'));
             document.getElementById('regSubmit').addEventListener('click', () => {
                 const id = document.getElementById('regId').value.trim();
                 const username = document.getElementById('regUsername').value.trim();
@@ -159,14 +398,21 @@
                 showStep('order');
             });
 
-            // Login Existing
+            // --- Login Existing ---
+            document.getElementById('loginBack').addEventListener('click', () => showStep('choice'));
             document.getElementById('loginSubmit').addEventListener('click', () => {
                 const id = document.getElementById('loginId').value.trim();
                 const pin = document.getElementById('loginPin').value.trim();
-                if (!id || !pin) { showToast('ID dan PIN harus diisi.', true); return; }
+                if (!id || !pin) {
+                    showToast('ID dan PIN harus diisi.', true);
+                    return;
+                }
                 const users = getUsers();
                 const found = users.find(u => u.id === id && u.pin === pin);
-                if (!found) { showToast('ID atau PIN salah.', true); return; }
+                if (!found) {
+                    showToast('ID atau PIN salah.', true);
+                    return;
+                }
                 state.user = { id: found.id, username: found.username, role: found.role };
                 localStorage.setItem('shiroha_currentUser', JSON.stringify(state.user));
                 state.order.nama = found.username;
@@ -174,11 +420,190 @@
                 showStep('order');
             });
 
-            // ... (sisanya sama, tetapi ketika selesai dan klik "Menu Utama" atau simpan struk, tiket disimpan ke pending) ...
+            // --- Order Step ---
+            document.getElementById('orderBack').addEventListener('click', () => showStep('choice'));
+            document.getElementById('orderNext').addEventListener('click', () => {
+                state.order.nama = document.getElementById('namaPembeli').value.trim();
+                if (!state.order.nama || !state.order.game || state.order.jokiItems.length === 0) {
+                    showToast('⚠️ Lengkapi nama, game, dan minimal satu layanan joki.', true);
+                    return;
+                }
+                showStep('payment');
+            });
 
-            // Saat klik "Menu Utama" dari struk
+            // Game selector (tanpa nominal)
+            document.getElementById('gameSelector').addEventListener('click', () => {
+                let html = '<h4>Pilih Game</h4><div class="modal-list">';
+                gameList.forEach(g => {
+                    html += `<div class="modal-item"><input type="radio" name="gameRadio" value="${g.id}" ${state.order.game?.id===g.id?'checked':''}> <span>${g.name}</span></div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancel">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmGame">Pilih</button></div>';
+                showModal(html);
+                document.getElementById('modalCancel').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmGame').addEventListener('click', () => {
+                    const sel = document.querySelector('input[name="gameRadio"]:checked');
+                    if (sel) {
+                        state.order.game = gameList.find(g => g.id === sel.value);
+                        document.getElementById('gameSelectedText').textContent = state.order.game.name;
+                        document.getElementById('gameSelectedText').classList.remove('placeholder');
+                        updateOrderTotal();
+                    }
+                    closeModal();
+                });
+            });
+
+            // Joki selector
+            document.getElementById('jokiSelector').addEventListener('click', () => {
+                let html = '<h4>Pilih Layanan (multi)</h4><div class="modal-list">';
+                jokiServices.forEach(s => {
+                    const existing = state.order.jokiItems.find(j => j.service.id === s.id);
+                    const checked = existing ? 'checked' : '';
+                    const qty = existing ? existing.qty : 1;
+                    html += `<div class="modal-item"><input type="checkbox" value="${s.id}" ${checked}><span>${s.name} (Rp ${s.price.toLocaleString('id-ID')})</span><div class="modal-qty"><span>Qty:</span><input type="number" min="1" value="${qty}" class="qty-input" data-service="${s.id}"></div></div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelJoki">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmJoki">Simpan</button></div>';
+                showModal(html);
+                document.getElementById('modalCancelJoki').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmJoki').addEventListener('click', () => {
+                    const checkboxes = document.querySelectorAll('#modalBox input[type="checkbox"]');
+                    const newItems = [];
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            const sid = cb.value;
+                            const qty = parseInt(cb.closest('.modal-item').querySelector('.qty-input').value) || 1;
+                            newItems.push({ service: jokiServices.find(s => s.id === sid), qty });
+                        }
+                    });
+                    state.order.jokiItems = newItems;
+                    renderJokiTags();
+                    updateOrderTotal();
+                    closeModal();
+                });
+            });
+
+            function renderJokiTags() {
+                const container = document.getElementById('selectedJokiTags');
+                container.innerHTML = '';
+                state.order.jokiItems.forEach(item => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.innerHTML = `${item.service.name} x${item.qty} <button data-remove="${item.service.id}">✕</button>`;
+                    container.appendChild(tag);
+                });
+                document.querySelectorAll('.tag button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const sid = e.target.dataset.remove;
+                        state.order.jokiItems = state.order.jokiItems.filter(j => j.service.id !== sid);
+                        renderJokiTags();
+                        updateOrderTotal();
+                    });
+                });
+                const textEl = document.getElementById('jokiSelectedText');
+                if (state.order.jokiItems.length === 0) {
+                    textEl.textContent = 'Pilih layanan...';
+                    textEl.classList.add('placeholder');
+                } else {
+                    textEl.textContent = state.order.jokiItems.map(i => i.service.name).join(', ');
+                    textEl.classList.remove('placeholder');
+                }
+            }
+
+            // Total hanya dari joki (game tidak dihitung)
+            function updateOrderTotal() {
+                let total = 0;
+                state.order.jokiItems.forEach(item => total += item.service.price * item.qty);
+                state.order.total = total;
+                document.getElementById('totalOrderDisplay').textContent = 'Total: Rp ' + total.toLocaleString('id-ID');
+            }
+            document.getElementById('namaPembeli').addEventListener('input', e => state.order.nama = e.target.value);
+
+            // --- Payment Step ---
+            document.getElementById('paymentBack').addEventListener('click', () => showStep('order'));
+            document.getElementById('paymentNext').addEventListener('click', () => {
+                if (!state.payment.via || !state.payment.rekAdmin || !state.payment.namaPengirim || !state.payment.norekPengirim) {
+                    showToast('⚠️ Lengkapi semua data pembayaran.', true);
+                    return;
+                }
+                showStep('receipt');
+            });
+
+            document.getElementById('viaSelector').addEventListener('click', () => {
+                let html = `<h4>Pilih Metode Pembayaran</h4><div class="modal-list">
+                    <div class="modal-item"><input type="radio" name="viaRadio" value="bank" ${state.payment.via==='bank'?'checked':''}> <span>🏦 Bank</span></div>
+                    <div class="modal-item"><input type="radio" name="viaRadio" value="ewallet" ${state.payment.via==='ewallet'?'checked':''}> <span>💰 E-Wallet</span></div>
+                </div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelVia">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmVia">Pilih</button></div>`;
+                showModal(html);
+                document.getElementById('modalCancelVia').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmVia').addEventListener('click', () => {
+                    const sel = document.querySelector('input[name="viaRadio"]:checked');
+                    if (sel) {
+                        state.payment.via = sel.value;
+                        document.getElementById('viaSelectedText').textContent = sel.value === 'bank' ? 'Bank' : 'E-Wallet';
+                        document.getElementById('viaSelectedText').classList.remove('placeholder');
+                        state.payment.rekAdmin = null;
+                        document.getElementById('rekAdminSelectedText').textContent = 'Pilih rekening admin...';
+                        document.getElementById('rekAdminSelectedText').classList.add('placeholder');
+                        updateRekAdminVisibility();
+                    }
+                    closeModal();
+                });
+            });
+
+            function updateRekAdminVisibility() {
+                document.getElementById('rekAdminGroup').style.display = state.payment.via ? 'block' : 'none';
+            }
+
+            document.getElementById('rekAdminSelector').addEventListener('click', () => {
+                if (!state.payment.via) {
+                    showToast('Pilih metode pembayaran terlebih dahulu.', true);
+                    return;
+                }
+                const list = state.payment.via === 'bank' ? bankAdmins : ewalletAdmins;
+                let html = '<h4>Pilih Rekening Admin</h4><div class="modal-list">';
+                list.forEach(r => {
+                    html += `<div class="modal-item"><input type="radio" name="rekRadio" value="${r.id}" ${state.payment.rekAdmin?.id===r.id?'checked':''}> <span>${r.name}</span></div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelRek">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmRek">Pilih</button></div>';
+                showModal(html);
+                document.getElementById('modalCancelRek').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmRek').addEventListener('click', () => {
+                    const sel = document.querySelector('input[name="rekRadio"]:checked');
+                    if (sel) {
+                        state.payment.rekAdmin = list.find(r => r.id === sel.value);
+                        document.getElementById('rekAdminSelectedText').textContent = state.payment.rekAdmin.name;
+                        document.getElementById('rekAdminSelectedText').classList.remove('placeholder');
+                    }
+                    closeModal();
+                });
+            });
+
+            document.getElementById('namaPengirim').addEventListener('input', e => state.payment.namaPengirim = e.target.value);
+            document.getElementById('norekPengirim').addEventListener('input', e => state.payment.norekPengirim = e.target.value);
+
+            // --- Receipt & Simpan ---
+            function renderReceipt() {
+                const content = document.getElementById('receiptContent');
+                content.innerHTML = `
+                    <div class="label">ID Pengguna</div><div class="value">${state.user.id}</div>
+                    <div class="label">Username</div><div class="value">${state.user.username}</div>
+                    <div class="label">Nama Pembeli</div><div class="value">${state.order.nama}</div>
+                    <div class="label">Game</div><div class="value">${state.order.game?.name}</div>
+                    <div class="label">Layanan</div><div class="value">${state.order.jokiItems.map(i => `${i.service.name} x${i.qty}`).join(', ')}</div>
+                    <div class="label">Total Biaya</div><div class="value">Rp ${state.order.total.toLocaleString('id-ID')}</div>
+                    <div class="label">Pembayaran via</div><div class="value">${state.payment.via === 'bank' ? 'Bank' : 'E-Wallet'}</div>
+                    <div class="label">Rekening Admin</div><div class="value">${state.payment.rekAdmin?.name}</div>
+                    <div class="label">Nama Pengirim</div><div class="value">${state.payment.namaPengirim}</div>
+                    <div class="label">No. Rekening Pengirim</div><div class="value">${state.payment.norekPengirim}</div>
+                    <div class="label">Total Nominal</div><div class="value">Rp ${state.order.total.toLocaleString('id-ID')}</div>
+                `;
+            }
+
+            // Tombol Menu Utama: simpan tiket ke pending
             document.getElementById('toDashboard').addEventListener('click', () => {
-                // Simpan tiket ke pending
+                if (!state.user) {
+                    showToast('Anda belum login.', true);
+                    return;
+                }
                 const ticket = {
                     id: 'TKT-' + Date.now(),
                     userId: state.user.id,
@@ -189,17 +614,17 @@
                     payment: state.payment,
                     timestamp: Date.now()
                 };
-                savePendingTransaction(ticket);
+                savePending(ticket);
                 window.location.href = 'dashboard.html';
             });
 
-            // Logout
+            // Tombol Logout
             document.getElementById('toLogout').addEventListener('click', () => {
                 localStorage.removeItem('shiroha_currentUser');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             });
 
-            // Inisialisasi
+            // --- Inisialisasi ---
             showStep('choice');
             updateRekAdminVisibility();
         })();
