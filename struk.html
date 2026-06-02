@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Struk</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+        .btn-primary:hover { box-shadow: 0 4px 15px rgba(168,85,247,0.4); }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+            margin-bottom: 20px;
+        }
+        .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+
+        .selector-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .fake-input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            color: #f1f1f3;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 200px;
+            user-select: none;
+        }
+        .fake-input .placeholder { color: #55556a; }
+
+        .empty-state {
+            text-align: center;
+            color: #6b6b80;
+            padding: 30px 0;
+        }
+
+        .struk-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            line-height: 1.8;
+            color: #e8e8f0;
+            font-size: 0.9rem;
+        }
+        .struk-card .label { color: #a0a0b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .struk-card .value { color: #ffffff; font-weight: 500; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 360px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .modal-list {
+            max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;
+        }
+        .modal-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+            background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: background 0.2s;
+        }
+        .modal-item:hover { background: rgba(255,255,255,0.06); }
+        .modal-item span { color: #fff; }
+        .modal-item input[type="radio"] { accent-color: #a855f7; width: 18px; height: 18px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="toast" id="toast"></div>
+    <div class="container">
+        <div class="header">
+            <div class="brand"><h2>🧾 Struk Transaksi</h2></div>
+            <a href="dashboard.html" class="btn">⬅ Kembali</a>
+        </div>
+
+        <div class="card">
+            <h3>Pilih Transaksi</h3>
+            <div class="selector-row">
+                <div class="fake-input" id="selectUserBtn">
+                    <span id="selectedUserText" class="placeholder">Pilih User...</span>
+                    <span>🔽</span>
+                </div>
+                <div class="fake-input" id="selectTransactionBtn">
+                    <span id="selectedTransactionText" class="placeholder">Pilih Jokian...</span>
+                    <span>🔽</span>
+                </div>
+            </div>
+            <div id="strukContainer">
+                <div class="empty-state">Pilih user dan transaksi untuk melihat struk.</div>
+            </div>
+            <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-primary" id="downloadStrukBtn" style="display:none;">📥 Download Struk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pilih User -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <h4>Pilih User</h4>
+            <div class="modal-list" id="userList"></div>
+            <div class="modal-actions">
+                <button class="btn" id="cancelUserModal">Batal</button>
+                <button class="btn btn-primary" id="confirmUserModal">Pilih</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pilih Transaksi -->
+    <div class="modal-overlay" id="transactionModal">
+        <div class="modal">
+            <h4>Pilih Transaksi</h4>
+            <div class="modal-list" id="transactionList"></div>
+            <div class="modal-actions">
+                <button class="btn" id="cancelTransactionModal">Batal</button>
+                <button class="btn btn-primary" id="confirmTransactionModal">Pilih</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Check admin access
+            let currentUser = null;
+            try {
+                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
+            } catch(e) {}
+            if (!currentUser || currentUser.role !== 'admin') {
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#fca5a5;">Akses ditolak. Hanya admin.</div>';
+                throw new Error('Access denied');
+            }
+
+            // Data transaksi (dummy jika belum ada)
+            const TRANSACTION_KEY = 'shiroha_transaksi';
+            let transactions = JSON.parse(localStorage.getItem(TRANSACTION_KEY)) || [];
+            if (transactions.length === 0) {
+                // Buat data dummy
+                transactions = [
+                    {
+                        id: 1,
+                        userId: 'user_demo',
+                        namaPembeli: 'DemoUser',
+                        game: { id: 'genshin', name: 'Genshin Impact', basePrice: 25000 },
+                        jokiItems: [
+                            { service: { id: 'explore2', name: 'Explore x2', price: 25000 }, qty: 1 },
+                            { service: { id: 'rawat1bulan', name: 'Rawat akun 1 bulan', price: 80000 }, qty: 1 }
+                        ],
+                        total: 130000,
+                        payment: {
+                            via: 'bank',
+                            rekAdmin: { id: 'bca', name: 'BCA - 1234567890 a/n Admin Shiroha', via: 'bank' },
+                            namaPengirim: 'DemoUser',
+                            norekPengirim: '12345678'
+                        },
+                        timestamp: Date.now() - 86400000
+                    },
+                    {
+                        id: 2,
+                        userId: 'user_lain',
+                        namaPembeli: 'UserLain',
+                        game: { id: 'mlbb', name: 'Mobile Legends', basePrice: 20000 },
+                        jokiItems: [
+                            { service: { id: 'event', name: 'Selesaikan Event', price: 35000 }, qty: 2 }
+                        ],
+                        total: 90000,
+                        payment: {
+                            via: 'ewallet',
+                            rekAdmin: { id: 'dana', name: 'DANA - 08123456789 a/n Admin Shiroha', via: 'ewallet' },
+                            namaPengirim: 'UserLain',
+                            norekPengirim: '08129876543'
+                        },
+                        timestamp: Date.now() - 172800000
+                    }
+                ];
+                localStorage.setItem(TRANSACTION_KEY, JSON.stringify(transactions));
+            }
+
+            // State
+            let selectedUserId = null;
+            let selectedTransactionId = null;
+
+            // DOM
+            const selectUserBtn = document.getElementById('selectUserBtn');
+            const selectedUserText = document.getElementById('selectedUserText');
+            const selectTransactionBtn = document.getElementById('selectTransactionBtn');
+            const selectedTransactionText = document.getElementById('selectedTransactionText');
+            const strukContainer = document.getElementById('strukContainer');
+            const downloadStrukBtn = document.getElementById('downloadStrukBtn');
+
+            // Modals
+            const userModal = document.getElementById('userModal');
+            const userList = document.getElementById('userList');
+            const cancelUserModal = document.getElementById('cancelUserModal');
+            const confirmUserModal = document.getElementById('confirmUserModal');
+            const transactionModal = document.getElementById('transactionModal');
+            const transactionList = document.getElementById('transactionList');
+            const cancelTransactionModal = document.getElementById('cancelTransactionModal');
+            const confirmTransactionModal = document.getElementById('confirmTransactionModal');
+
+            const toast = document.getElementById('toast');
+            let toastTimer;
+            function showToast(msg, isError = false) {
+                clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.className = 'toast ' + (isError ? 'error' : '');
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            // Render struk
+            function renderStruk() {
+                if (!selectedTransactionId) {
+                    strukContainer.innerHTML = '<div class="empty-state">Pilih user dan transaksi untuk melihat struk.</div>';
+                    downloadStrukBtn.style.display = 'none';
+                    return;
+                }
+                const tx = transactions.find(t => t.id == selectedTransactionId);
+                if (!tx) {
+                    strukContainer.innerHTML = '<div class="empty-state">Transaksi tidak ditemukan.</div>';
+                    downloadStrukBtn.style.display = 'none';
+                    return;
+                }
+                const strukHTML = `
+                    <div class="struk-card" id="strukContent">
+                        <div class="label">ID Transaksi</div><div class="value">#${tx.id}</div>
+                        <div class="label">User ID</div><div class="value">${tx.userId}</div>
+                        <div class="label">Nama Pembeli</div><div class="value">${tx.namaPembeli}</div>
+                        <div class="label">Game</div><div class="value">${tx.game.name}</div>
+                        <div class="label">Layanan</div><div class="value">${tx.jokiItems.map(i => `${i.service.name} x${i.qty}`).join(', ')}</div>
+                        <div class="label">Total Biaya</div><div class="value">Rp ${tx.total.toLocaleString('id-ID')}</div>
+                        <div class="label">Pembayaran via</div><div class="value">${tx.payment.via === 'bank' ? 'Bank' : 'E-Wallet'}</div>
+                        <div class="label">Rekening Admin</div><div class="value">${tx.payment.rekAdmin?.name}</div>
+                        <div class="label">Nama Pengirim</div><div class="value">${tx.payment.namaPengirim}</div>
+                        <div class="label">No. Rekening Pengirim</div><div class="value">${tx.payment.norekPengirim}</div>
+                        <div class="label">Tanggal</div><div class="value">${new Date(tx.timestamp).toLocaleString('id-ID')}</div>
+                    </div>
+                `;
+                strukContainer.innerHTML = strukHTML;
+                downloadStrukBtn.style.display = 'inline-flex';
+            }
+
+            // Download struk sebagai file HTML
+            downloadStrukBtn.addEventListener('click', () => {
+                const tx = transactions.find(t => t.id == selectedTransactionId);
+                if (!tx) return;
+                const content = document.getElementById('strukContent').outerHTML;
+                const fullHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Struk #${tx.id}</title>
+                <style>body{font-family:sans-serif;background:#fff;color:#000;padding:20px;} .label{font-size:0.7rem;color:#666;text-transform:uppercase;}.value{font-weight:bold;margin-bottom:8px;}</style></head><body>${content}</body></html>`;
+                const blob = new Blob([fullHTML], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `struk_${tx.id}.html`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Struk berhasil diunduh.');
+            });
+
+            // Modal user
+            selectUserBtn.addEventListener('click', () => {
+                const userIds = [...new Set(transactions.map(t => t.userId))];
+                userList.innerHTML = '';
+                userIds.forEach(uid => {
+                    const div = document.createElement('div');
+                    div.className = 'modal-item';
+                    div.innerHTML = `<input type="radio" name="userRadio" value="${uid}" ${selectedUserId === uid ? 'checked' : ''}> <span>${uid}</span>`;
+                    userList.appendChild(div);
+                });
+                userModal.style.display = 'flex';
+            });
+            cancelUserModal.addEventListener('click', () => userModal.style.display = 'none');
+            confirmUserModal.addEventListener('click', () => {
+                const checked = document.querySelector('input[name="userRadio"]:checked');
+                if (checked) {
+                    selectedUserId = checked.value;
+                    selectedUserText.textContent = selectedUserId;
+                    selectedUserText.classList.remove('placeholder');
+                    selectedTransactionId = null;
+                    selectedTransactionText.textContent = 'Pilih Jokian...';
+                    selectedTransactionText.classList.add('placeholder');
+                    renderStruk();
+                }
+                userModal.style.display = 'none';
+            });
+            userModal.addEventListener('click', e => { if (e.target === userModal) userModal.style.display = 'none'; });
+
+            // Modal transaksi
+            selectTransactionBtn.addEventListener('click', () => {
+                if (!selectedUserId) {
+                    showToast('Pilih user terlebih dahulu.', true);
+                    return;
+                }
+                const userTxs = transactions.filter(t => t.userId === selectedUserId);
+                transactionList.innerHTML = '';
+                if (userTxs.length === 0) {
+                    transactionList.innerHTML = '<div style="color:#6b6b80;text-align:center;">Tidak ada transaksi.</div>';
+                } else {
+                    userTxs.forEach(tx => {
+                        const div = document.createElement('div');
+                        div.className = 'modal-item';
+                        div.innerHTML = `<input type="radio" name="txRadio" value="${tx.id}" ${selectedTransactionId == tx.id ? 'checked' : ''}> 
+                        <span>#${tx.id} - ${tx.game.name} - Rp ${tx.total.toLocaleString('id-ID')}</span>`;
+                        transactionList.appendChild(div);
+                    });
+                }
+                transactionModal.style.display = 'flex';
+            });
+            cancelTransactionModal.addEventListener('click', () => transactionModal.style.display = 'none');
+            confirmTransactionModal.addEventListener('click', () => {
+                const checked = document.querySelector('input[name="txRadio"]:checked');
+                if (checked) {
+                    selectedTransactionId = checked.value;
+                    const tx = transactions.find(t => t.id == selectedTransactionId);
+                    if (tx) {
+                        selectedTransactionText.textContent = `#${tx.id} - ${tx.game.name}`;
+                        selectedTransactionText.classList.remove('placeholder');
+                        renderStruk();
+                    }
+                }
+                transactionModal.style.display = 'none';
+            });
+            transactionModal.addEventListener('click', e => { if (e.target === transactionModal) transactionModal.style.display = 'none'; });
+        })();
+    </script>
+</body>
+</html>
