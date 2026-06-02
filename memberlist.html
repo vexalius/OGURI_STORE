@@ -72,4 +72,278 @@
         }
         .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
-        .btn-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #
+        .btn-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .btn-small { padding: 6px 12px; font-size: 0.7rem; }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-md);
+            flex-wrap: wrap;
+        }
+        .member-info {
+            flex: 1;
+            min-width: 120px;
+        }
+        .member-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        .member-status {
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        .status-aktif { color: #4ade80; }
+        .status-offline { color: #6b6b80; }
+        .member-pin {
+            font-size: 0.8rem;
+            color: #a0a0b8;
+            margin-left: 8px;
+        }
+        .member-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6b6b80;
+            padding: 30px 0;
+        }
+
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
+
+        /* Modal edit PIN */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 320px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .modal-input {
+            width: 100%; padding: 10px; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border); border-radius: 8px; color: #fff; margin-bottom: 12px;
+            font-family: inherit;
+        }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    </style>
+</head>
+<body>
+    <div class="toast" id="toast"></div>
+    <div class="container">
+        <div class="header">
+            <div class="brand">
+                <h2>👥 List Member</h2>
+            </div>
+            <a href="dashboard.html" class="btn">⬅ Kembali</a>
+        </div>
+
+        <div class="card">
+            <h3>Daftar Member</h3>
+            <div class="member-list" id="memberList">
+                <div class="empty-state">Memuat...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit PIN -->
+    <div class="modal-overlay" id="editPinModal">
+        <div class="modal">
+            <h4>Edit PIN Member</h4>
+            <input type="password" class="modal-input" id="newPinInput" placeholder="PIN baru (min. 4 digit)" maxlength="6" inputmode="numeric">
+            <div class="modal-actions">
+                <button class="btn" id="cancelEditPin">Batal</button>
+                <button class="btn btn-primary" id="saveEditPin">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            try {
+                // Current user
+                let currentUser = null;
+                try {
+                    const stored = localStorage.getItem('shiroha_currentUser');
+                    if (stored) currentUser = JSON.parse(stored);
+                } catch(e) {
+                    currentUser = null;
+                }
+                if (!currentUser) {
+                    currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
+                    localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
+                }
+                const isAdmin = currentUser.role === 'admin';
+
+                // Data member
+                const MEMBERS_KEY = 'shiroha_members';
+                let members = [];
+                try {
+                    const stored = localStorage.getItem(MEMBERS_KEY);
+                    if (stored) members = JSON.parse(stored);
+                } catch(e) {
+                    members = [];
+                }
+                if (!members || members.length === 0) {
+                    members = [
+                        { id: 1, username: 'Sania', pin: '1234', status: 'aktif' },
+                        { id: 2, username: 'Danil', pin: '5678', status: 'offline' },
+                        { id: 3, username: 'Shiro', pin: '9999', status: 'aktif' }
+                    ];
+                    localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
+                }
+                function saveMembers() {
+                    localStorage.setItem(MEMBERS_KEY, JSON.stringify(members));
+                }
+
+                // DOM
+                const memberList = document.getElementById('memberList');
+                const toast = document.getElementById('toast');
+                const editPinModal = document.getElementById('editPinModal');
+                const newPinInput = document.getElementById('newPinInput');
+                const cancelEditPin = document.getElementById('cancelEditPin');
+                const saveEditPin = document.getElementById('saveEditPin');
+
+                let currentEditMemberId = null;
+
+                let toastTimer;
+                function showToast(msg, isError = false) {
+                    clearTimeout(toastTimer);
+                    toast.textContent = msg;
+                    toast.className = 'toast ' + (isError ? 'error' : '');
+                    void toast.offsetWidth;
+                    toast.classList.add('show');
+                    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+                }
+
+                // Render daftar member
+                function renderMembers() {
+                    memberList.innerHTML = '';
+                    if (!members || members.length === 0) {
+                        memberList.innerHTML = '<div class="empty-state">Belum ada member terdaftar.</div>';
+                        return;
+                    }
+                    members.forEach(member => {
+                        const item = document.createElement('div');
+                        item.className = 'member-item';
+                        
+                        let pinDisplay = '';
+                        if (isAdmin) {
+                            pinDisplay = `<span class="member-pin">PIN: ${member.pin}</span>`;
+                        }
+
+                        let actionsHtml = '';
+                        if (isAdmin) {
+                            actionsHtml = `
+                                <div class="member-actions">
+                                    <button class="btn btn-small edit-pin-btn" data-id="${member.id}">✏️ Edit PIN</button>
+                                    <button class="btn btn-small btn-danger hapus-btn" data-id="${member.id}">🗑 Hapus</button>
+                                </div>
+                            `;
+                        }
+
+                        item.innerHTML = `
+                            <div class="member-info">
+                                <span class="member-name">${member.username}</span>
+                                <span class="member-status ${member.status === 'aktif' ? 'status-aktif' : 'status-offline'}">
+                                    • ${member.status === 'aktif' ? 'Aktif' : 'Offline'}
+                                </span>
+                                ${pinDisplay}
+                            </div>
+                            ${actionsHtml}
+                        `;
+                        memberList.appendChild(item);
+                    });
+
+                    // Attach event admin
+                    if (isAdmin) {
+                        document.querySelectorAll('.edit-pin-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                currentEditMemberId = parseInt(btn.dataset.id);
+                                newPinInput.value = '';
+                                editPinModal.style.display = 'flex';
+                            });
+                        });
+                        document.querySelectorAll('.hapus-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                const memberId = parseInt(btn.dataset.id);
+                                if (confirm('Apakah Anda yakin ingin menghapus member ini?')) {
+                                    members = members.filter(m => m.id !== memberId);
+                                    saveMembers();
+                                    renderMembers();
+                                    showToast('Member dihapus.');
+                                }
+                            });
+                        });
+                    }
+                }
+
+                // Modal edit PIN
+                cancelEditPin.addEventListener('click', () => {
+                    editPinModal.style.display = 'none';
+                    currentEditMemberId = null;
+                });
+                saveEditPin.addEventListener('click', () => {
+                    const newPin = newPinInput.value.trim();
+                    if (!newPin || newPin.length < 4 || !/^\d+$/.test(newPin)) {
+                        showToast('PIN baru minimal 4 digit angka.', true);
+                        return;
+                    }
+                    const member = members.find(m => m.id === currentEditMemberId);
+                    if (member) {
+                        member.pin = newPin;
+                        saveMembers();
+                        renderMembers();
+                        showToast('PIN berhasil diperbarui.');
+                    }
+                    editPinModal.style.display = 'none';
+                });
+                editPinModal.addEventListener('click', (e) => {
+                    if (e.target === editPinModal) editPinModal.style.display = 'none';
+                });
+
+                // Inisialisasi
+                renderMembers();
+
+            } catch (error) {
+                console.error('Error di memberlist.html:', error);
+                document.getElementById('memberList').innerHTML = '<div class="empty-state" style="color:#fca5a5;">Gagal memuat data member.</div>';
+            }
+        })();
+    </script>
+</body>
+</html>
