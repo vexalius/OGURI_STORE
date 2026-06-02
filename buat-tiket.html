@@ -55,13 +55,42 @@
             opacity: 0.45;
             animation: floatOrb 12s ease-in-out infinite;
         }
-        .bg-orb.orb-1 { width: 260px; height: 260px; background: rgba(168, 85, 247, 0.12); top: -8%; left: -6%; animation-delay: 0s; }
+        .bg-orb.orb-1 { width: 260px; height: 260px; background: rgba(168, 85, 247, 0.12); top: -8%; left: -6%; }
         .bg-orb.orb-2 { width: 180px; height: 180px; background: rgba(99, 102, 241, 0.09); bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 15s; }
         @keyframes floatOrb {
             0%, 100% { transform: translate(0, 0) scale(1); }
             25% { transform: translate(22px, -28px) scale(1.07); }
             50% { transform: translate(-14px, 18px) scale(0.95); }
             75% { transform: translate(-22px, -14px) scale(1.04); }
+        }
+
+        /* Toast modern */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e;
+            color: #f1f1f3;
+            padding: 12px 22px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.error {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: #1e1418;
+            color: #fca5a5;
         }
 
         .app-card {
@@ -127,40 +156,14 @@
             color: #d4d4e0;
         }
         .btn-outline:hover { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.03); color: #fff; }
-        .btn-small {
-            padding: 10px 16px;
-            font-size: 0.85rem;
-            width: auto;
-        }
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-        }
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
+        .btn-small { padding: 10px 16px; font-size: 0.85rem; width: auto; }
+        .btn-danger { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+        .btn-row { display: flex; gap: 12px; margin-top: 20px; }
         .btn-row .btn { flex: 1; }
 
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.4px;
-            color: #c4c4d4;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.4px; color: #c4c4d4; margin-bottom: 6px; text-transform: uppercase; }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper input, .input-wrapper .fake-input {
             width: 100%;
             padding: 13px 14px;
@@ -190,12 +193,7 @@
             box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08);
         }
 
-        .tag-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
         .tag {
             background: rgba(168, 85, 247, 0.15);
             color: #d8b4fe;
@@ -207,102 +205,27 @@
             align-items: center;
             gap: 6px;
         }
-        .tag button {
-            background: none;
-            border: none;
-            color: #fca5a5;
-            cursor: pointer;
-            font-size: 1.1rem;
-            line-height: 1;
-            padding: 0 2px;
-        }
+        .tag button { background: none; border: none; color: #fca5a5; cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
 
-        .total-display {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #e8e8f0;
-            margin-top: 8px;
-            background: rgba(168, 85, 247, 0.05);
-            padding: 10px 14px;
-            border-radius: var(--radius-md);
-        }
+        .total-display { font-size: 1rem; font-weight: 600; color: #e8e8f0; margin-top: 8px; background: rgba(168, 85, 247, 0.05); padding: 10px 14px; border-radius: var(--radius-md); }
 
-        /* Modal / Popup */
         .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 20px;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
             animation: fadeIn 0.2s;
         }
-        .modal {
-            background: #1a1a2e;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 360px;
-            padding: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        }
-        .modal h4 {
-            font-size: 1.1rem;
-            color: #fff;
-            margin-bottom: 16px;
-        }
-        .modal-list {
-            max-height: 220px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .modal-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .modal-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .modal { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); width: 100%; max-width: 360px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .modal h4 { font-size: 1.1rem; color: #fff; margin-bottom: 16px; }
+        .modal-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+        .modal-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: background 0.2s; }
+        .modal-item:hover { background: rgba(255,255,255,0.06); }
         .modal-item input[type="radio"], .modal-item input[type="checkbox"] { accent-color: #a855f7; width: 18px; height: 18px; }
-        .modal-qty {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-left: auto;
-        }
-        .modal-qty input {
-            width: 50px;
-            padding: 6px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            color: #fff;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
+        .modal-qty { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+        .modal-qty input { width: 50px; padding: 6px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: #fff; text-align: center; font-size: 0.85rem; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
         .hidden { display: none !important; }
-        .step { transition: opacity 0.3s; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 480px) {
             .app-card { padding: 24px 18px; }
@@ -314,8 +237,11 @@
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
 
+    <!-- Toast modern -->
+    <div class="toast" id="toast"></div>
+
     <div class="app-card" id="appCard">
-        <!-- Step 1: Choice (Sudah/Belum punya ID) -->
+        <!-- Step 1: Choice -->
         <div id="stepChoice" class="step">
             <h2 class="step-title">📋 Buat Tiket</h2>
             <p class="step-subtitle">Silakan pilih status Anda</p>
@@ -324,40 +250,25 @@
             <button class="btn btn-outline" id="btnNewUser">🆕 Belum Memiliki ID</button>
         </div>
 
-        <!-- Step 2: Register (Belum punya ID) -->
+        <!-- Step 2: Register -->
         <div id="stepRegister" class="step hidden">
             <h2 class="step-title">📝 Daftar Akun Baru</h2>
             <p class="step-subtitle">Buat ID & PIN Anda</p>
-            <div class="form-group">
-                <label>ID Pengguna</label>
-                <div class="input-wrapper"><input type="text" id="regId" placeholder="Masukkan ID"></div>
-            </div>
-            <div class="form-group">
-                <label>Username</label>
-                <div class="input-wrapper"><input type="text" id="regUsername" placeholder="Nama panggilan"></div>
-            </div>
-            <div class="form-group">
-                <label>PIN (min. 4 digit angka)</label>
-                <div class="input-wrapper"><input type="password" id="regPin" placeholder="PIN" maxlength="6" inputmode="numeric"></div>
-            </div>
+            <div class="form-group"><label>ID Pengguna</label><div class="input-wrapper"><input type="text" id="regId" placeholder="Masukkan ID"></div></div>
+            <div class="form-group"><label>Username</label><div class="input-wrapper"><input type="text" id="regUsername" placeholder="Nama panggilan"></div></div>
+            <div class="form-group"><label>PIN (min. 4 digit angka)</label><div class="input-wrapper"><input type="password" id="regPin" placeholder="PIN" maxlength="6" inputmode="numeric"></div></div>
             <div class="btn-row">
                 <button class="btn btn-outline btn-small" id="regBack">⬅ Kembali</button>
                 <button class="btn btn-primary btn-small" id="regSubmit">Daftar & Lanjut</button>
             </div>
         </div>
 
-        <!-- Step 3: Login existing -->
+        <!-- Step 3: Login Existing -->
         <div id="stepLoginExisting" class="step hidden">
             <h2 class="step-title">🔐 Login</h2>
             <p class="step-subtitle">Masukkan ID & PIN Anda</p>
-            <div class="form-group">
-                <label>ID</label>
-                <div class="input-wrapper"><input type="text" id="loginId" placeholder="ID Anda"></div>
-            </div>
-            <div class="form-group">
-                <label>PIN</label>
-                <div class="input-wrapper"><input type="password" id="loginPin" placeholder="PIN" maxlength="6"></div>
-            </div>
+            <div class="form-group"><label>ID</label><div class="input-wrapper"><input type="text" id="loginId" placeholder="ID Anda"></div></div>
+            <div class="form-group"><label>PIN</label><div class="input-wrapper"><input type="password" id="loginPin" placeholder="PIN" maxlength="6"></div></div>
             <div class="btn-row">
                 <button class="btn btn-outline btn-small" id="loginBack">⬅ Kembali</button>
                 <button class="btn btn-primary btn-small" id="loginSubmit">Masuk</button>
@@ -368,25 +279,9 @@
         <div id="stepOrder" class="step hidden">
             <h2 class="step-title">📦 Informasi Order</h2>
             <p class="step-subtitle">Lengkapi detail joki</p>
-            <div class="form-group">
-                <label>Nama Pembeli</label>
-                <div class="input-wrapper"><input type="text" id="namaPembeli" placeholder="Nama Anda"></div>
-            </div>
-            <div class="form-group">
-                <label>Game</label>
-                <div class="input-wrapper fake-input" id="gameSelector">
-                    <span id="gameSelectedText" class="placeholder">Pilih game...</span>
-                    <span>🔽</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Layanan Joki (bisa pilih lebih dari satu)</label>
-                <div class="input-wrapper fake-input" id="jokiSelector">
-                    <span id="jokiSelectedText" class="placeholder">Pilih layanan...</span>
-                    <span>🔽</span>
-                </div>
-                <div id="selectedJokiTags" class="tag-list"></div>
-            </div>
+            <div class="form-group"><label>Nama Pembeli</label><div class="input-wrapper"><input type="text" id="namaPembeli" placeholder="Nama Anda"></div></div>
+            <div class="form-group"><label>Game</label><div class="input-wrapper fake-input" id="gameSelector"><span id="gameSelectedText" class="placeholder">Pilih game...</span><span>🔽</span></div></div>
+            <div class="form-group"><label>Layanan Joki (bisa pilih lebih dari satu)</label><div class="input-wrapper fake-input" id="jokiSelector"><span id="jokiSelectedText" class="placeholder">Pilih layanan...</span><span>🔽</span></div><div id="selectedJokiTags" class="tag-list"></div></div>
             <div class="total-display" id="totalOrderDisplay">Total: Rp 0</div>
             <div class="btn-row">
                 <button class="btn btn-outline btn-small" id="orderBack">⬅ Kembali</button>
@@ -398,39 +293,18 @@
         <div id="stepPayment" class="step hidden">
             <h2 class="step-title">💳 Informasi Pembayaran</h2>
             <p class="step-subtitle">Pilih metode & rekening</p>
-            <div class="form-group">
-                <label>Via Pembayaran</label>
-                <div class="input-wrapper fake-input" id="viaSelector">
-                    <span id="viaSelectedText" class="placeholder">Pilih Bank/E-wallet...</span>
-                    <span>🔽</span>
-                </div>
-            </div>
-            <div class="form-group" id="rekAdminGroup">
-                <label>Rekening Admin Tujuan</label>
-                <div class="input-wrapper fake-input" id="rekAdminSelector">
-                    <span id="rekAdminSelectedText" class="placeholder">Pilih rekening admin...</span>
-                    <span>🔽</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Nama Pengirim</label>
-                <div class="input-wrapper"><input type="text" id="namaPengirim" placeholder="Nama Anda"></div>
-            </div>
-            <div class="form-group">
-                <label>Nomor Rekening Pengirim</label>
-                <div class="input-wrapper"><input type="text" id="norekPengirim" placeholder="Nomor rekening/HP"></div>
-            </div>
-            <div class="form-group">
-                <label>Total Nominal</label>
-                <div class="input-wrapper"><input type="text" id="totalNominal" readonly placeholder="Otomatis terisi"></div>
-            </div>
+            <div class="form-group"><label>Via Pembayaran</label><div class="input-wrapper fake-input" id="viaSelector"><span id="viaSelectedText" class="placeholder">Pilih Bank/E-wallet...</span><span>🔽</span></div></div>
+            <div class="form-group" id="rekAdminGroup"><label>Rekening Admin Tujuan</label><div class="input-wrapper fake-input" id="rekAdminSelector"><span id="rekAdminSelectedText" class="placeholder">Pilih rekening admin...</span><span>🔽</span></div></div>
+            <div class="form-group"><label>Nama Pengirim</label><div class="input-wrapper"><input type="text" id="namaPengirim" placeholder="Nama Anda"></div></div>
+            <div class="form-group"><label>Nomor Rekening Pengirim</label><div class="input-wrapper"><input type="text" id="norekPengirim" placeholder="Nomor rekening/HP"></div></div>
+            <div class="form-group"><label>Total Nominal</label><div class="input-wrapper"><input type="text" id="totalNominal" readonly placeholder="Otomatis terisi"></div></div>
             <div class="btn-row">
                 <button class="btn btn-outline btn-small" id="paymentBack">⬅ Kembali</button>
                 <button class="btn btn-primary btn-small" id="paymentNext">Lanjut ➡</button>
             </div>
         </div>
 
-        <!-- Step 6: Struk -->
+        <!-- Step 6: Receipt -->
         <div id="stepReceipt" class="step hidden">
             <h2 class="step-title">🧾 Struk Pemesanan</h2>
             <p class="step-subtitle">Ringkasan data Anda</p>
@@ -449,7 +323,7 @@
 
     <script>
         (function() {
-            // --- Data statis ---
+            // Data
             const gameList = [
                 { id: 'genshin', name: 'Genshin Impact', basePrice: 25000 },
                 { id: 'starrail', name: 'Honkai Star Rail', basePrice: 25000 },
@@ -475,25 +349,13 @@
                 { id: 'gopay', name: 'GoPay - 08135558888 a/n Admin Shiroha', via: 'ewallet' }
             ];
 
-            // --- State ---
             const state = {
                 currentStep: 'choice',
                 user: { id: '', username: '', pin: '' },
-                order: {
-                    nama: '',
-                    game: null,
-                    jokiItems: [], // [{ service, qty }]
-                    total: 0
-                },
-                payment: {
-                    via: '', // 'bank' atau 'ewallet'
-                    rekAdmin: null,
-                    namaPengirim: '',
-                    norekPengirim: ''
-                }
+                order: { nama: '', game: null, jokiItems: [], total: 0 },
+                payment: { via: '', rekAdmin: null, namaPengirim: '', norekPengirim: '' }
             };
 
-            // --- Elements ---
             const steps = {
                 choice: document.getElementById('stepChoice'),
                 register: document.getElementById('stepRegister'),
@@ -504,10 +366,20 @@
             };
             const modalOverlay = document.getElementById('modalOverlay');
             const modalBox = document.getElementById('modalBox');
+            const toast = document.getElementById('toast');
 
-            // --- Helpers ---
+            let toastTimer;
+            function showToast(message, isError = false) {
+                clearTimeout(toastTimer);
+                toast.textContent = message;
+                toast.className = 'toast ' + (isError ? 'error' : '');
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
             function showStep(stepName) {
-                Object.keys(steps).forEach(s => steps[s].classList.add('hidden'));
+                Object.values(steps).forEach(s => s.classList.add('hidden'));
                 steps[stepName].classList.remove('hidden');
                 state.currentStep = stepName;
                 if (stepName === 'order') updateOrderTotal();
@@ -522,77 +394,72 @@
                 modalBox.innerHTML = htmlContent;
                 modalOverlay.classList.remove('hidden');
             }
+            function closeModal() { modalOverlay.classList.add('hidden'); }
+            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
 
-            function closeModal() {
-                modalOverlay.classList.add('hidden');
-            }
-
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
-            });
-
-            // --- Step Choice ---
+            // Step Choice
             document.getElementById('btnAlreadyHave').addEventListener('click', () => showStep('loginExisting'));
             document.getElementById('btnNewUser').addEventListener('click', () => showStep('register'));
 
-            // --- Register ---
+            // Register
             document.getElementById('regBack').addEventListener('click', () => showStep('choice'));
             document.getElementById('regSubmit').addEventListener('click', () => {
                 const id = document.getElementById('regId').value.trim();
                 const username = document.getElementById('regUsername').value.trim();
                 const pin = document.getElementById('regPin').value.trim();
                 if (!id || !username || !pin || pin.length < 4 || !/^\d+$/.test(pin)) {
-                    alert('Mohon isi semua data dengan benar. PIN minimal 4 digit angka.');
+                    showToast('Mohon isi semua data dengan benar. PIN minimal 4 digit angka.', true);
                     return;
                 }
                 state.user = { id, username, pin };
-                document.getElementById('namaPembeli').value = username; // prefill nama pembeli
+                // *** PERBAIKAN: Update state.order.nama ***
+                state.order.nama = username;
+                document.getElementById('namaPembeli').value = username;
                 showStep('order');
             });
 
-            // --- Login Existing ---
+            // Login Existing
             document.getElementById('loginBack').addEventListener('click', () => showStep('choice'));
             document.getElementById('loginSubmit').addEventListener('click', () => {
                 const id = document.getElementById('loginId').value.trim();
                 const pin = document.getElementById('loginPin').value.trim();
                 if (!id || !pin) {
-                    alert('ID dan PIN harus diisi.');
+                    showToast('ID dan PIN harus diisi.', true);
                     return;
                 }
-                // Simulasi login: simpan data user (seharusnya cek ke database)
                 state.user = { id, username: id, pin };
+                // *** PERBAIKAN: Update state.order.nama ***
+                state.order.nama = id;
                 document.getElementById('namaPembeli').value = id;
                 showStep('order');
             });
 
-            // --- Order Step ---
+            // Order Step
             document.getElementById('orderBack').addEventListener('click', () => showStep('choice'));
             document.getElementById('orderNext').addEventListener('click', () => {
+                // Update nama dari input field setiap kali (antisipasi perubahan manual)
+                state.order.nama = document.getElementById('namaPembeli').value.trim();
                 if (!state.order.nama || !state.order.game || state.order.jokiItems.length === 0) {
-                    alert('Lengkapi nama, game, dan minimal satu layanan joki.');
+                    showToast('⚠️ Lengkapi nama, game, dan minimal satu layanan joki.', true);
                     return;
                 }
                 showStep('payment');
             });
 
-            // Game selector popup
+            // Game selector
             document.getElementById('gameSelector').addEventListener('click', () => {
                 let html = '<h4>Pilih Game</h4><div class="modal-list">';
                 gameList.forEach(g => {
-                    html += `<div class="modal-item" data-game-id="${g.id}">
-                                <input type="radio" name="gameRadio" value="${g.id}" ${state.order.game?.id === g.id ? 'checked' : ''}>
-                                <span>${g.name} (Rp ${g.basePrice.toLocaleString('id-ID')})</span>
-                            </div>`;
+                    html += `<div class="modal-item"><input type="radio" name="gameRadio" value="${g.id}" ${state.order.game?.id===g.id?'checked':''}> <span>${g.name} (Rp ${g.basePrice.toLocaleString('id-ID')})</span></div>`;
                 });
                 html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancel">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmGame">Pilih</button></div>';
                 showModal(html);
                 document.getElementById('modalCancel').addEventListener('click', closeModal);
                 document.getElementById('modalConfirmGame').addEventListener('click', () => {
-                    const selected = document.querySelector('input[name="gameRadio"]:checked');
-                    if (selected) {
-                        const game = gameList.find(g => g.id === selected.value);
-                        state.order.game = game;
-                        document.getElementById('gameSelectedText').textContent = game.name;
+                    const sel = document.querySelector('input[name="gameRadio"]:checked');
+                    if (sel) {
+                        state.order.game = gameList.find(g => g.id === sel.value);
+                        document.getElementById('gameSelectedText').textContent = state.order.game.name;
                         document.getElementById('gameSelectedText').classList.remove('placeholder');
                         updateOrderTotal();
                     }
@@ -600,21 +467,14 @@
                 });
             });
 
-            // Joki selector popup (multi with qty)
+            // Joki selector
             document.getElementById('jokiSelector').addEventListener('click', () => {
                 let html = '<h4>Pilih Layanan (multi)</h4><div class="modal-list">';
                 jokiServices.forEach(s => {
                     const existing = state.order.jokiItems.find(j => j.service.id === s.id);
                     const checked = existing ? 'checked' : '';
                     const qty = existing ? existing.qty : 1;
-                    html += `<div class="modal-item">
-                                <input type="checkbox" value="${s.id}" ${checked}>
-                                <span>${s.name} (Rp ${s.price.toLocaleString('id-ID')})</span>
-                                <div class="modal-qty">
-                                    <span>Qty:</span>
-                                    <input type="number" min="1" value="${qty}" class="qty-input" data-service="${s.id}">
-                                </div>
-                            </div>`;
+                    html += `<div class="modal-item"><input type="checkbox" value="${s.id}" ${checked}><span>${s.name} (Rp ${s.price.toLocaleString('id-ID')})</span><div class="modal-qty"><span>Qty:</span><input type="number" min="1" value="${qty}" class="qty-input" data-service="${s.id}"></div></div>`;
                 });
                 html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelJoki">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmJoki">Simpan</button></div>';
                 showModal(html);
@@ -625,10 +485,8 @@
                     checkboxes.forEach(cb => {
                         if (cb.checked) {
                             const sid = cb.value;
-                            const qtyInput = cb.closest('.modal-item').querySelector('.qty-input');
-                            const qty = parseInt(qtyInput.value) || 1;
-                            const service = jokiServices.find(s => s.id === sid);
-                            newItems.push({ service, qty });
+                            const qty = parseInt(cb.closest('.modal-item').querySelector('.qty-input').value) || 1;
+                            newItems.push({ service: jokiServices.find(s => s.id === sid), qty });
                         }
                     });
                     state.order.jokiItems = newItems;
@@ -670,38 +528,32 @@
                 state.order.jokiItems.forEach(item => total += item.service.price * item.qty);
                 state.order.total = total;
                 document.getElementById('totalOrderDisplay').textContent = 'Total: Rp ' + total.toLocaleString('id-ID');
-                document.getElementById('namaPembeli').addEventListener('input', (e) => {
-                    state.order.nama = e.target.value;
-                });
-                // Update nama pembeli setiap kali
-                document.getElementById('namaPembeli').oninput = (e) => state.order.nama = e.target.value;
             }
+            // Update nama pembeli saat diketik manual
+            document.getElementById('namaPembeli').addEventListener('input', e => state.order.nama = e.target.value);
 
-            // --- Payment Step ---
+            // Payment Step
             document.getElementById('paymentBack').addEventListener('click', () => showStep('order'));
             document.getElementById('paymentNext').addEventListener('click', () => {
                 if (!state.payment.via || !state.payment.rekAdmin || !state.payment.namaPengirim || !state.payment.norekPengirim) {
-                    alert('Lengkapi semua data pembayaran.');
+                    showToast('⚠️ Lengkapi semua data pembayaran.', true);
                     return;
                 }
                 showStep('receipt');
             });
 
-            // Via selector
             document.getElementById('viaSelector').addEventListener('click', () => {
-                const html = `<h4>Pilih Metode Pembayaran</h4>
-                    <div class="modal-list">
-                        <div class="modal-item" data-via="bank"><input type="radio" name="viaRadio" value="bank" ${state.payment.via==='bank'?'checked':''}> 🏦 Bank</div>
-                        <div class="modal-item" data-via="ewallet"><input type="radio" name="viaRadio" value="ewallet" ${state.payment.via==='ewallet'?'checked':''}> 💰 E-Wallet</div>
-                    </div>
-                    <div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelVia">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmVia">Pilih</button></div>`;
+                let html = `<h4>Pilih Metode Pembayaran</h4><div class="modal-list">
+                    <div class="modal-item"><input type="radio" name="viaRadio" value="bank" ${state.payment.via==='bank'?'checked':''}> 🏦 Bank</div>
+                    <div class="modal-item"><input type="radio" name="viaRadio" value="ewallet" ${state.payment.via==='ewallet'?'checked':''}> 💰 E-Wallet</div>
+                </div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelVia">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmVia">Pilih</button></div>`;
                 showModal(html);
                 document.getElementById('modalCancelVia').addEventListener('click', closeModal);
                 document.getElementById('modalConfirmVia').addEventListener('click', () => {
-                    const selected = document.querySelector('input[name="viaRadio"]:checked');
-                    if (selected) {
-                        state.payment.via = selected.value;
-                        document.getElementById('viaSelectedText').textContent = selected.value === 'bank' ? 'Bank' : 'E-Wallet';
+                    const sel = document.querySelector('input[name="viaRadio"]:checked');
+                    if (sel) {
+                        state.payment.via = sel.value;
+                        document.getElementById('viaSelectedText').textContent = sel.value === 'bank' ? 'Bank' : 'E-Wallet';
                         document.getElementById('viaSelectedText').classList.remove('placeholder');
                         state.payment.rekAdmin = null;
                         document.getElementById('rekAdminSelectedText').textContent = 'Pilih rekening admin...';
@@ -713,15 +565,12 @@
             });
 
             function updateRekAdminVisibility() {
-                const group = document.getElementById('rekAdminGroup');
-                if (state.payment.via) group.style.display = 'block';
-                else group.style.display = 'none';
+                document.getElementById('rekAdminGroup').style.display = state.payment.via ? 'block' : 'none';
             }
 
-            // Rekening Admin selector
             document.getElementById('rekAdminSelector').addEventListener('click', () => {
                 if (!state.payment.via) {
-                    alert('Pilih metode pembayaran terlebih dahulu.');
+                    showToast('Pilih metode pembayaran terlebih dahulu.', true);
                     return;
                 }
                 const list = state.payment.via === 'bank' ? bankAdmins : ewalletAdmins;
@@ -733,11 +582,10 @@
                 showModal(html);
                 document.getElementById('modalCancelRek').addEventListener('click', closeModal);
                 document.getElementById('modalConfirmRek').addEventListener('click', () => {
-                    const selected = document.querySelector('input[name="rekRadio"]:checked');
-                    if (selected) {
-                        const rek = list.find(r => r.id === selected.value);
-                        state.payment.rekAdmin = rek;
-                        document.getElementById('rekAdminSelectedText').textContent = rek.name;
+                    const sel = document.querySelector('input[name="rekRadio"]:checked');
+                    if (sel) {
+                        state.payment.rekAdmin = list.find(r => r.id === sel.value);
+                        document.getElementById('rekAdminSelectedText').textContent = state.payment.rekAdmin.name;
                         document.getElementById('rekAdminSelectedText').classList.remove('placeholder');
                     }
                     closeModal();
@@ -747,10 +595,9 @@
             document.getElementById('namaPengirim').addEventListener('input', e => state.payment.namaPengirim = e.target.value);
             document.getElementById('norekPengirim').addEventListener('input', e => state.payment.norekPengirim = e.target.value);
 
-            // --- Receipt ---
+            // Receipt
             function renderReceipt() {
-                const content = document.getElementById('receiptContent');
-                content.innerHTML = `
+                document.getElementById('receiptContent').innerHTML = `
                     <strong>ID Pengguna:</strong> ${state.user.id}<br>
                     <strong>Username:</strong> ${state.user.username}<br>
                     <strong>Nama Pembeli:</strong> ${state.order.nama}<br>
@@ -765,14 +612,10 @@
                 `;
             }
 
-            document.getElementById('toDashboard').addEventListener('click', () => {
-                window.location.href = 'dashboard.html';
-            });
-            document.getElementById('toLogout').addEventListener('click', () => {
-                window.location.href = 'login.html';
-            });
+            document.getElementById('toDashboard').addEventListener('click', () => window.location.href = 'dashboard.html');
+            document.getElementById('toLogout').addEventListener('click', () => window.location.href = 'login.html');
 
-            // Initial
+            // Init
             showStep('choice');
             updateRekAdminVisibility();
         })();
