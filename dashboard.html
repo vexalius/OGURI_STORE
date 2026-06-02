@@ -72,6 +72,21 @@
             color: #d8b4fe; box-shadow: 0 0 12px rgba(168, 85, 247, 0.1);
         }
 
+        .user-info-bar {
+            background: rgba(168, 85, 247, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #d8b4fe;
+            font-weight: 500;
+        }
+        .user-info-bar span { font-size: 0.9rem; }
+
         .card {
             background: var(--card-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;
@@ -165,6 +180,12 @@
         </div>
 
         <nav class="navbar" id="navbar"></nav>
+
+        <!-- Info ringkasan hanya untuk user biasa -->
+        <div class="user-info-bar" id="userInfoBar" style="display: none;">
+            <span>📊 <strong id="infoBerlangsung">BERLANGSUNG: 0</strong></span>
+            <span>✅ <strong id="infoSelesai">SELESAI: 0</strong></span>
+        </div>
 
         <div class="card">
             <h2>📋 Progres Joki</h2>
@@ -287,17 +308,33 @@
 
             function renderTable() {
                 const allData = getJoki();
-                const filtered = isAdmin ? allData : allData.filter(j => j.userId === currentUser.id);
+                // Data milik user atau semua untuk admin
+                const userData = isAdmin ? allData : allData.filter(j => j.userId === currentUser.id);
+                
+                // Untuk user biasa: info ringkasan
+                if (!isAdmin) {
+                    const berlangsung = userData.filter(j => j.status !== 'selesai').length;
+                    const selesai = userData.filter(j => j.status === 'selesai').length;
+                    document.getElementById('infoBerlangsung').textContent = `BERLANGSUNG: ${berlangsung}`;
+                    document.getElementById('infoSelesai').textContent = `SELESAI: ${selesai}`;
+                    document.getElementById('userInfoBar').style.display = 'flex';
+                } else {
+                    document.getElementById('userInfoBar').style.display = 'none';
+                }
+
+                // Data yang ditampilkan di tabel: untuk user -> hanya yang bukan selesai, admin -> semua
+                const displayData = isAdmin ? userData : userData.filter(j => j.status !== 'selesai');
+
                 const tbody = document.getElementById('tableBody');
                 const editCol = document.getElementById('editColHeader');
                 if (!isAdmin) editCol.style.display = 'none'; else editCol.style.display = '';
 
-                if (filtered.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Belum ada data joki.</td></tr>';
+                if (displayData.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Tidak ada joki aktif.</td></tr>';
                     return;
                 }
 
-                tbody.innerHTML = filtered.map(j => {
+                tbody.innerHTML = displayData.map(j => {
                     const sc = { sedang:'sedang-joki', istirahat:'istirahat', belum_mulai:'belum-mulai', selesai:'selesai' }[j.status] || 'belum-mulai';
                     const st = { sedang:'Sedang Joki', istirahat:'Istirahat', belum_mulai:'Belum Mulai', selesai:'Selesai' }[j.status] || 'Belum Mulai';
                     const pembayaran = j.pembayaran || 'Lunas ✓';
@@ -326,7 +363,6 @@
                             editStatus.value = item.status;
                             editProgress.value = item.progress || 0;
                             progressValue.textContent = (item.progress || 0) + '%';
-                            // Konversi tanggal dari format DD/MM/YYYY ke YYYY-MM-DD untuk input date
                             const parseDate = (str) => {
                                 if (!str || str === '-') return '';
                                 const parts = str.split('/');
@@ -352,7 +388,6 @@
                 item.progress = parseInt(editProgress.value);
                 if (item.status === 'selesai') item.progress = 100;
                 if (item.status === 'belum_mulai') item.progress = 0;
-                // Simpan tanggal dalam format DD/MM/YYYY
                 const formatDate = (val) => {
                     if (!val) return '-';
                     const d = new Date(val);
