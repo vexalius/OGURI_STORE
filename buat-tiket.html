@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Buat Tiket</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.85);
+            --accent: #a855f7;
+            --accent-hover: #9333ea;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --input-bg: rgba(255, 255, 255, 0.04);
+            --input-border: rgba(255, 255, 255, 0.08);
+            --input-focus-border: #a855f7;
+            --danger: #ef4444;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(255, 255, 255, 0.04) inset;
+            --shadow-glow: 0 0 60px rgba(168, 85, 247, 0.12);
+            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(168, 85, 247, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 15% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+            animation: floatOrb 12s ease-in-out infinite;
+        }
+        .bg-orb.orb-1 { width: 260px; height: 260px; background: rgba(168, 85, 247, 0.12); top: -8%; left: -6%; animation-delay: 0s; }
+        .bg-orb.orb-2 { width: 180px; height: 180px; background: rgba(99, 102, 241, 0.09); bottom: -10%; right: -5%; animation-delay: -5s; animation-duration: 15s; }
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(22px, -28px) scale(1.07); }
+            50% { transform: translate(-14px, 18px) scale(0.95); }
+            75% { transform: translate(-22px, -14px) scale(1.04); }
+        }
+
+        .app-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-xl);
+            padding: 36px 28px 32px;
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            animation: cardAppear 0.5s ease-out;
+        }
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(28px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        .step-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            background: transparent;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: #fff;
+            box-shadow: 0 6px 24px rgba(168, 85, 247, 0.3);
+        }
+        .btn-primary:hover { box-shadow: 0 10px 32px rgba(168, 85, 247, 0.45); transform: translateY(-1px); }
+        .btn-outline {
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            color: #d4d4e0;
+        }
+        .btn-outline:hover { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.03); color: #fff; }
+        .btn-small {
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            width: auto;
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-row .btn { flex: 1; }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            color: #c4c4d4;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input, .input-wrapper .fake-input {
+            width: 100%;
+            padding: 13px 14px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-md);
+            color: #e8e8f0;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all var(--transition);
+            outline: none;
+        }
+        .fake-input {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            padding: 13px 14px;
+            min-height: 48px;
+        }
+        .fake-input span { color: #a0a0b8; }
+        .fake-input .placeholder { color: #55556a; }
+        .input-wrapper input:focus {
+            border-color: var(--input-focus-border);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08);
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .tag {
+            background: rgba(168, 85, 247, 0.15);
+            color: #d8b4fe;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .tag button {
+            background: none;
+            border: none;
+            color: #fca5a5;
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            padding: 0 2px;
+        }
+
+        .total-display {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e8e8f0;
+            margin-top: 8px;
+            background: rgba(168, 85, 247, 0.05);
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+        }
+
+        /* Modal / Popup */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+            animation: fadeIn 0.2s;
+        }
+        .modal {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 360px;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        }
+        .modal h4 {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .modal-list {
+            max-height: 220px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .modal-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .modal-item input[type="radio"], .modal-item input[type="checkbox"] { accent-color: #a855f7; width: 18px; height: 18px; }
+        .modal-qty {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+        .modal-qty input {
+            width: 50px;
+            padding: 6px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            color: #fff;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .hidden { display: none !important; }
+        .step { transition: opacity 0.3s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .app-card { padding: 24px 18px; }
+            .step-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="app-card" id="appCard">
+        <!-- Step 1: Choice (Sudah/Belum punya ID) -->
+        <div id="stepChoice" class="step">
+            <h2 class="step-title">📋 Buat Tiket</h2>
+            <p class="step-subtitle">Silakan pilih status Anda</p>
+            <button class="btn btn-primary" id="btnAlreadyHave">✅ Sudah Memiliki ID</button>
+            <div style="height:12px;"></div>
+            <button class="btn btn-outline" id="btnNewUser">🆕 Belum Memiliki ID</button>
+        </div>
+
+        <!-- Step 2: Register (Belum punya ID) -->
+        <div id="stepRegister" class="step hidden">
+            <h2 class="step-title">📝 Daftar Akun Baru</h2>
+            <p class="step-subtitle">Buat ID & PIN Anda</p>
+            <div class="form-group">
+                <label>ID Pengguna</label>
+                <div class="input-wrapper"><input type="text" id="regId" placeholder="Masukkan ID"></div>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <div class="input-wrapper"><input type="text" id="regUsername" placeholder="Nama panggilan"></div>
+            </div>
+            <div class="form-group">
+                <label>PIN (min. 4 digit angka)</label>
+                <div class="input-wrapper"><input type="password" id="regPin" placeholder="PIN" maxlength="6" inputmode="numeric"></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="regBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="regSubmit">Daftar & Lanjut</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Login existing -->
+        <div id="stepLoginExisting" class="step hidden">
+            <h2 class="step-title">🔐 Login</h2>
+            <p class="step-subtitle">Masukkan ID & PIN Anda</p>
+            <div class="form-group">
+                <label>ID</label>
+                <div class="input-wrapper"><input type="text" id="loginId" placeholder="ID Anda"></div>
+            </div>
+            <div class="form-group">
+                <label>PIN</label>
+                <div class="input-wrapper"><input type="password" id="loginPin" placeholder="PIN" maxlength="6"></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="loginBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="loginSubmit">Masuk</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Informasi Order -->
+        <div id="stepOrder" class="step hidden">
+            <h2 class="step-title">📦 Informasi Order</h2>
+            <p class="step-subtitle">Lengkapi detail joki</p>
+            <div class="form-group">
+                <label>Nama Pembeli</label>
+                <div class="input-wrapper"><input type="text" id="namaPembeli" placeholder="Nama Anda"></div>
+            </div>
+            <div class="form-group">
+                <label>Game</label>
+                <div class="input-wrapper fake-input" id="gameSelector">
+                    <span id="gameSelectedText" class="placeholder">Pilih game...</span>
+                    <span>🔽</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Layanan Joki (bisa pilih lebih dari satu)</label>
+                <div class="input-wrapper fake-input" id="jokiSelector">
+                    <span id="jokiSelectedText" class="placeholder">Pilih layanan...</span>
+                    <span>🔽</span>
+                </div>
+                <div id="selectedJokiTags" class="tag-list"></div>
+            </div>
+            <div class="total-display" id="totalOrderDisplay">Total: Rp 0</div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="orderBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="orderNext">Lanjut ➡</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Informasi Pembayaran -->
+        <div id="stepPayment" class="step hidden">
+            <h2 class="step-title">💳 Informasi Pembayaran</h2>
+            <p class="step-subtitle">Pilih metode & rekening</p>
+            <div class="form-group">
+                <label>Via Pembayaran</label>
+                <div class="input-wrapper fake-input" id="viaSelector">
+                    <span id="viaSelectedText" class="placeholder">Pilih Bank/E-wallet...</span>
+                    <span>🔽</span>
+                </div>
+            </div>
+            <div class="form-group" id="rekAdminGroup">
+                <label>Rekening Admin Tujuan</label>
+                <div class="input-wrapper fake-input" id="rekAdminSelector">
+                    <span id="rekAdminSelectedText" class="placeholder">Pilih rekening admin...</span>
+                    <span>🔽</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nama Pengirim</label>
+                <div class="input-wrapper"><input type="text" id="namaPengirim" placeholder="Nama Anda"></div>
+            </div>
+            <div class="form-group">
+                <label>Nomor Rekening Pengirim</label>
+                <div class="input-wrapper"><input type="text" id="norekPengirim" placeholder="Nomor rekening/HP"></div>
+            </div>
+            <div class="form-group">
+                <label>Total Nominal</label>
+                <div class="input-wrapper"><input type="text" id="totalNominal" readonly placeholder="Otomatis terisi"></div>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-outline btn-small" id="paymentBack">⬅ Kembali</button>
+                <button class="btn btn-primary btn-small" id="paymentNext">Lanjut ➡</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Struk -->
+        <div id="stepReceipt" class="step hidden">
+            <h2 class="step-title">🧾 Struk Pemesanan</h2>
+            <p class="step-subtitle">Ringkasan data Anda</p>
+            <div id="receiptContent" style="background: rgba(255,255,255,0.03); border-radius:12px; padding:16px; font-size:0.9rem; color:#d4d4e0; line-height:1.8;"></div>
+            <div class="btn-row" style="margin-top:20px;">
+                <button class="btn btn-primary" id="toDashboard">🏠 Menu Utama</button>
+                <button class="btn btn-danger" id="toLogout">🚪 Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Popup Global -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+        <div class="modal" id="modalBox"></div>
+    </div>
+
+    <script>
+        (function() {
+            // --- Data statis ---
+            const gameList = [
+                { id: 'genshin', name: 'Genshin Impact', basePrice: 25000 },
+                { id: 'starrail', name: 'Honkai Star Rail', basePrice: 25000 },
+                { id: 'mlbb', name: 'Mobile Legends', basePrice: 20000 },
+                { id: 'pubg', name: 'PUBG Mobile', basePrice: 22000 },
+                { id: 'valorant', name: 'Valorant', basePrice: 30000 }
+            ];
+            const jokiServices = [
+                { id: 'explore1', name: 'Explore x1', price: 15000 },
+                { id: 'explore2', name: 'Explore x2', price: 25000 },
+                { id: 'rawat1bulan', name: 'Rawat akun 1 bulan', price: 80000 },
+                { id: 'pushrank', name: 'Push Rank', price: 50000 },
+                { id: 'event', name: 'Selesaikan Event', price: 35000 }
+            ];
+            const bankAdmins = [
+                { id: 'bca', name: 'BCA - 1234567890 a/n Admin Shiroha', via: 'bank' },
+                { id: 'bri', name: 'BRI - 0987654321 a/n Admin Shiroha', via: 'bank' },
+                { id: 'mandiri', name: 'Mandiri - 1122334455 a/n Admin Shiroha', via: 'bank' }
+            ];
+            const ewalletAdmins = [
+                { id: 'dana', name: 'DANA - 08123456789 a/n Admin Shiroha', via: 'ewallet' },
+                { id: 'ovo', name: 'OVO - 08129876543 a/n Admin Shiroha', via: 'ewallet' },
+                { id: 'gopay', name: 'GoPay - 08135558888 a/n Admin Shiroha', via: 'ewallet' }
+            ];
+
+            // --- State ---
+            const state = {
+                currentStep: 'choice',
+                user: { id: '', username: '', pin: '' },
+                order: {
+                    nama: '',
+                    game: null,
+                    jokiItems: [], // [{ service, qty }]
+                    total: 0
+                },
+                payment: {
+                    via: '', // 'bank' atau 'ewallet'
+                    rekAdmin: null,
+                    namaPengirim: '',
+                    norekPengirim: ''
+                }
+            };
+
+            // --- Elements ---
+            const steps = {
+                choice: document.getElementById('stepChoice'),
+                register: document.getElementById('stepRegister'),
+                loginExisting: document.getElementById('stepLoginExisting'),
+                order: document.getElementById('stepOrder'),
+                payment: document.getElementById('stepPayment'),
+                receipt: document.getElementById('stepReceipt')
+            };
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalBox = document.getElementById('modalBox');
+
+            // --- Helpers ---
+            function showStep(stepName) {
+                Object.keys(steps).forEach(s => steps[s].classList.add('hidden'));
+                steps[stepName].classList.remove('hidden');
+                state.currentStep = stepName;
+                if (stepName === 'order') updateOrderTotal();
+                if (stepName === 'payment') {
+                    document.getElementById('totalNominal').value = 'Rp ' + state.order.total.toLocaleString('id-ID');
+                    updateRekAdminVisibility();
+                }
+                if (stepName === 'receipt') renderReceipt();
+            }
+
+            function showModal(htmlContent) {
+                modalBox.innerHTML = htmlContent;
+                modalOverlay.classList.remove('hidden');
+            }
+
+            function closeModal() {
+                modalOverlay.classList.add('hidden');
+            }
+
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+
+            // --- Step Choice ---
+            document.getElementById('btnAlreadyHave').addEventListener('click', () => showStep('loginExisting'));
+            document.getElementById('btnNewUser').addEventListener('click', () => showStep('register'));
+
+            // --- Register ---
+            document.getElementById('regBack').addEventListener('click', () => showStep('choice'));
+            document.getElementById('regSubmit').addEventListener('click', () => {
+                const id = document.getElementById('regId').value.trim();
+                const username = document.getElementById('regUsername').value.trim();
+                const pin = document.getElementById('regPin').value.trim();
+                if (!id || !username || !pin || pin.length < 4 || !/^\d+$/.test(pin)) {
+                    alert('Mohon isi semua data dengan benar. PIN minimal 4 digit angka.');
+                    return;
+                }
+                state.user = { id, username, pin };
+                document.getElementById('namaPembeli').value = username; // prefill nama pembeli
+                showStep('order');
+            });
+
+            // --- Login Existing ---
+            document.getElementById('loginBack').addEventListener('click', () => showStep('choice'));
+            document.getElementById('loginSubmit').addEventListener('click', () => {
+                const id = document.getElementById('loginId').value.trim();
+                const pin = document.getElementById('loginPin').value.trim();
+                if (!id || !pin) {
+                    alert('ID dan PIN harus diisi.');
+                    return;
+                }
+                // Simulasi login: simpan data user (seharusnya cek ke database)
+                state.user = { id, username: id, pin };
+                document.getElementById('namaPembeli').value = id;
+                showStep('order');
+            });
+
+            // --- Order Step ---
+            document.getElementById('orderBack').addEventListener('click', () => showStep('choice'));
+            document.getElementById('orderNext').addEventListener('click', () => {
+                if (!state.order.nama || !state.order.game || state.order.jokiItems.length === 0) {
+                    alert('Lengkapi nama, game, dan minimal satu layanan joki.');
+                    return;
+                }
+                showStep('payment');
+            });
+
+            // Game selector popup
+            document.getElementById('gameSelector').addEventListener('click', () => {
+                let html = '<h4>Pilih Game</h4><div class="modal-list">';
+                gameList.forEach(g => {
+                    html += `<div class="modal-item" data-game-id="${g.id}">
+                                <input type="radio" name="gameRadio" value="${g.id}" ${state.order.game?.id === g.id ? 'checked' : ''}>
+                                <span>${g.name} (Rp ${g.basePrice.toLocaleString('id-ID')})</span>
+                            </div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancel">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmGame">Pilih</button></div>';
+                showModal(html);
+                document.getElementById('modalCancel').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmGame').addEventListener('click', () => {
+                    const selected = document.querySelector('input[name="gameRadio"]:checked');
+                    if (selected) {
+                        const game = gameList.find(g => g.id === selected.value);
+                        state.order.game = game;
+                        document.getElementById('gameSelectedText').textContent = game.name;
+                        document.getElementById('gameSelectedText').classList.remove('placeholder');
+                        updateOrderTotal();
+                    }
+                    closeModal();
+                });
+            });
+
+            // Joki selector popup (multi with qty)
+            document.getElementById('jokiSelector').addEventListener('click', () => {
+                let html = '<h4>Pilih Layanan (multi)</h4><div class="modal-list">';
+                jokiServices.forEach(s => {
+                    const existing = state.order.jokiItems.find(j => j.service.id === s.id);
+                    const checked = existing ? 'checked' : '';
+                    const qty = existing ? existing.qty : 1;
+                    html += `<div class="modal-item">
+                                <input type="checkbox" value="${s.id}" ${checked}>
+                                <span>${s.name} (Rp ${s.price.toLocaleString('id-ID')})</span>
+                                <div class="modal-qty">
+                                    <span>Qty:</span>
+                                    <input type="number" min="1" value="${qty}" class="qty-input" data-service="${s.id}">
+                                </div>
+                            </div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelJoki">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmJoki">Simpan</button></div>';
+                showModal(html);
+                document.getElementById('modalCancelJoki').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmJoki').addEventListener('click', () => {
+                    const checkboxes = document.querySelectorAll('#modalBox input[type="checkbox"]');
+                    const newItems = [];
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            const sid = cb.value;
+                            const qtyInput = cb.closest('.modal-item').querySelector('.qty-input');
+                            const qty = parseInt(qtyInput.value) || 1;
+                            const service = jokiServices.find(s => s.id === sid);
+                            newItems.push({ service, qty });
+                        }
+                    });
+                    state.order.jokiItems = newItems;
+                    renderJokiTags();
+                    updateOrderTotal();
+                    closeModal();
+                });
+            });
+
+            function renderJokiTags() {
+                const container = document.getElementById('selectedJokiTags');
+                container.innerHTML = '';
+                state.order.jokiItems.forEach(item => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.innerHTML = `${item.service.name} x${item.qty} <button data-remove="${item.service.id}">✕</button>`;
+                    container.appendChild(tag);
+                });
+                document.querySelectorAll('.tag button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const sid = e.target.dataset.remove;
+                        state.order.jokiItems = state.order.jokiItems.filter(j => j.service.id !== sid);
+                        renderJokiTags();
+                        updateOrderTotal();
+                    });
+                });
+                const textEl = document.getElementById('jokiSelectedText');
+                if (state.order.jokiItems.length === 0) {
+                    textEl.textContent = 'Pilih layanan...';
+                    textEl.classList.add('placeholder');
+                } else {
+                    textEl.textContent = state.order.jokiItems.map(i => i.service.name).join(', ');
+                    textEl.classList.remove('placeholder');
+                }
+            }
+
+            function updateOrderTotal() {
+                let total = state.order.game ? state.order.game.basePrice : 0;
+                state.order.jokiItems.forEach(item => total += item.service.price * item.qty);
+                state.order.total = total;
+                document.getElementById('totalOrderDisplay').textContent = 'Total: Rp ' + total.toLocaleString('id-ID');
+                document.getElementById('namaPembeli').addEventListener('input', (e) => {
+                    state.order.nama = e.target.value;
+                });
+                // Update nama pembeli setiap kali
+                document.getElementById('namaPembeli').oninput = (e) => state.order.nama = e.target.value;
+            }
+
+            // --- Payment Step ---
+            document.getElementById('paymentBack').addEventListener('click', () => showStep('order'));
+            document.getElementById('paymentNext').addEventListener('click', () => {
+                if (!state.payment.via || !state.payment.rekAdmin || !state.payment.namaPengirim || !state.payment.norekPengirim) {
+                    alert('Lengkapi semua data pembayaran.');
+                    return;
+                }
+                showStep('receipt');
+            });
+
+            // Via selector
+            document.getElementById('viaSelector').addEventListener('click', () => {
+                const html = `<h4>Pilih Metode Pembayaran</h4>
+                    <div class="modal-list">
+                        <div class="modal-item" data-via="bank"><input type="radio" name="viaRadio" value="bank" ${state.payment.via==='bank'?'checked':''}> 🏦 Bank</div>
+                        <div class="modal-item" data-via="ewallet"><input type="radio" name="viaRadio" value="ewallet" ${state.payment.via==='ewallet'?'checked':''}> 💰 E-Wallet</div>
+                    </div>
+                    <div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelVia">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmVia">Pilih</button></div>`;
+                showModal(html);
+                document.getElementById('modalCancelVia').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmVia').addEventListener('click', () => {
+                    const selected = document.querySelector('input[name="viaRadio"]:checked');
+                    if (selected) {
+                        state.payment.via = selected.value;
+                        document.getElementById('viaSelectedText').textContent = selected.value === 'bank' ? 'Bank' : 'E-Wallet';
+                        document.getElementById('viaSelectedText').classList.remove('placeholder');
+                        state.payment.rekAdmin = null;
+                        document.getElementById('rekAdminSelectedText').textContent = 'Pilih rekening admin...';
+                        document.getElementById('rekAdminSelectedText').classList.add('placeholder');
+                        updateRekAdminVisibility();
+                    }
+                    closeModal();
+                });
+            });
+
+            function updateRekAdminVisibility() {
+                const group = document.getElementById('rekAdminGroup');
+                if (state.payment.via) group.style.display = 'block';
+                else group.style.display = 'none';
+            }
+
+            // Rekening Admin selector
+            document.getElementById('rekAdminSelector').addEventListener('click', () => {
+                if (!state.payment.via) {
+                    alert('Pilih metode pembayaran terlebih dahulu.');
+                    return;
+                }
+                const list = state.payment.via === 'bank' ? bankAdmins : ewalletAdmins;
+                let html = '<h4>Pilih Rekening Admin</h4><div class="modal-list">';
+                list.forEach(r => {
+                    html += `<div class="modal-item"><input type="radio" name="rekRadio" value="${r.id}" ${state.payment.rekAdmin?.id===r.id?'checked':''}> <span>${r.name}</span></div>`;
+                });
+                html += '</div><div class="modal-actions"><button class="btn btn-outline btn-small" id="modalCancelRek">Batal</button><button class="btn btn-primary btn-small" id="modalConfirmRek">Pilih</button></div>';
+                showModal(html);
+                document.getElementById('modalCancelRek').addEventListener('click', closeModal);
+                document.getElementById('modalConfirmRek').addEventListener('click', () => {
+                    const selected = document.querySelector('input[name="rekRadio"]:checked');
+                    if (selected) {
+                        const rek = list.find(r => r.id === selected.value);
+                        state.payment.rekAdmin = rek;
+                        document.getElementById('rekAdminSelectedText').textContent = rek.name;
+                        document.getElementById('rekAdminSelectedText').classList.remove('placeholder');
+                    }
+                    closeModal();
+                });
+            });
+
+            document.getElementById('namaPengirim').addEventListener('input', e => state.payment.namaPengirim = e.target.value);
+            document.getElementById('norekPengirim').addEventListener('input', e => state.payment.norekPengirim = e.target.value);
+
+            // --- Receipt ---
+            function renderReceipt() {
+                const content = document.getElementById('receiptContent');
+                content.innerHTML = `
+                    <strong>ID Pengguna:</strong> ${state.user.id}<br>
+                    <strong>Username:</strong> ${state.user.username}<br>
+                    <strong>Nama Pembeli:</strong> ${state.order.nama}<br>
+                    <strong>Game:</strong> ${state.order.game?.name}<br>
+                    <strong>Layanan:</strong> ${state.order.jokiItems.map(i => `${i.service.name} x${i.qty}`).join(', ')}<br>
+                    <strong>Total Biaya:</strong> Rp ${state.order.total.toLocaleString('id-ID')}<br>
+                    <strong>Pembayaran via:</strong> ${state.payment.via === 'bank' ? 'Bank' : 'E-Wallet'}<br>
+                    <strong>Rekening Admin:</strong> ${state.payment.rekAdmin?.name}<br>
+                    <strong>Nama Pengirim:</strong> ${state.payment.namaPengirim}<br>
+                    <strong>No. Rekening Pengirim:</strong> ${state.payment.norekPengirim}<br>
+                    <strong>Total Nominal:</strong> Rp ${state.order.total.toLocaleString('id-ID')}
+                `;
+            }
+
+            document.getElementById('toDashboard').addEventListener('click', () => {
+                window.location.href = 'dashboard.html';
+            });
+            document.getElementById('toLogout').addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+
+            // Initial
+            showStep('choice');
+            updateRekAdminVisibility();
+        })();
+    </script>
+</body>
+</html>
