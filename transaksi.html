@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Transaksi</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+        .btn-success { background: rgba(34,197,94,0.2); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+        .btn-small { padding: 6px 12px; font-size: 0.75rem; }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 12px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: center;
+        }
+        .tab-btn.active {
+            background: rgba(168,85,247,0.12);
+            border-color: rgba(168,85,247,0.3);
+            color: #d8b4fe;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .ticket-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .ticket-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .ticket-id {
+            font-weight: 600;
+            color: #fff;
+        }
+        .ticket-meta {
+            font-size: 0.7rem;
+            color: #6b6b80;
+        }
+        .ticket-body {
+            font-size: 0.85rem;
+            color: #d4d4e0;
+            line-height: 1.5;
+        }
+        .ticket-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6b6b80;
+            padding: 30px 0;
+        }
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="toast" id="toast"></div>
+    <div class="container">
+        <div class="header">
+            <div class="brand"><h2>💳 Transaksi</h2></div>
+            <a href="dashboard.html" class="btn">⬅ Kembali</a>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" id="tabPending">📥 Kotak Masuk (Pending)</button>
+            <button class="tab-btn" id="tabHistory">📋 Riwayat</button>
+        </div>
+
+        <div class="card" id="contentCard">
+            <!-- Diisi oleh JS -->
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- User & Role ---
+            let currentUser = null;
+            try {
+                const stored = localStorage.getItem('shiroha_currentUser');
+                if (stored) currentUser = JSON.parse(stored);
+            } catch(e) {}
+            if (!currentUser) {
+                currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
+                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
+            }
+            const isAdmin = currentUser.role === 'admin';
+
+            // --- Keys ---
+            const PENDING_KEY = 'shiroha_transaksi_pending';
+            const APPROVED_KEY = 'shiroha_transaksi_approved';
+            const JOKI_DATA_KEY = 'shiroha_joki_data';
+
+            // --- Data ---
+            let pendingTransactions = [];
+            let approvedTransactions = [];
+            let jokiData = [];
+
+            try {
+                pendingTransactions = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
+                approvedTransactions = JSON.parse(localStorage.getItem(APPROVED_KEY)) || [];
+                jokiData = JSON.parse(localStorage.getItem(JOKI_DATA_KEY)) || [];
+            } catch(e) {}
+
+            // Jika kosong, inisialisasi dummy (untuk demo)
+            if (pendingTransactions.length === 0 && approvedTransactions.length === 0) {
+                pendingTransactions = [
+                    {
+                        id: 'TKT-001',
+                        userId: 'user_demo',
+                        namaPembeli: 'DemoUser',
+                        game: { id: 'genshin', name: 'Genshin Impact', basePrice: 25000 },
+                        jokiItems: [
+                            { service: { id: 'explore2', name: 'Explore x2', price: 25000 }, qty: 1 },
+                            { service: { id: 'rawat1bulan', name: 'Rawat akun 1 bulan', price: 80000 }, qty: 1 }
+                        ],
+                        total: 130000,
+                        payment: {
+                            via: 'bank',
+                            rekAdmin: { id: 'bca', name: 'BCA - 1234567890 a/n Admin Shiroha', via: 'bank' },
+                            namaPengirim: 'DemoUser',
+                            norekPengirim: '12345678'
+                        },
+                        timestamp: Date.now() - 3600000
+                    },
+                    {
+                        id: 'TKT-002',
+                        userId: 'user_lain',
+                        namaPembeli: 'UserLain',
+                        game: { id: 'mlbb', name: 'Mobile Legends', basePrice: 20000 },
+                        jokiItems: [
+                            { service: { id: 'event', name: 'Selesaikan Event', price: 35000 }, qty: 2 }
+                        ],
+                        total: 90000,
+                        payment: {
+                            via: 'ewallet',
+                            rekAdmin: { id: 'dana', name: 'DANA - 08123456789 a/n Admin Shiroha', via: 'ewallet' },
+                            namaPengirim: 'UserLain',
+                            norekPengirim: '08129876543'
+                        },
+                        timestamp: Date.now() - 7200000
+                    }
+                ];
+                localStorage.setItem(PENDING_KEY, JSON.stringify(pendingTransactions));
+            }
+
+            // --- DOM ---
+            const tabPending = document.getElementById('tabPending');
+            const tabHistory = document.getElementById('tabHistory');
+            const contentCard = document.getElementById('contentCard');
+            const toast = document.getElementById('toast');
+
+            let currentTab = 'pending'; // 'pending' atau 'history'
+
+            function showToast(msg, isError = false) {
+                clearTimeout(toast.timer);
+                toast.textContent = msg;
+                toast.className = 'toast ' + (isError ? 'error' : '');
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                toast.timer = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            function refreshData() {
+                try {
+                    pendingTransactions = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
+                    approvedTransactions = JSON.parse(localStorage.getItem(APPROVED_KEY)) || [];
+                    jokiData = JSON.parse(localStorage.getItem(JOKI_DATA_KEY)) || [];
+                } catch(e) {}
+            }
+
+            function savePending() {
+                localStorage.setItem(PENDING_KEY, JSON.stringify(pendingTransactions));
+            }
+            function saveApproved() {
+                localStorage.setItem(APPROVED_KEY, JSON.stringify(approvedTransactions));
+            }
+            function saveJokiData() {
+                localStorage.setItem(JOKI_DATA_KEY, JSON.stringify(jokiData));
+            }
+
+            // Filter data berdasarkan role dan tab
+            function getFilteredData() {
+                refreshData();
+                if (currentTab === 'pending') {
+                    return isAdmin
+                        ? pendingTransactions
+                        : pendingTransactions.filter(t => t.userId === currentUser.id);
+                } else {
+                    // Riwayat
+                    return isAdmin
+                        ? approvedTransactions
+                        : approvedTransactions.filter(t => t.userId === currentUser.id);
+                }
+            }
+
+            function render() {
+                const data = getFilteredData();
+                let html = '';
+                if (currentTab === 'pending') {
+                    html += '<h3>📥 Tiket Menunggu Persetujuan</h3>';
+                } else {
+                    html += '<h3>📋 Riwayat Transaksi Disetujui</h3>';
+                }
+
+                if (data.length === 0) {
+                    html += '<div class="empty-state">Tidak ada data.</div>';
+                } else {
+                    html += '<div class="ticket-list">';
+                    data.forEach(ticket => {
+                        const waktu = new Date(ticket.timestamp).toLocaleString('id-ID');
+                        const layanan = ticket.jokiItems.map(i => `${i.service.name} x${i.qty}`).join(', ');
+                        html += `
+                            <div class="ticket-item">
+                                <div class="ticket-header">
+                                    <span class="ticket-id">#${ticket.id}</span>
+                                    <span class="ticket-meta">${waktu}</span>
+                                </div>
+                                <div class="ticket-body">
+                                    <strong>User:</strong> ${ticket.userId}<br>
+                                    <strong>Pembeli:</strong> ${ticket.namaPembeli}<br>
+                                    <strong>Game:</strong> ${ticket.game.name}<br>
+                                    <strong>Layanan:</strong> ${layanan}<br>
+                                    <strong>Total:</strong> Rp ${ticket.total.toLocaleString('id-ID')}<br>
+                                    <strong>Bayar via:</strong> ${ticket.payment.via === 'bank' ? 'Bank' : 'E-Wallet'} |
+                                    <strong>Rek Admin:</strong> ${ticket.payment.rekAdmin?.name}<br>
+                                    <strong>Pengirim:</strong> ${ticket.payment.namaPengirim} (${ticket.payment.norekPengirim})
+                                </div>
+                                ${currentTab === 'pending' && isAdmin ? `
+                                <div class="ticket-actions">
+                                    <button class="btn btn-success btn-small approve-btn" data-id="${ticket.id}">✅ Setujui</button>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                }
+                contentCard.innerHTML = html;
+
+                // Event listener untuk tombol setujui
+                if (currentTab === 'pending' && isAdmin) {
+                    document.querySelectorAll('.approve-btn').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            const ticketId = this.dataset.id;
+                            approveTicket(ticketId);
+                        });
+                    });
+                }
+            }
+
+            function approveTicket(ticketId) {
+                refreshData();
+                const index = pendingTransactions.findIndex(t => t.id == ticketId);
+                if (index === -1) return;
+                const ticket = pendingTransactions[index];
+
+                // Pindahkan ke approved
+                approvedTransactions.push({
+                    ...ticket,
+                    approvedAt: Date.now(),
+                    approvedBy: currentUser.id
+                });
+                // Hapus dari pending
+                pendingTransactions.splice(index, 1);
+
+                // Tambahkan ke joki_data untuk dashboard/status-joki
+                const newJokiEntry = {
+                    id: Date.now(),
+                    userId: ticket.userId,
+                    namaGame: ticket.game.name,
+                    listJoki: ticket.jokiItems.map(i => `${i.service.name} x${i.qty}`).join(', '),
+                    status: 'belum_mulai',
+                    progress: 0,
+                    tglMulai: new Date().toLocaleDateString('id-ID'),
+                    tglBerakhir: '-',
+                    transaksiId: ticket.id
+                };
+                jokiData.push(newJokiEntry);
+
+                // Simpan semua
+                savePending();
+                saveApproved();
+                saveJokiData();
+
+                showToast('Tiket disetujui. Data masuk ke dashboard & status joki.');
+                render();
+            }
+
+            // Tab switching
+            tabPending.addEventListener('click', () => {
+                currentTab = 'pending';
+                tabPending.classList.add('active');
+                tabHistory.classList.remove('active');
+                render();
+            });
+            tabHistory.addEventListener('click', () => {
+                currentTab = 'history';
+                tabHistory.classList.add('active');
+                tabPending.classList.remove('active');
+                render();
+            });
+
+            // Inisialisasi render
+            render();
+        })();
+    </script>
+</body>
+</html>
