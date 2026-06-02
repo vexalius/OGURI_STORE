@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Chat</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 40px);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.04);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            color: #d4d4e0;
+        }
+        .user-emoji {
+            font-size: 1.1rem;
+        }
+        .btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+        .btn-primary:hover { box-shadow: 0 4px 15px rgba(168,85,247,0.4); }
+
+        .chat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .pinned-message {
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: var(--radius-md);
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            display: none;
+            font-size: 0.8rem;
+            color: #d8b4fe;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .pinned-message .pin-content { flex: 1; }
+        .pinned-message button { background: none; border: none; color: #a0a0b8; cursor: pointer; font-size: 1rem; }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .message {
+            background: rgba(255,255,255,0.03);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            border: 1px solid rgba(255,255,255,0.04);
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .message-sender {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.8rem;
+        }
+        .message-time {
+            font-size: 0.65rem;
+            color: #6b6b80;
+            margin-left: auto;
+        }
+        .message-body {
+            color: #d4d4e0;
+        }
+        .message-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            font-size: 0.75rem;
+        }
+        .reaction-btn, .pin-btn, .delete-btn {
+            background: none;
+            border: none;
+            color: #6b6b80;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .reaction-btn:hover { color: #d8b4fe; background: rgba(168,85,247,0.1); }
+        .pin-btn:hover { color: #fbbf24; }
+        .delete-btn:hover { color: #fca5a5; }
+        .reactions-display {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .reaction-badge {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: default;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+        }
+        .chat-input {
+            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            padding: 12px 16px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .chat-input:focus { border-color: var(--accent); }
+        .send-btn {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .send-btn:hover { background: #9333ea; }
+
+        /* Modal Popup */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 320px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .emoji-option {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            padding: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .emoji-option:hover { background: rgba(255,255,255,0.1); border-color: rgba(168,85,247,0.4); }
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+        .toast {
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="toast" id="toast"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <span style="font-size:1.4rem;">💬</span>
+                <h2 style="font-size:1.2rem; font-weight:700; color:#fff;">Chat Room</h2>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div class="user-info" id="userInfoDisplay">
+                    <span class="user-emoji" id="headerEmoji">😊</span>
+                    <span id="headerNickname">User</span>
+                </div>
+                <button class="btn" id="profileBtn">👤 Profil</button>
+                <a href="dashboard.html" class="btn">⬅ Kembali</a>
+            </div>
+        </div>
+
+        <div class="chat-card">
+            <div class="pinned-message" id="pinnedMessage">
+                <span class="pin-content" id="pinText"></span>
+                <button id="unpinBtn">✕</button>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ketik pesan...">
+                <button class="send-btn" id="sendBtn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reaksi -->
+    <div class="modal-overlay" id="reactionModal">
+        <div class="modal">
+            <h4>Pilih Reaksi</h4>
+            <div class="emoji-grid" id="reactionEmojiGrid"></div>
+            <div class="modal-actions">
+                <button class="btn" id="closeReactionModal">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Profil -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <h4>Ubah Profil Chat</h4>
+            <label style="color:#a0a0b8; font-size:0.8rem;">Nickname</label>
+            <input type="text" class="modal-input" id="nicknameInput" placeholder="Nama tampilan">
+            <label style="color:#a0a0b8; font-size:0.8rem;">Emoji Profil</label>
+            <div class="emoji-grid" id="profileEmojiGrid"></div>
+            <div class="modal-actions">
+                <button class="btn" id="closeProfileModal">Batal</button>
+                <button class="btn btn-primary" id="saveProfile">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- User ---
+            let currentUser = null;
+            try {
+                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
+            } catch(e) {}
+            if (!currentUser) {
+                currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
+                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
+            }
+            const isAdmin = currentUser.role === 'admin';
+
+            // --- Profile Chat per user ---
+            const PROFILE_KEY = 'shiroha_chat_profile';
+            let userProfiles = JSON.parse(localStorage.getItem(PROFILE_KEY)) || {};
+            if (!userProfiles[currentUser.id]) {
+                userProfiles[currentUser.id] = { nickname: currentUser.username, emoji: '😊' };
+            }
+            function saveProfiles() { localStorage.setItem(PROFILE_KEY, JSON.stringify(userProfiles)); }
+            function getUserProfile(uid) {
+                return userProfiles[uid] || { nickname: uid, emoji: '👤' };
+            }
+
+            // --- Data Chat ---
+            const CHAT_KEY = 'shiroha_chat_messages';
+            let messages = JSON.parse(localStorage.getItem(CHAT_KEY)) || [];
+            function saveMessages() { localStorage.setItem(CHAT_KEY, JSON.stringify(messages)); }
+
+            // --- Pin ---
+            const PIN_KEY = 'shiroha_chat_pin';
+            let pinnedMessageId = localStorage.getItem(PIN_KEY) || null;
+
+            // --- DOM ---
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const pinnedDiv = document.getElementById('pinnedMessage');
+            const pinText = document.getElementById('pinText');
+            const unpinBtn = document.getElementById('unpinBtn');
+            const userInfoDisplay = document.getElementById('userInfoDisplay');
+            const headerEmoji = document.getElementById('headerEmoji');
+            const headerNickname = document.getElementById('headerNickname');
+            const profileBtn = document.getElementById('profileBtn');
+
+            // Modals
+            const reactionModal = document.getElementById('reactionModal');
+            const reactionEmojiGrid = document.getElementById('reactionEmojiGrid');
+            const closeReactionModal = document.getElementById('closeReactionModal');
+            const profileModal = document.getElementById('profileModal');
+            const profileEmojiGrid = document.getElementById('profileEmojiGrid');
+            const nicknameInput = document.getElementById('nicknameInput');
+            const closeProfileModal = document.getElementById('closeProfileModal');
+            const saveProfile = document.getElementById('saveProfile');
+
+            const toast = document.getElementById('toast');
+            let toastTimer;
+            function showToast(msg, isError = false) {
+                clearTimeout(toastTimer);
+                toast.textContent = msg;
+                toast.className = 'toast ' + (isError ? 'error' : '');
+                void toast.offsetWidth;
+                toast.classList.add('show');
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+            }
+
+            // Emoji set
+            const emojiList = ['😀','😂','❤️','👍','👎','🎉','😢','😡','🔥','✨','💯','🙏'];
+
+            // Update header
+            function updateHeader() {
+                const profile = getUserProfile(currentUser.id);
+                headerEmoji.textContent = profile.emoji;
+                headerNickname.textContent = profile.nickname;
+            }
+            updateHeader();
+
+            // Render semua pesan
+            function renderMessages() {
+                chatMessages.innerHTML = '';
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = '<div style="text-align:center;color:#6b6b80;padding:30px;">Belum ada pesan</div>';
+                }
+                messages.forEach(msg => {
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = 'message';
+                    const profile = getUserProfile(msg.userId);
+                    const waktu = new Date(msg.timestamp).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+                    
+                    let actionsHtml = '';
+                    // Tombol reaksi selalu ada
+                    actionsHtml += `<button class="reaction-btn" data-msgid="${msg.id}">😀 +</button>`;
+                    if (isAdmin) {
+                        actionsHtml += `<button class="pin-btn" data-msgid="${msg.id}">📌 Pin</button>`;
+                        actionsHtml += `<button class="delete-btn" data-msgid="${msg.id}">🗑 Hapus</button>`;
+                    }
+                    
+                    // Reaksi display
+                    let reactionsHtml = '';
+                    if (msg.reactions && msg.reactions.length > 0) {
+                        // Group by emoji
+                        const counts = {};
+                        msg.reactions.forEach(r => {
+                            counts[r.emoji] = (counts[r.emoji] || 0) + 1;
+                        });
+                        reactionsHtml = '<div class="reactions-display">';
+                        for (const [emoji, count] of Object.entries(counts)) {
+                            reactionsHtml += `<span class="reaction-badge">${emoji} ${count}</span>`;
+                        }
+                        reactionsHtml += '</div>';
+                    }
+
+                    msgDiv.innerHTML = `
+                        <div class="message-header">
+                            <span>${profile.emoji}</span>
+                            <span class="message-sender">${profile.nickname}</span>
+                            <span class="message-time">${waktu}</span>
+                        </div>
+                        <div class="message-body">${escapeHtml(msg.text)}</div>
+                        <div class="message-actions">${actionsHtml}</div>
+                        ${reactionsHtml}
+                    `;
+                    chatMessages.appendChild(msgDiv);
+                });
+
+                // Attach event listeners ke tombol-tombol
+                document.querySelectorAll('.reaction-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const msgId = btn.dataset.msgid;
+                        openReactionModal(msgId);
+                    });
+                });
+                document.querySelectorAll('.pin-btn').forEach(btn => {
+                    btn.addEventListener('click', () => pinMessage(btn.dataset.msgid));
+                });
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', () => deleteMessage(btn.dataset.msgid));
+                });
+
+                // Render pin
+                renderPin();
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+
+            function renderPin() {
+                if (pinnedMessageId) {
+                    const msg = messages.find(m => m.id == pinnedMessageId);
+                    if (msg) {
+                        const profile = getUserProfile(msg.userId);
+                        pinText.textContent = `📌 ${profile.nickname}: ${msg.text}`;
+                        pinnedDiv.style.display = 'flex';
+                    } else {
+                        pinnedDiv.style.display = 'none';
+                        pinnedMessageId = null;
+                        localStorage.removeItem(PIN_KEY);
+                    }
+                } else {
+                    pinnedDiv.style.display = 'none';
+                }
+            }
+
+            function pinMessage(msgId) {
+                pinnedMessageId = msgId;
+                localStorage.setItem(PIN_KEY, msgId);
+                renderPin();
+                showToast('Pesan disematkan.');
+            }
+
+            unpinBtn.addEventListener('click', () => {
+                pinnedMessageId = null;
+                localStorage.removeItem(PIN_KEY);
+                renderPin();
+                showToast('Sematkan dilepas.');
+            });
+
+            function deleteMessage(msgId) {
+                if (!isAdmin) return;
+                messages = messages.filter(m => m.id != msgId);
+                saveMessages();
+                if (pinnedMessageId == msgId) {
+                    pinnedMessageId = null;
+                    localStorage.removeItem(PIN_KEY);
+                }
+                renderMessages();
+                showToast('Pesan dihapus.');
+            }
+
+            // Kirim pesan
+            function sendMessage() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+                const msg = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    text: text,
+                    timestamp: Date.now(),
+                    reactions: []
+                };
+                messages.push(msg);
+                saveMessages();
+                chatInput.value = '';
+                renderMessages();
+            }
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Reaksi modal
+            let currentReactionMsgId = null;
+            function openReactionModal(msgId) {
+                currentReactionMsgId = msgId;
+                reactionEmojiGrid.innerHTML = '';
+                emojiList.forEach(emoji => {
+                    const el = document.createElement('div');
+                    el.className = 'emoji-option';
+                    el.textContent = emoji;
+                    el.addEventListener('click', () => addReaction(msgId, emoji));
+                    reactionEmojiGrid.appendChild(el);
+                });
+                reactionModal.style.display = 'flex';
+            }
+            function addReaction(msgId, emoji) {
+                const msg = messages.find(m => m.id == msgId);
+                if (!msg) return;
+                if (!msg.reactions) msg.reactions = [];
+                msg.reactions.push({ emoji, userId: currentUser.id });
+                saveMessages();
+                renderMessages();
+                reactionModal.style.display = 'none';
+            }
+            closeReactionModal.addEventListener('click', () => reactionModal.style.display = 'none');
+            reactionModal.addEventListener('click', (e) => {
+                if (e.target === reactionModal) reactionModal.style.display = 'none';
+            });
+
+            // Profil modal
+            profileBtn.addEventListener('click', () => {
+                const profile = getUserProfile(currentUser.id);
+                nicknameInput.value = profile.nickname;
+                profileEmojiGrid.innerHTML = '';
+                emojiList.forEach(emoji => {
+                    const el = document.createElement('div');
+                    el.className = 'emoji-option';
+                    el.textContent = emoji;
+                    if (emoji === profile.emoji) el.style.border = '1px solid #a855f7';
+                    el.addEventListener('click', () => {
+                        document.querySelectorAll('#profileEmojiGrid .emoji-option').forEach(e => e.style.border = '1px solid transparent');
+                        el.style.border = '1px solid #a855f7';
+                        el.dataset.selected = 'true';
+                    });
+                    profileEmojiGrid.appendChild(el);
+                });
+                profileModal.style.display = 'flex';
+            });
+            closeProfileModal.addEventListener('click', () => profileModal.style.display = 'none');
+            saveProfile.addEventListener('click', () => {
+                const nickname = nicknameInput.value.trim() || currentUser.username;
+                const selectedEmoji = profileEmojiGrid.querySelector('.emoji-option[data-selected="true"]');
+                const emoji = selectedEmoji ? selectedEmoji.textContent : '😊';
+                userProfiles[currentUser.id] = { nickname, emoji };
+                saveProfiles();
+                updateHeader();
+                renderMessages();
+                profileModal.style.display = 'none';
+                showToast('Profil diperbarui.');
+            });
+            profileModal.addEventListener('click', (e) => {
+                if (e.target === profileModal) profileModal.style.display = 'none';
+            });
+
+            // Inisialisasi
+            renderMessages();
+        })();
+    </script>
+</body>
+</html>
