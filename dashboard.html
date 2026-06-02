@@ -37,115 +37,61 @@
         .container { max-width: 1100px; margin: 0 auto; }
 
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
         }
         .brand { display: flex; align-items: center; gap: 10px; }
         .brand h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
+            font-size: 1.6rem; font-weight: 700; letter-spacing: -0.3px;
             background: linear-gradient(to right, #ffffff, #d8b4fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .logout-btn, .update-progress-btn {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 10px 20px;
-            border-radius: var(--radius-pill);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
+            background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+            color: var(--text-secondary); padding: 10px 20px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all var(--transition);
+            display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
         }
         .logout-btn:hover { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5; }
-        .update-progress-btn {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: rgba(168, 85, 247, 0.2);
-            color: #d8b4fe;
-            margin-right: 8px;
-        }
+        .update-progress-btn { background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2); color: #d8b4fe; margin-right: 8px; }
         .update-progress-btn:hover { background: rgba(168, 85, 247, 0.2); }
 
         .navbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 28px;
-            padding-bottom: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;
+            padding-bottom: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
         .navbar::-webkit-scrollbar { display: none; }
         .nav-link {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 10px 18px;
-            border-radius: var(--radius-pill);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: all var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            letter-spacing: 0.3px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border);
+            color: var(--text-secondary); padding: 10px 18px; border-radius: var(--radius-pill);
+            font-size: 0.8rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+            transition: all var(--transition); display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.3px;
         }
         .nav-link:hover, .nav-link.active {
-            background: rgba(168, 85, 247, 0.12);
-            border-color: rgba(168, 85, 247, 0.3);
-            color: #d8b4fe;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.1);
+            background: rgba(168, 85, 247, 0.12); border-color: rgba(168, 85, 247, 0.3);
+            color: #d8b4fe; box-shadow: 0 0 12px rgba(168, 85, 247, 0.1);
         }
 
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
-            overflow-x: auto;
+            background: var(--card-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow); overflow-x: auto;
         }
         .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 18px; letter-spacing: -0.2px; }
 
         .table-wrapper { overflow-x: auto; border-radius: var(--radius-md); }
         table { width: 100%; min-width: 850px; border-collapse: collapse; font-size: 0.85rem; }
         th {
-            text-align: left;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.7rem;
-            letter-spacing: 0.6px;
-            text-transform: uppercase;
-            padding: 12px 10px;
+            text-align: left; color: var(--text-secondary); font-weight: 600; font-size: 0.7rem;
+            letter-spacing: 0.6px; text-transform: uppercase; padding: 12px 10px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         td { padding: 14px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
 
         .status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
+            display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;
+            font-weight: 600; letter-spacing: 0.3px; text-transform: uppercase;
         }
         .status.sedang-joki { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
         .status.istirahat { background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.25); }
@@ -156,26 +102,37 @@
         .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #a855f7, #7c3aed); transition: width 0.4s; }
 
         .edit-btn {
-            background: none;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #a0a0b8;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all var(--transition);
-            font-size: 0.9rem;
+            background: none; border: 1px solid rgba(255,255,255,0.1); color: #a0a0b8;
+            width: 32px; height: 32px; border-radius: 8px; display: inline-flex;
+            align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); font-size: 0.9rem;
         }
-        .edit-btn:hover {
-            background: rgba(168, 85, 247, 0.15);
-            border-color: rgba(168, 85, 247, 0.4);
-            color: #d8b4fe;
-        }
+        .edit-btn:hover { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.4); color: #d8b4fe; }
 
         .pembayaran-badge { color: #a3e635; font-weight: 500; font-size: 0.8rem; }
+        .pembayaran-pending { color: #fbbf24; }
+
+        /* Modal Edit */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 400px; padding: 24px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 20px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; }
+        .form-input, .form-select {
+            width: 100%; padding: 10px; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border); border-radius: 8px; color: #fff;
+            font-family: inherit; font-size: 0.85rem; outline: none;
+        }
+        .form-input:focus, .form-select:focus { border-color: var(--accent); }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+        .btn { padding: 10px 18px; border-radius: var(--radius-pill); font-weight: 600; cursor: pointer; border: none; font-family: inherit; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); }
 
         .toast {
             position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
@@ -203,9 +160,7 @@
             </div>
             <div style="display: flex; align-items: center;">
                 <button class="update-progress-btn" id="updateProgressBtn" style="display: none;">🔄 Perbarui Progress</button>
-                <button class="logout-btn" id="logoutBtn">
-                    <span>🚪</span> Logout
-                </button>
+                <button class="logout-btn" id="logoutBtn"><span>🚪</span> Logout</button>
             </div>
         </div>
 
@@ -235,33 +190,64 @@
         </div>
     </div>
 
+    <!-- Modal Edit Progres -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h4>✏️ Edit Progres Joki</h4>
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Nama Game</label>
+                <input type="text" class="form-input" id="editNamaGame" readonly>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-select" id="editStatus">
+                    <option value="belum_mulai">Belum Mulai</option>
+                    <option value="sedang">Sedang Joki</option>
+                    <option value="istirahat">Istirahat</option>
+                    <option value="selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Progress (%)</label>
+                <input type="range" class="form-input" id="editProgress" min="0" max="100" value="0" style="padding:0;">
+                <span id="progressValue" style="font-size:0.8rem; color:#d8b4fe;">0%</span>
+            </div>
+            <div class="form-group">
+                <label>Tanggal Mulai</label>
+                <input type="date" class="form-input" id="editTglMulai">
+            </div>
+            <div class="form-group">
+                <label>Tanggal Berakhir</label>
+                <input type="date" class="form-input" id="editTglBerakhir">
+            </div>
+            <div class="form-group">
+                <label>Pembayaran</label>
+                <select class="form-select" id="editPembayaran">
+                    <option value="Lunas ✓">Lunas</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="closeEditModal">Batal</button>
+                <button class="btn btn-primary" id="saveEdit">Simpan</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function() {
-            // --- Toast ---
             const toast = document.getElementById('toast');
-            function showToast(msg) {
-                toast.textContent = msg;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2500);
-            }
+            function showToast(msg) { toast.textContent = msg; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
 
-            // --- Cek login & role ---
             let currentUser = null;
-            try {
-                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-            } catch(e) {}
-            if (!currentUser) {
-                window.location.href = 'index.html';
-                return;
-            }
+            try { currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser')); } catch(e) {}
+            if (!currentUser) { window.location.href = 'index.html'; return; }
             const isAdmin = currentUser.role === 'admin';
 
-            // --- Tampilkan tombol "Perbarui Progress" hanya untuk admin ---
-            if (isAdmin) {
-                document.getElementById('updateProgressBtn').style.display = 'inline-flex';
-            }
+            if (isAdmin) document.getElementById('updateProgressBtn').style.display = 'inline-flex';
 
-            // --- Navigasi ---
+            // Navigasi
             const navbar = document.getElementById('navbar');
             const menuItems = [
                 { href: 'detail-akun.html', icon: '👤', text: 'Detail Akun' },
@@ -273,133 +259,125 @@
                 { href: 'struk.html', icon: '🧾', text: 'Struk' },
                 { href: 'transaksi.html', icon: '💳', text: 'Transaksi' }
             ];
-            if (isAdmin) {
-                menuItems.push({ href: 'pengaturan.html', icon: '⚙️', text: 'Pengaturan' });
-            }
-            navbar.innerHTML = menuItems.map(item => `<a href="${item.href}" class="nav-link">${item.icon} ${item.text}</a>`).join('');
+            if (isAdmin) menuItems.push({ href: 'pengaturan.html', icon: '⚙️', text: 'Pengaturan' });
+            navbar.innerHTML = menuItems.map(i => `<a href="${i.href}" class="nav-link">${i.icon} ${i.text}</a>`).join('');
 
-            // --- Logout ---
-            document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.removeItem('shiroha_currentUser');
                 window.location.href = 'index.html';
             });
 
-            // --- Data Joki ---
-            const JOKI_DATA_KEY = 'shiroha_joki_data';
-            function getJokiData() {
-                try { return JSON.parse(localStorage.getItem(JOKI_DATA_KEY)) || []; }
-                catch(e) { return []; }
-            }
-            function saveJokiData(data) {
-                localStorage.setItem(JOKI_DATA_KEY, JSON.stringify(data));
-            }
+            // Data Joki
+            const JOKI_KEY = 'shiroha_joki_data';
+            function getJoki() { try { return JSON.parse(localStorage.getItem(JOKI_KEY)) || []; } catch(e) { return []; } }
+            function saveJoki(data) { localStorage.setItem(JOKI_KEY, JSON.stringify(data)); }
+
+            const editModal = document.getElementById('editModal');
+            const editId = document.getElementById('editId');
+            const editNamaGame = document.getElementById('editNamaGame');
+            const editStatus = document.getElementById('editStatus');
+            const editProgress = document.getElementById('editProgress');
+            const progressValue = document.getElementById('progressValue');
+            const editTglMulai = document.getElementById('editTglMulai');
+            const editTglBerakhir = document.getElementById('editTglBerakhir');
+            const editPembayaran = document.getElementById('editPembayaran');
+
+            editProgress.addEventListener('input', () => progressValue.textContent = editProgress.value + '%');
 
             function renderTable() {
-                const allData = getJokiData();
-                const filteredData = isAdmin ? allData : allData.filter(j => j.userId === currentUser.id);
-                const tableBody = document.getElementById('tableBody');
-                const editColHeader = document.getElementById('editColHeader');
+                const allData = getJoki();
+                const filtered = isAdmin ? allData : allData.filter(j => j.userId === currentUser.id);
+                const tbody = document.getElementById('tableBody');
+                const editCol = document.getElementById('editColHeader');
+                if (!isAdmin) editCol.style.display = 'none'; else editCol.style.display = '';
 
-                if (!isAdmin) editColHeader.style.display = 'none';
-                else editColHeader.style.display = '';
-
-                if (filteredData.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Belum ada data joki.</td></tr>';
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#6b6b80;">Belum ada data joki.</td></tr>';
                     return;
                 }
 
-                tableBody.innerHTML = filteredData.map(joki => {
-                    const statusClass = {
-                        'sedang': 'sedang-joki',
-                        'istirahat': 'istirahat',
-                        'belum_mulai': 'belum-mulai',
-                        'selesai': 'selesai'
-                    }[joki.status] || 'belum-mulai';
-                    const statusText = {
-                        'sedang': 'Sedang Joki',
-                        'istirahat': 'Istirahat',
-                        'belum_mulai': 'Belum Mulai',
-                        'selesai': 'Selesai'
-                    }[joki.status] || 'Belum Mulai';
-                    const pembayaran = joki.pembayaran || 'Lunas ✓';
-                    const pembayaranClass = pembayaran.includes('Lunas') ? 'pembayaran-badge' : '';
-
-                    return `
-                        <tr>
-                            <td><strong>${joki.namaGame}</strong></td>
-                            <td>${joki.listJoki}</td>
-                            <td><span class="status ${statusClass}">${statusText}</span></td>
-                            <td>
-                                <div class="progress-container">
-                                    <div class="progress-fill" style="width: ${joki.progress || 0}%; ${joki.status === 'selesai' ? 'background:#4ade80;' : ''}"></div>
-                                </div>
-                                <span style="font-size:0.7rem; margin-left:6px;">${joki.progress || 0}%</span>
-                            </td>
-                            <td>${joki.tglMulai || '-'}</td>
-                            <td>${joki.tglBerakhir || '-'}</td>
-                            <td><span class="${pembayaranClass}">${pembayaran}</span></td>
-                            ${isAdmin ? `<td><button class="edit-btn" data-id="${joki.id}">✏️</button></td>` : ''}
-                        </tr>
-                    `;
+                tbody.innerHTML = filtered.map(j => {
+                    const sc = { sedang:'sedang-joki', istirahat:'istirahat', belum_mulai:'belum-mulai', selesai:'selesai' }[j.status] || 'belum-mulai';
+                    const st = { sedang:'Sedang Joki', istirahat:'Istirahat', belum_mulai:'Belum Mulai', selesai:'Selesai' }[j.status] || 'Belum Mulai';
+                    const pembayaran = j.pembayaran || 'Lunas ✓';
+                    const pClass = pembayaran.includes('Lunas') ? 'pembayaran-badge' : 'pembayaran-pending';
+                    return `<tr>
+                        <td><strong>${j.namaGame}</strong></td>
+                        <td>${j.listJoki}</td>
+                        <td><span class="status ${sc}">${st}</span></td>
+                        <td><div class="progress-container"><div class="progress-fill" style="width:${j.progress||0}%; ${j.status==='selesai'?'background:#4ade80;':''}"></div></div> <span style="font-size:0.7rem;margin-left:6px;">${j.progress||0}%</span></td>
+                        <td>${j.tglMulai||'-'}</td>
+                        <td>${j.tglBerakhir||'-'}</td>
+                        <td><span class="${pClass}">${pembayaran}</span></td>
+                        ${isAdmin ? `<td><button class="edit-btn" data-id="${j.id}">✏️</button></td>` : ''}
+                    </tr>`;
                 }).join('');
 
-                // Event: Edit status (admin)
                 if (isAdmin) {
                     document.querySelectorAll('.edit-btn').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
-                            const allJoki = getJokiData();
-                            const target = allJoki.find(j => j.id == id);
-                            if (!target) return;
-                            const newStatus = prompt('Ubah status (sedang/istirahat/belum_mulai/selesai):', target.status);
-                            if (newStatus && ['sedang','istirahat','belum_mulai','selesai'].includes(newStatus)) {
-                                target.status = newStatus;
-                                if (newStatus === 'selesai') {
-                                    target.progress = 100;
-                                    target.tglBerakhir = new Date().toLocaleDateString('id-ID');
-                                } else if (newStatus === 'belum_mulai') {
-                                    target.progress = 0;
-                                    target.tglMulai = new Date().toLocaleDateString('id-ID');
-                                    target.tglBerakhir = '-';
-                                }
-                                saveJokiData(allJoki);
-                                renderTable();
-                                showToast('Status berhasil diubah.');
-                            } else if (newStatus !== null) {
-                                alert('Status tidak valid.');
-                            }
+                            const data = getJoki();
+                            const item = data.find(j => j.id == id);
+                            if (!item) return;
+                            editId.value = item.id;
+                            editNamaGame.value = item.namaGame;
+                            editStatus.value = item.status;
+                            editProgress.value = item.progress || 0;
+                            progressValue.textContent = (item.progress || 0) + '%';
+                            // Konversi tanggal dari format DD/MM/YYYY ke YYYY-MM-DD untuk input date
+                            const parseDate = (str) => {
+                                if (!str || str === '-') return '';
+                                const parts = str.split('/');
+                                if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+                                return str;
+                            };
+                            editTglMulai.value = parseDate(item.tglMulai);
+                            editTglBerakhir.value = parseDate(item.tglBerakhir);
+                            editPembayaran.value = item.pembayaran || 'Lunas ✓';
+                            editModal.style.display = 'flex';
                         });
                     });
                 }
             }
 
-            // --- Perbarui Progress (Admin) ---
-            document.getElementById('updateProgressBtn').addEventListener('click', function() {
-                const allJoki = getJokiData();
-                let updated = 0;
-                allJoki.forEach(joki => {
-                    if (joki.status === 'sedang') {
-                        joki.progress = Math.min(99, (joki.progress || 0) + 5);
-                        updated++;
-                    }
+            document.getElementById('closeEditModal').addEventListener('click', () => editModal.style.display = 'none');
+            document.getElementById('saveEdit').addEventListener('click', () => {
+                const id = editId.value;
+                const data = getJoki();
+                const item = data.find(j => j.id == id);
+                if (!item) return;
+                item.status = editStatus.value;
+                item.progress = parseInt(editProgress.value);
+                if (item.status === 'selesai') item.progress = 100;
+                if (item.status === 'belum_mulai') item.progress = 0;
+                // Simpan tanggal dalam format DD/MM/YYYY
+                const formatDate = (val) => {
+                    if (!val) return '-';
+                    const d = new Date(val);
+                    return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+                };
+                item.tglMulai = formatDate(editTglMulai.value);
+                item.tglBerakhir = formatDate(editTglBerakhir.value);
+                item.pembayaran = editPembayaran.value;
+                saveJoki(data);
+                editModal.style.display = 'none';
+                renderTable();
+                showToast('Data berhasil diperbarui.');
+            });
+
+            document.getElementById('updateProgressBtn').addEventListener('click', () => {
+                const data = getJoki();
+                let count = 0;
+                data.forEach(j => {
+                    if (j.status === 'sedang') { j.progress = Math.min(99, (j.progress||0)+5); count++; }
                 });
-                if (updated > 0) {
-                    saveJokiData(allJoki);
-                    renderTable();
-                    showToast(`Progress diperbarui untuk ${updated} joki.`);
-                } else {
-                    showToast('Tidak ada joki dengan status "Sedang Joki".');
-                }
+                if (count) { saveJoki(data); renderTable(); showToast(`Progress diperbarui untuk ${count} joki.`); }
+                else showToast('Tidak ada joki dengan status Sedang Joki.');
             });
 
-            // --- Inisialisasi ---
             renderTable();
-
-            // Tandai menu aktif
-            const currentPage = window.location.pathname.split('/').pop();
-            document.querySelectorAll('.nav-link').forEach(link => {
-                if (link.getAttribute('href') === currentPage) link.classList.add('active');
-            });
         })();
     </script>
 </body>
