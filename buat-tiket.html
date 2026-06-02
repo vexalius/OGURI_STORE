@@ -64,7 +64,6 @@
             75% { transform: translate(-22px, -14px) scale(1.04); }
         }
 
-        /* Toast modern */
         .toast {
             position: fixed;
             top: 24px;
@@ -84,14 +83,8 @@
             pointer-events: none;
             backdrop-filter: blur(8px);
         }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-        .toast.error {
-            border-color: rgba(239, 68, 68, 0.4);
-            background: #1e1418;
-            color: #fca5a5;
-        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error { border-color: rgba(239, 68, 68, 0.4); background: #1e1418; color: #fca5a5; }
 
         .app-card {
             position: relative;
@@ -112,49 +105,18 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .step-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 8px;
-            letter-spacing: -0.3px;
-        }
-        .step-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-        }
+        .step-title { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .step-subtitle { font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 24px; }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 15px 20px;
-            border: none;
-            border-radius: var(--radius-pill);
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: inherit;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            transition: all var(--transition);
-            text-decoration: none;
-            background: transparent;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; padding: 15px 20px; border: none; border-radius: var(--radius-pill);
+            font-size: 0.95rem; font-weight: 600; font-family: inherit; letter-spacing: 0.3px;
+            cursor: pointer; transition: all var(--transition); text-decoration: none; background: transparent;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-            color: #fff;
-            box-shadow: 0 6px 24px rgba(168, 85, 247, 0.3);
-        }
+        .btn-primary { background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); color: #fff; box-shadow: 0 6px 24px rgba(168, 85, 247, 0.3); }
         .btn-primary:hover { box-shadow: 0 10px 32px rgba(168, 85, 247, 0.45); transform: translateY(-1px); }
-        .btn-outline {
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
-            color: #d4d4e0;
-        }
+        .btn-outline { border: 1.5px solid rgba(255, 255, 255, 0.15); color: #d4d4e0; }
         .btn-outline:hover { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.03); color: #fff; }
         .btn-small { padding: 10px 16px; font-size: 0.85rem; width: auto; }
         .btn-danger { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
@@ -165,76 +127,38 @@
         .form-group label { display: block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.4px; color: #c4c4d4; margin-bottom: 6px; text-transform: uppercase; }
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper input, .input-wrapper .fake-input {
-            width: 100%;
-            padding: 13px 14px;
-            background: var(--input-bg);
-            border: 1.5px solid var(--input-border);
-            border-radius: var(--radius-md);
-            color: #e8e8f0;
-            font-size: 0.9rem;
-            font-family: inherit;
-            transition: all var(--transition);
-            outline: none;
+            width: 100%; padding: 13px 14px; background: var(--input-bg); border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-md); color: #e8e8f0; font-size: 0.9rem; font-family: inherit; transition: all var(--transition); outline: none;
         }
-        .fake-input {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            user-select: none;
-            padding: 13px 14px;
-            min-height: 48px;
-        }
-        .fake-input span { color: #f1f1f3; } /* default putih */
-        .fake-input .placeholder { color: #55556a; } /* placeholder abu-abu */
-        .input-wrapper input:focus {
-            border-color: var(--input-focus-border);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08);
-        }
+        .fake-input { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; padding: 13px 14px; min-height: 48px; }
+        .fake-input span { color: #f1f1f3; }
+        .fake-input .placeholder { color: #55556a; }
+        .input-wrapper input:focus { border-color: var(--input-focus-border); background: rgba(255, 255, 255, 0.06); box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.08); }
 
         .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .tag {
-            background: rgba(168, 85, 247, 0.15);
-            color: #d8b4fe;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .tag { background: rgba(168, 85, 247, 0.15); color: #d8b4fe; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
         .tag button { background: none; border: none; color: #fca5a5; cursor: pointer; font-size: 1.1rem; line-height: 1; padding: 0 2px; }
 
         .total-display { font-size: 1rem; font-weight: 600; color: #ffffff; margin-top: 8px; background: rgba(168, 85, 247, 0.08); padding: 10px 14px; border-radius: var(--radius-md); }
 
-        /* Modal */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-            display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
-            animation: fadeIn 0.2s;
+            display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; animation: fadeIn 0.2s;
         }
         .modal { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); width: 100%; max-width: 360px; padding: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
         .modal h4 { font-size: 1.1rem; color: #fff; margin-bottom: 16px; }
         .modal-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
         .modal-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: background 0.2s; }
         .modal-item:hover { background: rgba(255,255,255,0.06); }
-        .modal-item span { color: #ffffff; } /* teks putih di popup */
+        .modal-item span { color: #ffffff; }
         .modal-item input[type="radio"], .modal-item input[type="checkbox"] { accent-color: #a855f7; width: 18px; height: 18px; }
         .modal-qty { display: flex; align-items: center; gap: 6px; margin-left: auto; }
         .modal-qty input { width: 50px; padding: 6px; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; color: #fff; text-align: center; font-size: 0.85rem; }
         .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
-        /* Struk */
         .receipt-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 20px;
-            color: #f1f1f3;
-            font-size: 0.9rem;
-            line-height: 1.9;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+            padding: 20px; color: #f1f1f3; font-size: 0.9rem; line-height: 1.9;
         }
         .receipt-card .label { color: #a0a0b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .receipt-card .value { color: #ffffff; font-weight: 500; }
@@ -252,7 +176,6 @@
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
 
-    <!-- Toast modern -->
     <div class="toast" id="toast"></div>
 
     <div class="app-card" id="appCard">
@@ -331,14 +254,13 @@
         </div>
     </div>
 
-    <!-- Modal Popup Global -->
     <div id="modalOverlay" class="modal-overlay hidden">
         <div class="modal" id="modalBox"></div>
     </div>
 
     <script>
         (function() {
-            // Data
+            // Data statis
             const gameList = [
                 { id: 'genshin', name: 'Genshin Impact', basePrice: 25000 },
                 { id: 'starrail', name: 'Honkai Star Rail', basePrice: 25000 },
@@ -364,9 +286,12 @@
                 { id: 'gopay', name: 'GoPay - 08135558888 a/n Admin Shiroha', via: 'ewallet' }
             ];
 
+            // Simulasi database pengguna terdaftar (disimpan selama sesi)
+            const registeredUsers = [];
+
             const state = {
                 currentStep: 'choice',
-                user: { id: '', username: '', pin: '' },
+                user: null, // akan diisi setelah login/register berhasil
                 order: { nama: '', game: null, jokiItems: [], total: 0 },
                 payment: { via: '', rekAdmin: null, namaPengirim: '', norekPengirim: '' }
             };
@@ -397,12 +322,32 @@
                 Object.values(steps).forEach(s => s.classList.add('hidden'));
                 steps[stepName].classList.remove('hidden');
                 state.currentStep = stepName;
-                if (stepName === 'order') updateOrderTotal();
+                if (stepName === 'order') {
+                    // Jika user belum login, paksa kembali ke choice
+                    if (!state.user) {
+                        showToast('Anda harus login terlebih dahulu.', true);
+                        showStep('choice');
+                        return;
+                    }
+                    updateOrderTotal();
+                }
                 if (stepName === 'payment') {
+                    if (!state.user) {
+                        showToast('Sesi habis, silakan login ulang.', true);
+                        showStep('choice');
+                        return;
+                    }
                     document.getElementById('totalNominal').value = 'Rp ' + state.order.total.toLocaleString('id-ID');
                     updateRekAdminVisibility();
                 }
-                if (stepName === 'receipt') renderReceipt();
+                if (stepName === 'receipt') {
+                    if (!state.user) {
+                        showToast('Sesi habis, silakan login ulang.', true);
+                        showStep('choice');
+                        return;
+                    }
+                    renderReceipt();
+                }
             }
 
             function showModal(htmlContent) {
@@ -426,9 +371,18 @@
                     showToast('Mohon isi semua data dengan benar. PIN minimal 4 digit angka.', true);
                     return;
                 }
-                state.user = { id, username, pin };
+                // Cek apakah ID sudah terdaftar
+                if (registeredUsers.find(u => u.id === id)) {
+                    showToast('ID sudah digunakan. Silakan gunakan ID lain.', true);
+                    return;
+                }
+                // Simpan user ke database simulasi
+                const newUser = { id, username, pin };
+                registeredUsers.push(newUser);
+                state.user = newUser;
                 state.order.nama = username;
                 document.getElementById('namaPembeli').value = username;
+                showToast('Pendaftaran berhasil! Silakan lanjut.', false);
                 showStep('order');
             });
 
@@ -441,9 +395,17 @@
                     showToast('ID dan PIN harus diisi.', true);
                     return;
                 }
-                state.user = { id, username: id, pin };
-                state.order.nama = id;
-                document.getElementById('namaPembeli').value = id;
+                // Cari user di database simulasi
+                const foundUser = registeredUsers.find(u => u.id === id && u.pin === pin);
+                if (!foundUser) {
+                    showToast('ID atau PIN salah. Silakan coba lagi.', true);
+                    return;
+                }
+                // Login berhasil
+                state.user = foundUser;
+                state.order.nama = foundUser.username;
+                document.getElementById('namaPembeli').value = foundUser.username;
+                showToast('Login berhasil!', false);
                 showStep('order');
             });
 
@@ -452,7 +414,7 @@
             document.getElementById('orderNext').addEventListener('click', () => {
                 state.order.nama = document.getElementById('namaPembeli').value.trim();
                 if (!state.order.nama || !state.order.game || state.order.jokiItems.length === 0) {
-                    showToast('⚠️ Lengkapi nama, game, dan minimal satu layanan joki. ⚠️', true);
+                    showToast('⚠️ Lengkapi nama, game, dan minimal satu layanan joki.', true);
                     return;
                 }
                 showStep('payment');
@@ -471,9 +433,8 @@
                     const sel = document.querySelector('input[name="gameRadio"]:checked');
                     if (sel) {
                         state.order.game = gameList.find(g => g.id === sel.value);
-                        const textEl = document.getElementById('gameSelectedText');
-                        textEl.textContent = state.order.game.name;
-                        textEl.classList.remove('placeholder');
+                        document.getElementById('gameSelectedText').textContent = state.order.game.name;
+                        document.getElementById('gameSelectedText').classList.remove('placeholder');
                         updateOrderTotal();
                     }
                     closeModal();
@@ -548,7 +509,7 @@
             document.getElementById('paymentBack').addEventListener('click', () => showStep('order'));
             document.getElementById('paymentNext').addEventListener('click', () => {
                 if (!state.payment.via || !state.payment.rekAdmin || !state.payment.namaPengirim || !state.payment.norekPengirim) {
-                    showToast('⚠️ Lengkapi semua data pembayaran. ⚠️', true);
+                    showToast('⚠️ Lengkapi semua data pembayaran.', true);
                     return;
                 }
                 showStep('receipt');
@@ -565,9 +526,8 @@
                     const sel = document.querySelector('input[name="viaRadio"]:checked');
                     if (sel) {
                         state.payment.via = sel.value;
-                        const textEl = document.getElementById('viaSelectedText');
-                        textEl.textContent = sel.value === 'bank' ? 'Bank' : 'E-Wallet';
-                        textEl.classList.remove('placeholder');
+                        document.getElementById('viaSelectedText').textContent = sel.value === 'bank' ? 'Bank' : 'E-Wallet';
+                        document.getElementById('viaSelectedText').classList.remove('placeholder');
                         state.payment.rekAdmin = null;
                         document.getElementById('rekAdminSelectedText').textContent = 'Pilih rekening admin...';
                         document.getElementById('rekAdminSelectedText').classList.add('placeholder');
@@ -598,9 +558,8 @@
                     const sel = document.querySelector('input[name="rekRadio"]:checked');
                     if (sel) {
                         state.payment.rekAdmin = list.find(r => r.id === sel.value);
-                        const textEl = document.getElementById('rekAdminSelectedText');
-                        textEl.textContent = state.payment.rekAdmin.name;
-                        textEl.classList.remove('placeholder');
+                        document.getElementById('rekAdminSelectedText').textContent = state.payment.rekAdmin.name;
+                        document.getElementById('rekAdminSelectedText').classList.remove('placeholder');
                     }
                     closeModal();
                 });
@@ -627,8 +586,17 @@
                 `;
             }
 
-            document.getElementById('toDashboard').addEventListener('click', () => window.location.href = 'dashboard.html');
-            document.getElementById('toLogout').addEventListener('click', () => window.location.href = 'login.html');
+            document.getElementById('toDashboard').addEventListener('click', () => {
+                if (!state.user) {
+                    showToast('Anda belum login.', true);
+                    return;
+                }
+                window.location.href = 'dashboard.html';
+            });
+            document.getElementById('toLogout').addEventListener('click', () => {
+                state.user = null;
+                window.location.href = 'login.html';
+            });
 
             // Init
             showStep('choice');
