@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Status Joki</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+            margin-bottom: 20px;
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .status-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .status-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+        .status-item:hover { background: rgba(255,255,255,0.05); }
+        .game-info {
+            flex: 1;
+            min-width: 140px;
+        }
+        .game-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        .joki-list {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .status-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .status-selesai { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+        .status-sedang { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+        .status-istirahat { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+        .status-belum { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+        .progress-container {
+            width: 100px;
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+        }
+        .empty-state {
+            text-align: center;
+            color: #6b6b80;
+            padding: 30px 0;
+        }
+
+        .notification-banner {
+            background: rgba(34,197,94,0.08);
+            border: 1px solid rgba(34,197,94,0.3);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #4ade80;
+            font-weight: 500;
+            font-size: 0.85rem;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 320px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .modal-list {
+            max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;
+        }
+        .modal-item {
+            display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+            background: rgba(255,255,255,0.03); border-radius: 10px; cursor: pointer; transition: background 0.2s;
+        }
+        .modal-item:hover { background: rgba(255,255,255,0.06); }
+        .modal-item span { color: #fff; }
+        .modal-item input[type="radio"] { accent-color: #a855f7; width: 18px; height: 18px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+        @media (max-width: 500px) {
+            .status-item { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand">
+                <h2>📊 Status Joki</h2>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn" id="pilihUserBtn" style="display: none;">👥 Pilih User</button>
+                <a href="dashboard.html" class="btn">⬅ Kembali</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="notificationContainer"></div>
+            <h3 id="listTitle">Daftar Joki Anda</h3>
+            <div class="status-list" id="statusList"></div>
+        </div>
+    </div>
+
+    <!-- Modal Pilih User -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <h4>Pilih User</h4>
+            <div class="modal-list" id="userListModal"></div>
+            <div class="modal-actions">
+                <button class="btn" id="modalCancel">Batal</button>
+                <button class="btn btn-primary" id="modalPilih">Tampilkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Current user
+            let currentUser = null;
+            try {
+                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
+            } catch(e) {}
+            if (!currentUser) {
+                currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
+                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
+            }
+            const isAdmin = currentUser.role === 'admin';
+
+            // Data joki dummy (jika belum ada di localStorage)
+            const DATA_KEY = 'shiroha_joki_data';
+            let jokiData = JSON.parse(localStorage.getItem(DATA_KEY));
+            if (!jokiData || jokiData.length === 0) {
+                jokiData = [
+                    {
+                        id: 1,
+                        userId: 'user_demo',
+                        namaGame: 'Genshin Impact',
+                        listJoki: 'Explore x2, Rawat akun 1 bln',
+                        status: 'selesai',
+                        progress: 100,
+                        tglMulai: '01/06/2026',
+                        tglBerakhir: '10/06/2026'
+                    },
+                    {
+                        id: 2,
+                        userId: 'user_demo',
+                        namaGame: 'Honkai Star Rail',
+                        listJoki: 'Push Rank',
+                        status: 'sedang',
+                        progress: 65,
+                        tglMulai: '28/05/2026',
+                        tglBerakhir: '15/06/2026'
+                    },
+                    {
+                        id: 3,
+                        userId: 'user_lain',
+                        namaGame: 'Mobile Legends',
+                        listJoki: 'Selesaikan Event',
+                        status: 'selesai',
+                        progress: 100,
+                        tglMulai: '20/05/2026',
+                        tglBerakhir: '27/05/2026'
+                    }
+                ];
+                localStorage.setItem(DATA_KEY, JSON.stringify(jokiData));
+            }
+
+            // State
+            let selectedUserId = isAdmin ? null : currentUser.id;
+
+            // DOM
+            const statusList = document.getElementById('statusList');
+            const listTitle = document.getElementById('listTitle');
+            const notificationContainer = document.getElementById('notificationContainer');
+            const pilihUserBtn = document.getElementById('pilihUserBtn');
+            const userModal = document.getElementById('userModal');
+            const userListModal = document.getElementById('userListModal');
+            const modalCancel = document.getElementById('modalCancel');
+            const modalPilih = document.getElementById('modalPilih');
+
+            // Tampilkan tombol pilih user untuk admin
+            if (isAdmin) {
+                pilihUserBtn.style.display = 'inline-flex';
+            }
+
+            // Render status berdasarkan selectedUserId
+            function render() {
+                // Filter data
+                let filtered = [];
+                if (selectedUserId) {
+                    filtered = jokiData.filter(j => j.userId === selectedUserId);
+                    listTitle.textContent = `Daftar Joki - ${selectedUserId}`;
+                } else {
+                    // Admin belum pilih user, tampilkan semua
+                    filtered = jokiData;
+                    listTitle.textContent = 'Daftar Joki (Semua User)';
+                }
+
+                // Render list
+                statusList.innerHTML = '';
+                if (filtered.length === 0) {
+                    statusList.innerHTML = '<div class="empty-state">Tidak ada data joki.</div>';
+                }
+                filtered.forEach(joki => {
+                    const statusClass = {
+                        'selesai': 'status-selesai',
+                        'sedang': 'status-sedang',
+                        'istirahat': 'status-istirahat',
+                        'belum_mulai': 'status-belum'
+                    }[joki.status] || 'status-belum';
+                    const statusText = {
+                        'selesai': 'Selesai',
+                        'sedang': 'Sedang Joki',
+                        'istirahat': 'Istirahat',
+                        'belum_mulai': 'Belum Mulai'
+                    }[joki.status] || 'Belum Mulai';
+
+                    const item = document.createElement('div');
+                    item.className = 'status-item';
+                    item.innerHTML = `
+                        <div class="game-info">
+                            <div class="game-name">${joki.namaGame}</div>
+                            <div class="joki-list">${joki.listJoki}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <div class="progress-container">
+                                <div class="progress-fill" style="width:${joki.progress}%; ${joki.status === 'selesai' ? 'background:#4ade80;' : ''}"></div>
+                            </div>
+                            <span style="font-size:0.75rem;">${joki.progress}%</span>
+                        </div>
+                    `;
+                    statusList.appendChild(item);
+                });
+
+                // Tampilkan notifikasi jika ada joki selesai
+                renderNotification(filtered);
+            }
+
+            function renderNotification(filtered) {
+                notificationContainer.innerHTML = '';
+                const selesaiList = filtered.filter(j => j.status === 'selesai');
+                if (selesaiList.length > 0) {
+                    const banner = document.createElement('div');
+                    banner.className = 'notification-banner';
+                    const names = selesaiList.map(j => `${j.namaGame} - ${j.listJoki}`).join(', ');
+                    banner.innerHTML = `✅ <strong>STATUS JOKI (${names}) SELESAI</strong>`;
+                    notificationContainer.appendChild(banner);
+                }
+            }
+
+            // Admin pilih user
+            pilihUserBtn.addEventListener('click', () => {
+                // Kumpulkan userId unik dari jokiData
+                const users = [...new Set(jokiData.map(j => j.userId))];
+                userListModal.innerHTML = '';
+                users.forEach(uid => {
+                    const div = document.createElement('div');
+                    div.className = 'modal-item';
+                    div.innerHTML = `<input type="radio" name="userRadio" value="${uid}" ${selectedUserId === uid ? 'checked' : ''}> <span>${uid}</span>`;
+                    userListModal.appendChild(div);
+                });
+                userModal.style.display = 'flex';
+            });
+
+            modalCancel.addEventListener('click', () => {
+                userModal.style.display = 'none';
+            });
+            modalPilih.addEventListener('click', () => {
+                const selected = document.querySelector('input[name="userRadio"]:checked');
+                if (selected) {
+                    selectedUserId = selected.value;
+                    render();
+                }
+                userModal.style.display = 'none';
+            });
+            userModal.addEventListener('click', (e) => {
+                if (e.target === userModal) userModal.style.display = 'none';
+            });
+
+            // Inisialisasi
+            render();
+        })();
+    </script>
+</body>
+</html>
