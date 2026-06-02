@@ -181,7 +181,6 @@
             const USERS_KEY = 'shiroha_users';
             let users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
             if (users.length === 0) {
-                // Buat admin default dan user demo
                 users = [
                     { id: 'admin', username: 'Admin', pin: '1234', role: 'admin' },
                     { id: 'user1', username: 'Demo User', pin: '5678', role: 'user' }
@@ -226,15 +225,6 @@
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                // Cek maintenance mode
-                if (localStorage.getItem('shiroha_maintenance') === 'true') {
-                    const currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-                    if (!currentUser || currentUser.role !== 'admin') {
-                        showToast('🔧 Aplikasi sedang dalam maintenance. Coba lagi nanti.', true);
-                        return;
-                    }
-                }
-
                 const idValue = userIdInput.value.trim();
                 const pinValue = userPinInput.value.trim();
 
@@ -261,9 +251,16 @@
                 }
 
                 // Cek user di database
+                const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
                 const foundUser = users.find(u => u.id === idValue && u.pin === pinValue);
                 if (!foundUser) {
                     showToast('❌ ID atau PIN salah.', true);
+                    return;
+                }
+
+                // Maintenance check: hanya blokir user biasa, admin tetap bisa masuk
+                if (localStorage.getItem('shiroha_maintenance') === 'true' && foundUser.role !== 'admin') {
+                    showToast('🔧 Aplikasi sedang dalam maintenance. Coba lagi nanti.', true);
                     return;
                 }
 
@@ -274,7 +271,6 @@
                     role: foundUser.role
                 }));
 
-                // Redirect ke dashboard
                 window.location.href = 'dashboard.html';
             });
 
