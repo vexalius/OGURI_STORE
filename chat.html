@@ -111,7 +111,6 @@
             display: none;
             font-size: 0.8rem;
             color: #d8b4fe;
-            display: flex;
             align-items: center;
             justify-content: space-between;
         }
@@ -235,19 +234,24 @@
         .modal h4 { color: #fff; margin-bottom: 16px; }
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(5, 1fr); /* Ubah jadi 5 biar muat */
             gap: 8px;
             margin-bottom: 16px;
+            justify-items: center;
         }
         .emoji-option {
             background: rgba(255,255,255,0.04);
             border: 1px solid transparent;
             border-radius: 8px;
             font-size: 1.3rem;
-            padding: 8px;
-            cursor: pointer;
+            padding: 8px 0;
+            width: 100%;
             text-align: center;
+            cursor: pointer;
             transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .emoji-option:hover { background: rgba(255,255,255,0.1); border-color: rgba(168,85,247,0.4); }
         .modal-input {
@@ -420,17 +424,14 @@
                     const waktu = new Date(msg.timestamp).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
                     
                     let actionsHtml = '';
-                    // Tombol reaksi selalu ada
                     actionsHtml += `<button class="reaction-btn" data-msgid="${msg.id}">😀 +</button>`;
                     if (isAdmin) {
                         actionsHtml += `<button class="pin-btn" data-msgid="${msg.id}">📌 Pin</button>`;
                         actionsHtml += `<button class="delete-btn" data-msgid="${msg.id}">🗑 Hapus</button>`;
                     }
                     
-                    // Reaksi display
                     let reactionsHtml = '';
                     if (msg.reactions && msg.reactions.length > 0) {
-                        // Group by emoji
                         const counts = {};
                         msg.reactions.forEach(r => {
                             counts[r.emoji] = (counts[r.emoji] || 0) + 1;
@@ -455,7 +456,6 @@
                     chatMessages.appendChild(msgDiv);
                 });
 
-                // Attach event listeners ke tombol-tombol
                 document.querySelectorAll('.reaction-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const msgId = btn.dataset.msgid;
@@ -469,7 +469,6 @@
                     btn.addEventListener('click', () => deleteMessage(btn.dataset.msgid));
                 });
 
-                // Render pin
                 renderPin();
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
@@ -522,7 +521,6 @@
                 showToast('Pesan dihapus.');
             }
 
-            // Kirim pesan
             function sendMessage() {
                 const text = chatInput.value.trim();
                 if (!text) return;
@@ -606,7 +604,6 @@
                 if (e.target === profileModal) profileModal.style.display = 'none';
             });
 
-            // Inisialisasi
             renderMessages();
         })();
     </script>
