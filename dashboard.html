@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIROHA JOKI - Dashboard</title>
+    <style>
+        :root {
+            --bg: #06060e;
+            --card-bg: rgba(18, 18, 30, 0.75);
+            --accent: #a855f7;
+            --accent-hover: #9333ea;
+            --text: #f1f1f3;
+            --text-secondary: #a0a0b8;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-pill: 50px;
+            --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(to right, #ffffff, #d8b4fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 20px;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+            padding-bottom: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .navbar::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-link {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 10px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+        }
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.1);
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+            overflow-x: auto;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            letter-spacing: -0.2px;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+        }
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th {
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        td {
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            vertical-align: middle;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status Badge */
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .status.sedang-joki {
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.25);
+        }
+        .status.istirahat {
+            background: rgba(251, 191, 36, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+        }
+        .status.belum-mulai {
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+        .status.selesai {
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 120px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #a855f7, #7c3aed);
+            transition: width 0.4s;
+        }
+
+        /* Edit Button */
+        .edit-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #a0a0b8;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 0.9rem;
+        }
+        .edit-btn:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.4);
+            color: #d8b4fe;
+        }
+
+        .pembayaran-badge {
+            color: #a3e635;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .navbar {
+                gap: 6px;
+            }
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">
+                <span style="font-size:1.8rem;">🎮</span>
+                <h1>SHIROHA JOKI</h1>
+            </div>
+            <a href="login.html" class="logout-btn">
+                <span>🚪</span> Logout
+            </a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <a href="detail-akun.html" class="nav-link">👤 Detail Akun</a>
+            <a href="keluhan.html" class="nav-link">📢 Keluhan</a>
+            <a href="chat.html" class="nav-link">💬 Chat</a>
+            <a href="status-joki.html" class="nav-link">📊 Status Joki</a>
+            <a href="gamelist.html" class="nav-link">🎮 Game/List</a>
+            <a href="memberlist.html" class="nav-link">👥 List Member</a>
+            <a href="struk.html" class="nav-link">🧾 Struk</a>
+            <a href="transaksi.html" class="nav-link">💳 Transaksi</a>
+            <a href="pengaturan.html" class="nav-link">⚙️ Pengaturan</a>
+        </nav>
+
+        <!-- Dashboard Joki Progress -->
+        <div class="card">
+            <h2>📋 Progres Joki Aktif</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Game</th>
+                            <th>List Joki</th>
+                            <th>Status</th>
+                            <th>Progress</th>
+                            <th>Mulai</th>
+                            <th>Berakhir</th>
+                            <th>Pembayaran</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Genshin Impact</strong></td>
+                            <td>Explore x2, Rawat akun 1 bln</td>
+                            <td><span class="status sedang-joki">Sedang Joki</span></td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-fill" style="width: 65%;"></div>
+                                </div>
+                                <span style="font-size:0.7rem; margin-left:6px;">65%</span>
+                            </td>
+                            <td>01/06/2026</td>
+                            <td>30/06/2026</td>
+                            <td><span class="pembayaran-badge">Lunas ✓</span></td>
+                            <td><button class="edit-btn">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Honkai Star Rail</strong></td>
+                            <td>Push Rank</td>
+                            <td><span class="status istirahat">Istirahat</span></td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-fill" style="width: 20%;"></div>
+                                </div>
+                                <span style="font-size:0.7rem; margin-left:6px;">20%</span>
+                            </td>
+                            <td>28/05/2026</td>
+                            <td>15/06/2026</td>
+                            <td><span class="pembayaran-badge">Lunas ✓</span></td>
+                            <td><button class="edit-btn">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mobile Legends</strong></td>
+                            <td>Selesaikan Event</td>
+                            <td><span class="status belum-mulai">Belum Mulai</span></td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <span style="font-size:0.7rem; margin-left:6px;">0%</span>
+                            </td>
+                            <td>05/06/2026</td>
+                            <td>12/06/2026</td>
+                            <td><span style="color:#fbbf24;">Pending</span></td>
+                            <td><button class="edit-btn">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Valorant</strong></td>
+                            <td>Push Rank, Event</td>
+                            <td><span class="status selesai">Selesai</span></td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-fill" style="width: 100%; background: #4ade80;"></div>
+                                </div>
+                                <span style="font-size:0.7rem; margin-left:6px;">100%</span>
+                            </td>
+                            <td>20/05/2026</td>
+                            <td>27/05/2026</td>
+                            <td><span class="pembayaran-badge">Lunas ✓</span></td>
+                            <td><button class="edit-btn" disabled style="opacity:0.4;">✏️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulasi interaksi kecil: klik edit tombol
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.disabled) return;
+                alert('🔧 Fitur edit hanya untuk admin.\n(Di sini akan terhubung ke panel admin)');
+            });
+        });
+
+        // Tandai menu aktif (opsional)
+        const currentPage = window.location.pathname.split('/').pop();
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
