@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIROHA JOKI - Game/List</title>
+    <title>OGURI STORE - Game & Layanan</title>
     <style>
         :root {
             --bg: #06060e;
@@ -18,28 +18,19 @@
             --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
             --transition: 0.2s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
-            background-image:
-                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            background-image: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168,85,247,0.07) 0%, transparent 70%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
             padding: 20px;
             color: var(--text);
             -webkit-tap-highlight-color: transparent;
-            display: flex;
-            justify-content: center;
         }
-
-        .container {
-            width: 100%;
-            max-width: 700px;
-        }
-
+        .container { width: 100%; max-width: 700px; }
         .header {
             display: flex;
             align-items: center;
@@ -82,35 +73,14 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
             margin-bottom: 20px;
         }
-        .card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #fff;
-        }
-        .form-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        .form-input {
-            flex: 1;
-            min-width: 120px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.85rem;
-            outline: none;
-        }
-        .form-input:focus { border-color: var(--accent); }
-        .form-select {
+        .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+
+        .form-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .form-input, .form-select {
+            flex: 1; min-width: 120px;
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -119,66 +89,44 @@
             font-family: inherit;
             font-size: 0.85rem;
             outline: none;
-            min-width: 130px;
         }
-        .form-select option { background: #1a1a2e; }
+        .form-input:focus, .form-select:focus { border-color: var(--accent); }
 
-        .game-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .game-item {
+        .list-item {
             background: rgba(255,255,255,0.03);
             border-radius: var(--radius-md);
             padding: 14px;
             border: 1px solid rgba(255,255,255,0.05);
-        }
-        .game-item-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             margin-bottom: 8px;
         }
-        .game-name {
-            font-weight: 600;
-            font-size: 1rem;
-            color: #fff;
-        }
-        .game-base-price {
-            font-size: 0.8rem;
-            color: #a0a0b8;
-        }
-        .joki-list {
-            margin-left: 16px;
-            font-size: 0.8rem;
-            color: #d4d4e0;
-        }
-        .joki-row {
+        .list-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 4px 0;
+            font-weight: 600;
         }
-        .joki-row span { flex: 1; }
-        .edit-btn, .del-btn {
-            background: none;
-            border: none;
-            color: #6b6b80;
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            transition: color 0.2s;
+        .list-sub { margin-top: 8px; font-size: 0.85rem; }
+        .rekening-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            justify-content: space-between;
         }
-        .edit-btn:hover { color: #d8b4fe; }
-        .del-btn:hover { color: #fca5a5; }
 
-        .empty-state {
-            text-align: center;
-            color: #6b6b80;
-            padding: 20px 0;
+        .empty-state { text-align: center; color: #6b6b80; padding: 20px 0; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
         }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 360px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
 
         .toast {
             position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
@@ -188,73 +136,110 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
-
-        @media (max-width: 500px) {
-            .form-row { flex-direction: column; }
-        }
     </style>
 </head>
 <body>
     <div class="toast" id="toast"></div>
     <div class="container">
         <div class="header">
-            <div class="brand">
-                <h2>🎮 Game & List Joki</h2>
-            </div>
+            <div class="brand"><h2>🎮 Game & Layanan</h2></div>
             <a href="dashboard.html" class="btn">⬅ Kembali</a>
         </div>
 
-        <!-- Card Admin (tambah game/layanan) -->
-        <div class="card" id="adminCard" style="display: none;">
-            <h3>➕ Tambah Data</h3>
-            <div class="form-row">
-                <input type="text" class="form-input" id="inputNamaGame" placeholder="Nama Game">
-                <input type="number" class="form-input" id="inputHargaGame" placeholder="Harga Game" min="0">
-                <button class="btn btn-primary" id="btnTambahGame">Tambah Game</button>
+        <!-- Panel Admin (hanya muncul jika admin) -->
+        <div id="adminPanel" style="display:none;">
+            <!-- Tambah Game -->
+            <div class="card">
+                <h3>➕ Tambah Game</h3>
+                <div class="form-row">
+                    <input type="text" class="form-input" id="gameName" placeholder="Nama Game">
+                    <button class="btn btn-primary" id="addGameBtn">Tambah</button>
+                </div>
             </div>
-            <div class="form-row">
-                <select class="form-select" id="selectGameForJoki">
-                    <option value="">Pilih Game</option>
-                </select>
-                <input type="text" class="form-input" id="inputNamaJoki" placeholder="Nama Layanan">
-                <input type="number" class="form-input" id="inputHargaJoki" placeholder="Harga Layanan" min="0">
-                <button class="btn btn-primary" id="btnTambahJoki">Tambah Layanan</button>
+
+            <!-- Tambah Layanan Joki -->
+            <div class="card">
+                <h3>➕ Tambah Layanan Joki</h3>
+                <div class="form-row">
+                    <select class="form-select" id="selectGameForJoki"></select>
+                    <input type="text" class="form-input" id="jokiName" placeholder="Nama Layanan">
+                    <input type="number" class="form-input" id="jokiPrice" placeholder="Harga" min="0">
+                    <button class="btn btn-primary" id="addJokiBtn">Tambah</button>
+                </div>
+            </div>
+
+            <!-- Kelola Rekening Admin -->
+            <div class="card">
+                <h3>🏦 Kelola Rekening Admin</h3>
+                <div id="rekeningList"></div>
+                <button class="btn btn-primary btn-small" id="addRekeningBtn">+ Tambah Rekening</button>
             </div>
         </div>
 
-        <!-- Daftar Game -->
+        <!-- Daftar Game & Layanan (terlihat semua user) -->
         <div class="card">
             <h3>📋 Daftar Game & Layanan</h3>
-            <div class="game-list" id="gameListContainer"></div>
+            <div id="gameListContainer"></div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Rekening -->
+    <div class="modal-overlay" id="rekeningModal">
+        <div class="modal">
+            <h4 id="rekeningModalTitle">Tambah Rekening</h4>
+            <input type="hidden" id="rekeningId">
+            <div class="form-group" style="margin-bottom:12px;">
+                <label style="color:#a0a0b8;font-size:0.8rem;display:block;margin-bottom:4px;">Jenis</label>
+                <select class="form-select" id="rekeningJenis">
+                    <option value="bank">🏦 Bank</option>
+                    <option value="ewallet">💰 E-Wallet</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label style="color:#a0a0b8;font-size:0.8rem;display:block;margin-bottom:4px;">Nama Bank/E-Wallet</label>
+                <input type="text" class="form-input" id="rekeningNama" placeholder="BCA, DANA, dll">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label style="color:#a0a0b8;font-size:0.8rem;display:block;margin-bottom:4px;">Nomor Rekening</label>
+                <input type="text" class="form-input" id="rekeningNomor" placeholder="1234567890">
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label style="color:#a0a0b8;font-size:0.8rem;display:block;margin-bottom:4px;">Atas Nama</label>
+                <input type="text" class="form-input" id="rekeningAtasNama" placeholder="Admin OGURI">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" id="closeRekeningModal">Batal</button>
+                <button class="btn btn-primary" id="saveRekening">Simpan</button>
+            </div>
         </div>
     </div>
 
     <script>
         (function() {
-            // Current user
+            // Cek user login
             let currentUser = null;
-            try {
-                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-            } catch(e) {}
-            if (!currentUser) {
-                currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
-                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
-            }
+            try { currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser')); } catch(e) {}
+            if (!currentUser) { window.location.href = 'index.html'; return; }
             const isAdmin = currentUser.role === 'admin';
 
-            // Data game dan joki dari localStorage
+            // Keys localStorage
             const GAMES_KEY = 'shiroha_game_list';
             const JOKI_KEY = 'shiroha_joki_services';
+            const REKENING_KEY = 'shiroha_rekening_admin';
 
+            // Ambil data
             let games = JSON.parse(localStorage.getItem(GAMES_KEY)) || [];
             let jokiServices = JSON.parse(localStorage.getItem(JOKI_KEY)) || [];
+            let rekeningAdmin = JSON.parse(localStorage.getItem(REKENING_KEY)) || [];
 
-            // Default data jika kosong
+            // Default jika kosong (tanpa harga game)
             if (games.length === 0) {
                 games = [
-                    { id: 1, nama: 'Genshin Impact', harga: 25000 },
-                    { id: 2, nama: 'Honkai Star Rail', harga: 25000 },
-                    { id: 3, nama: 'Mobile Legends', harga: 20000 }
+                    { id: 1, nama: 'Genshin Impact' },
+                    { id: 2, nama: 'Honkai Star Rail' },
+                    { id: 3, nama: 'Mobile Legends' },
+                    { id: 4, nama: 'PUBG Mobile' },
+                    { id: 5, nama: 'Valorant' }
                 ];
                 localStorage.setItem(GAMES_KEY, JSON.stringify(games));
             }
@@ -267,218 +252,257 @@
                 ];
                 localStorage.setItem(JOKI_KEY, JSON.stringify(jokiServices));
             }
+            if (rekeningAdmin.length === 0) {
+                rekeningAdmin = [
+                    { id: 1, jenis: 'bank', nama: 'BCA', nomor: '1234567890', atasNama: 'Admin OGURI' },
+                    { id: 2, jenis: 'ewallet', nama: 'DANA', nomor: '08123456789', atasNama: 'Admin OGURI' }
+                ];
+                localStorage.setItem(REKENING_KEY, JSON.stringify(rekeningAdmin));
+            }
 
             function saveGames() { localStorage.setItem(GAMES_KEY, JSON.stringify(games)); }
             function saveJoki() { localStorage.setItem(JOKI_KEY, JSON.stringify(jokiServices)); }
+            function saveRekening() { localStorage.setItem(REKENING_KEY, JSON.stringify(rekeningAdmin)); }
 
-            // DOM
-            const adminCard = document.getElementById('adminCard');
-            const gameListContainer = document.getElementById('gameListContainer');
-            const inputNamaGame = document.getElementById('inputNamaGame');
-            const inputHargaGame = document.getElementById('inputHargaGame');
-            const btnTambahGame = document.getElementById('btnTambahGame');
-            const selectGameForJoki = document.getElementById('selectGameForJoki');
-            const inputNamaJoki = document.getElementById('inputNamaJoki');
-            const inputHargaJoki = document.getElementById('inputHargaJoki');
-            const btnTambahJoki = document.getElementById('btnTambahJoki');
+            // Toast
             const toast = document.getElementById('toast');
-
-            let toastTimer;
-            function showToast(msg, isError = false) {
-                clearTimeout(toastTimer);
+            function showToast(msg, isErr = false) {
                 toast.textContent = msg;
-                toast.className = 'toast ' + (isError ? 'error' : '');
-                void toast.offsetWidth;
+                toast.className = 'toast' + (isErr ? ' error' : '');
                 toast.classList.add('show');
-                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+                setTimeout(() => toast.classList.remove('show'), 2500);
             }
 
-            // Tampilkan admin card jika admin
+            // Tampilkan admin panel
             if (isAdmin) {
-                adminCard.style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'block';
             }
 
-            // Populate select game
-            function populateSelectGame() {
-                selectGameForJoki.innerHTML = '<option value="">Pilih Game</option>';
-                games.forEach(g => {
-                    selectGameForJoki.innerHTML += `<option value="${g.id}">${g.nama}</option>`;
-                });
-            }
-
-            // Render daftar game
-            function renderGameList() {
-                gameListContainer.innerHTML = '';
-                if (games.length === 0) {
-                    gameListContainer.innerHTML = '<div class="empty-state">Belum ada game tersedia.</div>';
-                    return;
-                }
-                games.forEach(game => {
-                    const gameDiv = document.createElement('div');
-                    gameDiv.className = 'game-item';
-                    const gameJoki = jokiServices.filter(j => j.gameId === game.id);
-                    let jokiHtml = '';
-                    if (gameJoki.length === 0) {
-                        jokiHtml = '<div style="color:#6b6b80; margin-left:16px;">Belum ada layanan</div>';
-                    } else {
-                        gameJoki.forEach(j => {
-                            jokiHtml += `
-                                <div class="joki-row">
-                                    <span>• ${j.nama} — Rp ${j.harga.toLocaleString('id-ID')}</span>
-                                    ${isAdmin ? `<div>
-                                        <button class="edit-btn" data-joki-id="${j.id}">✏️</button>
-                                        <button class="del-btn" data-joki-id="${j.id}">🗑</button>
-                                    </div>` : ''}
-                                </div>`;
-                        });
-                    }
-                    gameDiv.innerHTML = `
-                        <div class="game-item-header">
-                            <div>
-                                <span class="game-name">${game.nama}</span>
-                                <span class="game-base-price"> | Harga Game: Rp ${game.harga.toLocaleString('id-ID')}</span>
-                            </div>
-                            ${isAdmin ? `<div>
-                                <button class="edit-btn" data-game-id="${game.id}">✏️ Edit</button>
-                                <button class="del-btn" data-game-id="${game.id}">🗑 Hapus</button>
-                            </div>` : ''}
-                        </div>
-                        <div class="joki-list">${jokiHtml}</div>
-                    `;
-                    gameListContainer.appendChild(gameDiv);
-                });
-
-                // Attach event listeners untuk tombol edit/hapus game
+            // Render semua
+            function renderAll() {
+                renderGameList();
                 if (isAdmin) {
-                    document.querySelectorAll('[data-game-id]').forEach(btn => {
-                        const gameId = parseInt(btn.dataset.gameId);
-                        if (btn.classList.contains('edit-btn')) {
-                            btn.addEventListener('click', () => editGame(gameId));
-                        } else if (btn.classList.contains('del-btn')) {
-                            btn.addEventListener('click', () => deleteGame(gameId));
-                        }
-                    });
-                    document.querySelectorAll('[data-joki-id]').forEach(btn => {
-                        const jokiId = parseInt(btn.dataset.jokiId);
-                        if (btn.classList.contains('edit-btn')) {
-                            btn.addEventListener('click', () => editJoki(jokiId));
-                        } else if (btn.classList.contains('del-btn')) {
-                            btn.addEventListener('click', () => deleteJoki(jokiId));
-                        }
-                    });
+                    renderRekening();
+                    populateSelectGame();
                 }
             }
 
-            // Tambah game
-            btnTambahGame.addEventListener('click', () => {
-                const nama = inputNamaGame.value.trim();
-                const harga = parseInt(inputHargaGame.value);
-                if (!nama || isNaN(harga) || harga < 0) {
-                    showToast('Mohon isi nama dan harga game dengan benar.', true);
+            function populateSelectGame() {
+                const select = document.getElementById('selectGameForJoki');
+                if (!select) return;
+                select.innerHTML = '<option value="">Pilih Game</option>' + 
+                    games.map(g => `<option value="${g.id}">${g.nama}</option>`).join('');
+            }
+
+            function renderGameList() {
+                const container = document.getElementById('gameListContainer');
+                if (games.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Belum ada game tersedia.</div>';
                     return;
                 }
-                const newGame = {
-                    id: Date.now(),
-                    nama,
-                    harga
-                };
-                games.push(newGame);
-                saveGames();
-                inputNamaGame.value = '';
-                inputHargaGame.value = '';
-                populateSelectGame();
-                renderGameList();
-                showToast('Game berhasil ditambahkan.');
-            });
+                container.innerHTML = games.map(game => {
+                    const layanan = jokiServices.filter(j => j.gameId === game.id);
+                    return `
+                        <div class="list-item">
+                            <div class="list-header">
+                                <span>${game.nama}</span>
+                                ${isAdmin ? `<div>
+                                    <button class="btn btn-small edit-game-btn" data-id="${game.id}">✏️</button>
+                                    <button class="btn btn-small btn-danger delete-game-btn" data-id="${game.id}">🗑</button>
+                                </div>` : ''}
+                            </div>
+                            <div class="list-sub">
+                                ${layanan.length ? layanan.map(j => `
+                                    <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;">
+                                        <span>• ${j.nama} — Rp ${j.harga.toLocaleString('id-ID')}</span>
+                                        ${isAdmin ? `<div>
+                                            <button class="btn btn-small edit-joki-btn" data-id="${j.id}">✏️</button>
+                                            <button class="btn btn-small btn-danger delete-joki-btn" data-id="${j.id}">🗑</button>
+                                        </div>` : ''}
+                                    </div>
+                                `).join('') : '<span style="color:#6b6b80;">Belum ada layanan</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
 
-            // Tambah joki
-            btnTambahJoki.addEventListener('click', () => {
-                const gameId = parseInt(selectGameForJoki.value);
-                const nama = inputNamaJoki.value.trim();
-                const harga = parseInt(inputHargaJoki.value);
-                if (!gameId || !nama || isNaN(harga) || harga < 0) {
-                    showToast('Lengkapi semua data layanan.', true);
+                // Event listeners admin
+                if (isAdmin) {
+                    document.querySelectorAll('.edit-game-btn').forEach(b => 
+                        b.addEventListener('click', () => editGame(parseInt(b.dataset.id))));
+                    document.querySelectorAll('.delete-game-btn').forEach(b => 
+                        b.addEventListener('click', () => deleteGame(parseInt(b.dataset.id))));
+                    document.querySelectorAll('.edit-joki-btn').forEach(b => 
+                        b.addEventListener('click', () => editJoki(parseInt(b.dataset.id))));
+                    document.querySelectorAll('.delete-joki-btn').forEach(b => 
+                        b.addEventListener('click', () => deleteJoki(parseInt(b.dataset.id))));
+                }
+            }
+
+            function renderRekening() {
+                const container = document.getElementById('rekeningList');
+                if (!container) return;
+                if (rekeningAdmin.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Belum ada rekening terdaftar.</div>';
                     return;
                 }
-                const newJoki = {
-                    id: Date.now(),
-                    gameId,
-                    nama,
-                    harga
-                };
-                jokiServices.push(newJoki);
-                saveJoki();
-                inputNamaJoki.value = '';
-                inputHargaJoki.value = '';
-                renderGameList();
-                showToast('Layanan berhasil ditambahkan.');
-            });
+                container.innerHTML = rekeningAdmin.map(r => `
+                    <div class="rekening-item">
+                        <span>${r.jenis === 'bank' ? '🏦' : '💰'} ${r.nama} - ${r.nomor} a/n ${r.atasNama}</span>
+                        <div>
+                            <button class="btn btn-small edit-rekening-btn" data-id="${r.id}">✏️</button>
+                            <button class="btn btn-small btn-danger delete-rekening-btn" data-id="${r.id}">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
 
-            // Edit game (sederhana: prompt)
-            function editGame(gameId) {
-                const game = games.find(g => g.id === gameId);
+                document.querySelectorAll('.edit-rekening-btn').forEach(b => 
+                    b.addEventListener('click', () => openRekeningModal(parseInt(b.dataset.id))));
+                document.querySelectorAll('.delete-rekening-btn').forEach(b => 
+                    b.addEventListener('click', () => deleteRekening(parseInt(b.dataset.id))));
+            }
+
+            // Game CRUD
+            function editGame(id) {
+                const game = games.find(g => g.id === id);
                 if (!game) return;
-                const newNama = prompt('Edit Nama Game:', game.nama);
-                if (newNama === null) return;
-                const newHarga = prompt('Edit Harga Game (Rp):', game.harga);
-                if (newHarga === null) return;
-                const hargaNum = parseInt(newHarga);
-                if (!newNama.trim() || isNaN(hargaNum) || hargaNum < 0) {
-                    showToast('Data tidak valid.', true);
-                    return;
+                const newName = prompt('Edit nama game:', game.nama);
+                if (newName && newName.trim()) {
+                    game.nama = newName.trim();
+                    saveGames();
+                    renderAll();
+                    showToast('Nama game diperbarui.');
                 }
-                game.nama = newNama.trim();
-                game.harga = hargaNum;
-                saveGames();
-                populateSelectGame();
-                renderGameList();
-                showToast('Game diperbarui.');
             }
-
-            // Hapus game
-            function deleteGame(gameId) {
+            function deleteGame(id) {
                 if (!confirm('Hapus game ini beserta semua layanannya?')) return;
-                games = games.filter(g => g.id !== gameId);
-                jokiServices = jokiServices.filter(j => j.gameId !== gameId);
-                saveGames();
-                saveJoki();
-                populateSelectGame();
-                renderGameList();
+                games = games.filter(g => g.id !== id);
+                jokiServices = jokiServices.filter(j => j.gameId !== id);
+                saveGames(); saveJoki();
+                renderAll();
                 showToast('Game dihapus.');
             }
 
-            // Edit joki
-            function editJoki(jokiId) {
-                const joki = jokiServices.find(j => j.id === jokiId);
+            document.getElementById('addGameBtn').addEventListener('click', () => {
+                const nama = document.getElementById('gameName').value.trim();
+                if (!nama) { showToast('Nama game harus diisi.', true); return; }
+                games.push({ id: Date.now(), nama });
+                saveGames();
+                document.getElementById('gameName').value = '';
+                renderAll();
+                showToast('Game ditambahkan.');
+            });
+
+            // Joki CRUD
+            function editJoki(id) {
+                const joki = jokiServices.find(j => j.id === id);
                 if (!joki) return;
-                const newNama = prompt('Edit Nama Layanan:', joki.nama);
-                if (newNama === null) return;
-                const newHarga = prompt('Edit Harga (Rp):', joki.harga);
-                if (newHarga === null) return;
-                const hargaNum = parseInt(newHarga);
-                if (!newNama.trim() || isNaN(hargaNum) || hargaNum < 0) {
-                    showToast('Data tidak valid.', true);
-                    return;
+                const newName = prompt('Edit nama layanan:', joki.nama);
+                if (newName === null) return;
+                const newPrice = prompt('Edit harga:', joki.harga);
+                if (newPrice === null) return;
+                const priceNum = parseInt(newPrice);
+                if (!newName.trim() || isNaN(priceNum) || priceNum < 0) {
+                    showToast('Data tidak valid.', true); return;
                 }
-                joki.nama = newNama.trim();
-                joki.harga = hargaNum;
+                joki.nama = newName.trim();
+                joki.harga = priceNum;
                 saveJoki();
-                renderGameList();
+                renderAll();
                 showToast('Layanan diperbarui.');
             }
-
-            // Hapus joki
-            function deleteJoki(jokiId) {
+            function deleteJoki(id) {
                 if (!confirm('Hapus layanan ini?')) return;
-                jokiServices = jokiServices.filter(j => j.id !== jokiId);
+                jokiServices = jokiServices.filter(j => j.id !== id);
                 saveJoki();
-                renderGameList();
+                renderAll();
                 showToast('Layanan dihapus.');
             }
 
+            document.getElementById('addJokiBtn').addEventListener('click', () => {
+                const gameId = parseInt(document.getElementById('selectGameForJoki').value);
+                const nama = document.getElementById('jokiName').value.trim();
+                const harga = parseInt(document.getElementById('jokiPrice').value);
+                if (!gameId || !nama || isNaN(harga) || harga < 0) {
+                    showToast('Lengkapi data dengan benar.', true); return;
+                }
+                jokiServices.push({ id: Date.now(), gameId, nama, harga });
+                saveJoki();
+                document.getElementById('jokiName').value = '';
+                document.getElementById('jokiPrice').value = '';
+                renderAll();
+                showToast('Layanan ditambahkan.');
+            });
+
+            // Rekening CRUD
+            const rekeningModal = document.getElementById('rekeningModal');
+            const rekeningId = document.getElementById('rekeningId');
+            const rekeningJenis = document.getElementById('rekeningJenis');
+            const rekeningNama = document.getElementById('rekeningNama');
+            const rekeningNomor = document.getElementById('rekeningNomor');
+            const rekeningAtasNama = document.getElementById('rekeningAtasNama');
+            const rekeningModalTitle = document.getElementById('rekeningModalTitle');
+
+            function openRekeningModal(id = null) {
+                if (id) {
+                    const rek = rekeningAdmin.find(r => r.id === id);
+                    if (!rek) return;
+                    rekeningId.value = rek.id;
+                    rekeningJenis.value = rek.jenis;
+                    rekeningNama.value = rek.nama;
+                    rekeningNomor.value = rek.nomor;
+                    rekeningAtasNama.value = rek.atasNama;
+                    rekeningModalTitle.textContent = 'Edit Rekening';
+                } else {
+                    rekeningId.value = '';
+                    rekeningJenis.value = 'bank';
+                    rekeningNama.value = '';
+                    rekeningNomor.value = '';
+                    rekeningAtasNama.value = 'Admin OGURI';
+                    rekeningModalTitle.textContent = 'Tambah Rekening';
+                }
+                rekeningModal.style.display = 'flex';
+            }
+
+            document.getElementById('addRekeningBtn').addEventListener('click', () => openRekeningModal());
+            document.getElementById('closeRekeningModal').addEventListener('click', () => rekeningModal.style.display = 'none');
+            document.getElementById('saveRekening').addEventListener('click', () => {
+                const id = rekeningId.value ? parseInt(rekeningId.value) : Date.now();
+                const jenis = rekeningJenis.value;
+                const nama = rekeningNama.value.trim();
+                const nomor = rekeningNomor.value.trim();
+                const atasNama = rekeningAtasNama.value.trim();
+                if (!nama || !nomor || !atasNama) {
+                    showToast('Lengkapi semua data rekening.', true); return;
+                }
+                const existing = rekeningAdmin.find(r => r.id === id);
+                if (existing) {
+                    existing.jenis = jenis;
+                    existing.nama = nama;
+                    existing.nomor = nomor;
+                    existing.atasNama = atasNama;
+                } else {
+                    rekeningAdmin.push({ id, jenis, nama, nomor, atasNama });
+                }
+                saveRekening();
+                rekeningModal.style.display = 'none';
+                renderRekening();
+                showToast('Rekening disimpan.');
+            });
+
+            function deleteRekening(id) {
+                if (!confirm('Hapus rekening ini?')) return;
+                rekeningAdmin = rekeningAdmin.filter(r => r.id !== id);
+                saveRekening();
+                renderRekening();
+                showToast('Rekening dihapus.');
+            }
+
             // Inisialisasi
-            populateSelectGame();
-            renderGameList();
+            if (isAdmin) {
+                populateSelectGame();
+            }
+            renderAll();
         })();
     </script>
 </body>
