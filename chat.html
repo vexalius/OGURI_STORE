@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIROHA JOKI - Chat</title>
+    <title>OGURI STORE - Chat Room</title>
     <style>
         :root {
             --bg: #06060e;
@@ -47,7 +47,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -65,9 +65,6 @@
             border-radius: var(--radius-pill);
             font-size: 0.8rem;
             color: #d4d4e0;
-        }
-        .user-emoji {
-            font-size: 1.1rem;
         }
         .btn {
             background: rgba(255,255,255,0.04);
@@ -87,14 +84,12 @@
         }
         .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
         .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
-        .btn-primary:hover { box-shadow: 0 4px 15px rgba(168,85,247,0.4); }
 
         .chat-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
             flex: 1;
             display: flex;
@@ -104,10 +99,8 @@
 
         .pinned-message {
             background: rgba(168, 85, 247, 0.12);
-            border: 1px solid rgba(168, 85, 247, 0.25);
-            border-radius: var(--radius-md);
-            padding: 8px 12px;
-            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+            padding: 8px 16px;
             display: none;
             font-size: 0.8rem;
             color: #d8b4fe;
@@ -120,50 +113,56 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding-right: 4px;
-            margin-bottom: 12px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
         .chat-messages::-webkit-scrollbar { width: 4px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
-        .message {
-            background: rgba(255,255,255,0.03);
-            border-radius: 14px;
+        .message-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+        .message-row.me { align-self: flex-end; align-items: flex-end; }
+        .message-row.other { align-self: flex-start; align-items: flex-start; }
+
+        .message-bubble {
             padding: 10px 14px;
+            border-radius: 16px;
             font-size: 0.85rem;
             line-height: 1.4;
-            border: 1px solid rgba(255,255,255,0.04);
-            animation: fadeIn 0.2s;
+            word-wrap: break-word;
+            position: relative;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
+        .message-row.me .message-bubble {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #fff;
+            border-bottom-right-radius: 4px;
         }
-        .message-sender {
-            font-weight: 600;
-            color: #ffffff;
-            font-size: 0.8rem;
-        }
-        .message-time {
-            font-size: 0.65rem;
-            color: #6b6b80;
-            margin-left: auto;
-        }
-        .message-body {
+        .message-row.other .message-bubble {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
             color: #d4d4e0;
+            border-bottom-left-radius: 4px;
         }
+
+        .message-sender {
+            font-size: 0.7rem;
+            color: #a0a0b8;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
         .message-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 6px;
-            font-size: 0.75rem;
+            gap: 6px;
+            margin-top: 4px;
+            font-size: 0.7rem;
         }
         .reaction-btn, .pin-btn, .delete-btn {
             background: none;
@@ -172,39 +171,44 @@
             cursor: pointer;
             padding: 2px 6px;
             border-radius: 12px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.2s;
         }
         .reaction-btn:hover { color: #d8b4fe; background: rgba(168,85,247,0.1); }
         .pin-btn:hover { color: #fbbf24; }
         .delete-btn:hover { color: #fca5a5; }
+
         .reactions-display {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             flex-wrap: wrap;
             margin-top: 4px;
         }
         .reaction-badge {
             background: rgba(255,255,255,0.05);
             border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.75rem;
+            padding: 2px 6px;
+            font-size: 0.7rem;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: default;
         }
 
         .chat-input-area {
             display: flex;
             gap: 8px;
+            padding: 10px 16px;
+            border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+            flex-shrink: 0;
         }
         .chat-input {
             flex: 1;
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             border-radius: var(--radius-pill);
-            padding: 12px 16px;
+            padding: 10px 16px;
             color: #fff;
             font-family: inherit;
             font-size: 0.9rem;
@@ -215,14 +219,14 @@
             background: var(--accent);
             border: none;
             color: #fff;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: var(--radius-pill);
             cursor: pointer;
             font-weight: 600;
         }
         .send-btn:hover { background: #9333ea; }
 
-        /* Modal Popup */
+        /* Modal */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
             display: none; align-items: center; justify-content: center; z-index: 100;
@@ -234,7 +238,7 @@
         .modal h4 { color: #fff; margin-bottom: 16px; }
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* Ubah jadi 5 biar muat */
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
             margin-bottom: 16px;
             justify-items: center;
@@ -287,7 +291,7 @@
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <div class="user-info" id="userInfoDisplay">
-                    <span class="user-emoji" id="headerEmoji">😊</span>
+                    <span id="headerEmoji">😊</span>
                     <span id="headerNickname">User</span>
                 </div>
                 <button class="btn" id="profileBtn">👤 Profil</button>
@@ -336,18 +340,11 @@
 
     <script>
         (function() {
-            // --- User ---
             let currentUser = null;
-            try {
-                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-            } catch(e) {}
-            if (!currentUser) {
-                currentUser = { id: 'user_demo', username: 'DemoUser', role: 'user' };
-                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
-            }
+            try { currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser')); } catch(e) {}
+            if (!currentUser) { window.location.href = 'index.html'; return; }
             const isAdmin = currentUser.role === 'admin';
 
-            // --- Profile Chat per user ---
             const PROFILE_KEY = 'shiroha_chat_profile';
             let userProfiles = JSON.parse(localStorage.getItem(PROFILE_KEY)) || {};
             if (!userProfiles[currentUser.id]) {
@@ -358,28 +355,22 @@
                 return userProfiles[uid] || { nickname: uid, emoji: '👤' };
             }
 
-            // --- Data Chat ---
             const CHAT_KEY = 'shiroha_chat_messages';
             let messages = JSON.parse(localStorage.getItem(CHAT_KEY)) || [];
             function saveMessages() { localStorage.setItem(CHAT_KEY, JSON.stringify(messages)); }
 
-            // --- Pin ---
             const PIN_KEY = 'shiroha_chat_pin';
             let pinnedMessageId = localStorage.getItem(PIN_KEY) || null;
 
-            // --- DOM ---
             const chatMessages = document.getElementById('chatMessages');
             const chatInput = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
             const pinnedDiv = document.getElementById('pinnedMessage');
             const pinText = document.getElementById('pinText');
             const unpinBtn = document.getElementById('unpinBtn');
-            const userInfoDisplay = document.getElementById('userInfoDisplay');
+
             const headerEmoji = document.getElementById('headerEmoji');
             const headerNickname = document.getElementById('headerNickname');
-            const profileBtn = document.getElementById('profileBtn');
-
-            // Modals
             const reactionModal = document.getElementById('reactionModal');
             const reactionEmojiGrid = document.getElementById('reactionEmojiGrid');
             const closeReactionModal = document.getElementById('closeReactionModal');
@@ -390,20 +381,15 @@
             const saveProfile = document.getElementById('saveProfile');
 
             const toast = document.getElementById('toast');
-            let toastTimer;
-            function showToast(msg, isError = false) {
-                clearTimeout(toastTimer);
+            function showToast(msg, isErr) {
                 toast.textContent = msg;
-                toast.className = 'toast ' + (isError ? 'error' : '');
-                void toast.offsetWidth;
+                toast.className = 'toast' + (isErr ? ' error' : '');
                 toast.classList.add('show');
-                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+                setTimeout(() => toast.classList.remove('show'), 2500);
             }
 
-            // Emoji set
             const emojiList = ['😀','😂','❤️','👍','👎','🎉','😢','😡','🔥','✨','💯','🙏'];
 
-            // Update header
             function updateHeader() {
                 const profile = getUserProfile(currentUser.id);
                 headerEmoji.textContent = profile.emoji;
@@ -411,25 +397,25 @@
             }
             updateHeader();
 
-            // Render semua pesan
             function renderMessages() {
                 chatMessages.innerHTML = '';
                 if (messages.length === 0) {
                     chatMessages.innerHTML = '<div style="text-align:center;color:#6b6b80;padding:30px;">Belum ada pesan</div>';
                 }
+
                 messages.forEach(msg => {
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = 'message';
                     const profile = getUserProfile(msg.userId);
-                    const waktu = new Date(msg.timestamp).toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-                    
+                    const isMe = msg.userId === currentUser.id;
+                    const senderName = isMe ? 'Anda' : (profile.nickname || msg.userId);
+                    const rowClass = isMe ? 'me' : 'other';
+
                     let actionsHtml = '';
                     actionsHtml += `<button class="reaction-btn" data-msgid="${msg.id}">😀 +</button>`;
                     if (isAdmin) {
                         actionsHtml += `<button class="pin-btn" data-msgid="${msg.id}">📌 Pin</button>`;
                         actionsHtml += `<button class="delete-btn" data-msgid="${msg.id}">🗑 Hapus</button>`;
                     }
-                    
+
                     let reactionsHtml = '';
                     if (msg.reactions && msg.reactions.length > 0) {
                         const counts = {};
@@ -443,13 +429,11 @@
                         reactionsHtml += '</div>';
                     }
 
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message-row ${rowClass}`;
                     msgDiv.innerHTML = `
-                        <div class="message-header">
-                            <span>${profile.emoji}</span>
-                            <span class="message-sender">${profile.nickname}</span>
-                            <span class="message-time">${waktu}</span>
-                        </div>
-                        <div class="message-body">${escapeHtml(msg.text)}</div>
+                        <div class="message-sender">${senderName}</div>
+                        <div class="message-bubble">${escapeHtml(msg.text)}</div>
                         <div class="message-actions">${actionsHtml}</div>
                         ${reactionsHtml}
                     `;
@@ -457,10 +441,7 @@
                 });
 
                 document.querySelectorAll('.reaction-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const msgId = btn.dataset.msgid;
-                        openReactionModal(msgId);
-                    });
+                    btn.addEventListener('click', () => openReactionModal(btn.dataset.msgid));
                 });
                 document.querySelectorAll('.pin-btn').forEach(btn => {
                     btn.addEventListener('click', () => pinMessage(btn.dataset.msgid));
@@ -487,8 +468,6 @@
                         pinnedDiv.style.display = 'flex';
                     } else {
                         pinnedDiv.style.display = 'none';
-                        pinnedMessageId = null;
-                        localStorage.removeItem(PIN_KEY);
                     }
                 } else {
                     pinnedDiv.style.display = 'none';
@@ -536,12 +515,12 @@
                 chatInput.value = '';
                 renderMessages();
             }
+
             sendBtn.addEventListener('click', sendMessage);
             chatInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
 
-            // Reaksi modal
             let currentReactionMsgId = null;
             function openReactionModal(msgId) {
                 currentReactionMsgId = msgId;
@@ -555,6 +534,7 @@
                 });
                 reactionModal.style.display = 'flex';
             }
+
             function addReaction(msgId, emoji) {
                 const msg = messages.find(m => m.id == msgId);
                 if (!msg) return;
@@ -564,13 +544,14 @@
                 renderMessages();
                 reactionModal.style.display = 'none';
             }
+
             closeReactionModal.addEventListener('click', () => reactionModal.style.display = 'none');
             reactionModal.addEventListener('click', (e) => {
                 if (e.target === reactionModal) reactionModal.style.display = 'none';
             });
 
             // Profil modal
-            profileBtn.addEventListener('click', () => {
+            document.getElementById('profileBtn').addEventListener('click', () => {
                 const profile = getUserProfile(currentUser.id);
                 nicknameInput.value = profile.nickname;
                 profileEmojiGrid.innerHTML = '';
@@ -588,6 +569,7 @@
                 });
                 profileModal.style.display = 'flex';
             });
+
             closeProfileModal.addEventListener('click', () => profileModal.style.display = 'none');
             saveProfile.addEventListener('click', () => {
                 const nickname = nicknameInput.value.trim() || currentUser.username;
@@ -600,6 +582,7 @@
                 profileModal.style.display = 'none';
                 showToast('Profil diperbarui.');
             });
+
             profileModal.addEventListener('click', (e) => {
                 if (e.target === profileModal) profileModal.style.display = 'none';
             });
