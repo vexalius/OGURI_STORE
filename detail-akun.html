@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIROHA JOKI - Detail Akun</title>
+    <title>OGURI STORE - Detail Akun</title>
     <style>
         :root {
             --bg: #06060e;
@@ -18,380 +18,357 @@
             --shadow-glow: 0 0 50px rgba(168, 85, 247, 0.1);
             --transition: 0.2s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: var(--bg);
-            background-image:
-                radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168, 85, 247, 0.07) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+            background-image: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(168,85,247,0.07) 0%, transparent 70%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
             padding: 20px;
             color: var(--text);
             -webkit-tap-highlight-color: transparent;
         }
-
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
+        .container { width: 100%; max-width: 700px; }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+        .brand h2 {
+            font-size: 1.4rem; font-weight: 700;
+            background: linear-gradient(to right, #fff, #d8b4fe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
+        .btn {
+            background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+            color: var(--text-secondary); padding: 10px 18px; border-radius: var(--radius-pill);
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all var(--transition);
+            display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
         }
-        .brand h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-            background: linear-gradient(to right, #ffffff, #d8b4fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .back-btn {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 10px 20px;
-            border-radius: var(--radius-pill);
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all var(--transition);
-        }
-        .back-btn:hover {
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
+        .btn-danger { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .btn-small { padding: 6px 12px; font-size: 0.7rem; }
 
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--shadow-glow);
-            margin-bottom: 20px;
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow); margin-bottom: 20px;
         }
-        .card h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 18px;
-            letter-spacing: -0.2px;
-        }
+        .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
 
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+        .account-list { display: flex; flex-direction: column; gap: 12px; }
+        .account-item {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: var(--radius-md); padding: 14px;
         }
-        .detail-item {
-            background: rgba(255,255,255,0.02);
-            border-radius: var(--radius-md);
-            padding: 14px;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
-        .detail-item.full-width {
-            grid-column: span 2;
-        }
-        .detail-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 4px;
-        }
-        .detail-value {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #ffffff;
-            word-break: break-word;
-        }
-        .detail-value input {
-            width: 100%;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 10px;
-            color: #fff;
-            font-size: 0.9rem;
-            font-family: inherit;
-            outline: none;
-            transition: border 0.2s;
-        }
-        .detail-value input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-        .status-lunas {
-            background: rgba(34, 197, 94, 0.12);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.25);
-        }
-        .status-pending {
-            background: rgba(251, 191, 36, 0.12);
-            color: #fbbf24;
-            border: 1px solid rgba(251, 191, 36, 0.25);
-        }
+        .account-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .account-game { font-weight: 600; color: #fff; }
+        .account-detail { font-size: 0.85rem; color: #d4d4e0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .detail-label { color: var(--text-secondary); font-size: 0.7rem; }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: var(--radius-pill);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            box-shadow: 0 6px 24px rgba(168, 85, 247, 0.3);
-        }
-        .btn-primary:hover { box-shadow: 0 10px 32px rgba(168, 85, 247, 0.45); transform: translateY(-1px); }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.15);
-            color: #d4d4e0;
-            padding: 12px 24px;
-            border-radius: var(--radius-pill);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-        .btn-outline:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.03); color: #fff; }
+        .empty-state { text-align: center; color: #6b6b80; padding: 30px 0; }
 
-        .edit-toggle {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
         }
+        .modal {
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 400px; padding: 20px;
+        }
+        .modal h4 { color: #fff; margin-bottom: 16px; }
+        .modal .form-group { margin-bottom: 12px; }
+        .modal label { display: block; color: #a0a0b8; font-size: 0.8rem; margin-bottom: 4px; }
+        .form-input, .form-select {
+            width: 100%; padding: 10px; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border); border-radius: 8px; color: #fff;
+            font-family: inherit; font-size: 0.85rem; outline: none;
+        }
+        .form-input:focus, .form-select:focus { border-color: var(--accent); }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
 
         .toast {
-            position: fixed;
-            top: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: #1e1e2e;
-            color: #f1f1f3;
-            padding: 12px 22px;
-            border-radius: var(--radius-pill);
-            font-size: 0.85rem;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.5);
-            z-index: 200;
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-            backdrop-filter: blur(8px);
+            position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
+            background: #1e1e2e; color: #f1f1f3; padding: 12px 22px; border-radius: var(--radius-pill);
+            font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.08); z-index: 200;
+            transition: transform 0.35s; pointer-events: none;
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
-
-        @media (max-width: 500px) {
-            .detail-grid { grid-template-columns: 1fr; }
-            .detail-item.full-width { grid-column: span 1; }
-        }
     </style>
 </head>
 <body>
     <div class="toast" id="toast"></div>
     <div class="container">
         <div class="header">
-            <div class="brand">
-                <h1>👤 Detail Akun Game</h1>
+            <div class="brand"><h2>👤 Detail Akun Game</h2></div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn" id="pilihUserBtn" style="display:none;">👥 Pilih User</button>
+                <button class="btn btn-primary" id="addAccountBtn">➕ Tambah Akun</button>
+                <a href="dashboard.html" class="btn">⬅ Kembali</a>
             </div>
-            <a href="dashboard.html" class="back-btn">⬅ Kembali</a>
         </div>
 
-        <div class="card" id="akunCard">
-            <h2>Informasi Akun</h2>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Nama Game</div>
-                    <div class="detail-value" id="displayNamaGame">Genshin Impact</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">List Joki</div>
-                    <div class="detail-value" id="displayListJoki">Explore x2, Rawat akun 1 bln</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">ID Game</div>
-                    <div class="detail-value" id="displayIdGame">812345678</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Password Game</div>
-                    <div class="detail-value" id="displayPasswordGame">••••••••</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Nickname Game</div>
-                    <div class="detail-value" id="displayNickname">TravelerPro</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Server Game</div>
-                    <div class="detail-value" id="displayServer">Asia</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Login Via</div>
-                    <div class="detail-value" id="displayLoginVia">Google</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Status Pembayaran</div>
-                    <div class="detail-value" id="displayStatusPembayaran"><span class="status-badge status-lunas">Lunas ✓</span></div>
-                </div>
-            </div>
+        <div class="card">
+            <h3>Daftar Akun Game</h3>
+            <div class="account-list" id="accountList"></div>
+        </div>
+    </div>
 
-            <!-- Tombol edit hanya muncul jika admin -->
-            <div class="edit-toggle" id="editToggle" style="display: none;">
-                <button class="btn-outline" id="btnEdit">✏️ Edit</button>
-                <button class="btn-primary" id="btnSimpan" style="display: none;">💾 Simpan Perubahan</button>
+    <!-- Modal Tambah/Edit Akun -->
+    <div class="modal-overlay" id="accountModal">
+        <div class="modal">
+            <h4 id="accountModalTitle">Tambah Akun</h4>
+            <input type="hidden" id="accountId">
+            <div class="form-group">
+                <label>Nama Game</label>
+                <input type="text" class="form-input" id="namaGame" placeholder="Genshin Impact">
+            </div>
+            <div class="form-group">
+                <label>List Joki</label>
+                <input type="text" class="form-input" id="listJoki" placeholder="Explore x2, Rawat akun 1 bln">
+            </div>
+            <div class="form-group">
+                <label>ID Game</label>
+                <input type="text" class="form-input" id="idGame" placeholder="812345678">
+            </div>
+            <div class="form-group">
+                <label>Password Game</label>
+                <input type="text" class="form-input" id="passwordGame" placeholder="rahasia123">
+            </div>
+            <div class="form-group">
+                <label>Nickname Game</label>
+                <input type="text" class="form-input" id="nickname" placeholder="TravelerPro">
+            </div>
+            <div class="form-group">
+                <label>Server Game</label>
+                <input type="text" class="form-input" id="server" placeholder="Asia">
+            </div>
+            <div class="form-group">
+                <label>Login Via</label>
+                <select class="form-select" id="loginVia">
+                    <option value="Google">Google</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="Email">Email</option>
+                    <option value="Game Center">Game Center</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status Pembayaran</label>
+                <select class="form-select" id="statusPembayaran">
+                    <option value="Lunas">Lunas</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" id="closeAccountModal">Batal</button>
+                <button class="btn btn-primary" id="saveAccount">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pilih User (Admin) -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <h4>Pilih User</h4>
+            <div id="userList" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
+            <div class="modal-actions">
+                <button class="btn" id="closeUserModal">Batal</button>
+                <button class="btn btn-primary" id="confirmUser">Pilih</button>
             </div>
         </div>
     </div>
 
     <script>
         (function() {
-            // Simulasi user login (dari session/localStorage)
-            // Untuk demo, kita cek localStorage 'currentUser'
+            // --- User ---
             let currentUser = null;
-            try {
-                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-            } catch(e) {}
-
-            // Jika belum login, redirect ke login.html
-            if (!currentUser) {
-                // Untuk keperluan demo, kita anggap user login sebagai 'user1' (bukan admin)
-                // Admin ditandai dengan role 'admin'
-                // Kita set default user biar bisa diakses
-                currentUser = { id: 'user1', username: 'demo', role: 'user' };
-                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
-            }
-
+            try { currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser')); } catch(e) {}
+            if (!currentUser) { window.location.href = 'index.html'; return; }
             const isAdmin = currentUser.role === 'admin';
 
-            // Data akun (dummy, nanti diambil dari database)
-            const dataAkun = {
-                namaGame: 'Genshin Impact',
-                listJoki: 'Explore x2, Rawat akun 1 bln',
-                idGame: '812345678',
-                passwordGame: 'rahasia123',
-                nickname: 'TravelerPro',
-                server: 'Asia',
-                loginVia: 'Google',
-                statusPembayaran: 'lunas' // atau 'pending'
-            };
+            // --- Keys ---
+            const ACCOUNT_KEY = 'shiroha_detail_akun';
+            const USERS_KEY = 'shiroha_users';
 
-            const displayFields = {
-                namaGame: document.getElementById('displayNamaGame'),
-                listJoki: document.getElementById('displayListJoki'),
-                idGame: document.getElementById('displayIdGame'),
-                passwordGame: document.getElementById('displayPasswordGame'),
-                nickname: document.getElementById('displayNickname'),
-                server: document.getElementById('displayServer'),
-                loginVia: document.getElementById('displayLoginVia'),
-                statusPembayaran: document.getElementById('displayStatusPembayaran')
-            };
+            // --- Data ---
+            let accounts = JSON.parse(localStorage.getItem(ACCOUNT_KEY)) || [];
+            let selectedUserId = isAdmin ? null : currentUser.id; // Admin bisa pilih user
 
-            let editMode = false;
+            function saveAccounts() { localStorage.setItem(ACCOUNT_KEY, JSON.stringify(accounts)); }
 
-            // Toast
+            // --- Toast ---
             const toast = document.getElementById('toast');
-            let toastTimer;
-            function showToast(msg, isError = false) {
-                clearTimeout(toastTimer);
+            function showToast(msg, isErr = false) {
                 toast.textContent = msg;
-                toast.className = 'toast ' + (isError ? 'error' : '');
-                void toast.offsetWidth;
+                toast.className = 'toast' + (isErr ? ' error' : '');
                 toast.classList.add('show');
-                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+                setTimeout(() => toast.classList.remove('show'), 2500);
             }
 
-            // Render data ke tampilan
-            function renderDisplay() {
-                displayFields.namaGame.textContent = dataAkun.namaGame;
-                displayFields.listJoki.textContent = dataAkun.listJoki;
-                displayFields.idGame.textContent = dataAkun.idGame;
-                displayFields.passwordGame.textContent = editMode ? dataAkun.passwordGame : '••••••••';
-                displayFields.nickname.textContent = dataAkun.nickname;
-                displayFields.server.textContent = dataAkun.server;
-                displayFields.loginVia.textContent = dataAkun.loginVia;
-                
-                const statusSpan = document.createElement('span');
-                statusSpan.className = 'status-badge ' + (dataAkun.statusPembayaran === 'lunas' ? 'status-lunas' : 'status-pending');
-                statusSpan.textContent = dataAkun.statusPembayaran === 'lunas' ? 'Lunas ✓' : 'Pending';
-                displayFields.statusPembayaran.innerHTML = '';
-                displayFields.statusPembayaran.appendChild(statusSpan);
-            }
-
-            // Masuk mode edit
-            function enterEditMode() {
-                editMode = true;
-                // Ubah teks jadi input
-                const fields = ['namaGame', 'listJoki', 'idGame', 'passwordGame', 'nickname', 'server', 'loginVia'];
-                fields.forEach(field => {
-                    const currentValue = dataAkun[field];
-                    displayFields[field].innerHTML = `<input type="text" id="edit_${field}" value="${currentValue}">`;
-                });
-                // Status pembayaran pilihan
-                const statusOptions = ['lunas', 'pending'];
-                let statusHtml = '<select id="edit_statusPembayaran" style="background:#1e1e2e; color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px;">';
-                statusOptions.forEach(opt => {
-                    statusHtml += `<option value="${opt}" ${dataAkun.statusPembayaran === opt ? 'selected' : ''}>${opt === 'lunas' ? 'Lunas' : 'Pending'}</option>`;
-                });
-                statusHtml += '</select>';
-                displayFields.statusPembayaran.innerHTML = statusHtml;
-
-                document.getElementById('btnEdit').style.display = 'none';
-                document.getElementById('btnSimpan').style.display = 'inline-flex';
-            }
-
-            // Simpan perubahan
-            function saveChanges() {
-                const fields = ['namaGame', 'listJoki', 'idGame', 'passwordGame', 'nickname', 'server', 'loginVia'];
-                fields.forEach(field => {
-                    const input = document.getElementById(`edit_${field}`);
-                    if (input) dataAkun[field] = input.value;
-                });
-                const statusSelect = document.getElementById('edit_statusPembayaran');
-                if (statusSelect) dataAkun.statusPembayaran = statusSelect.value;
-
-                editMode = false;
-                renderDisplay();
-                document.getElementById('btnEdit').style.display = 'inline-flex';
-                document.getElementById('btnSimpan').style.display = 'none';
-                showToast('Data akun berhasil diperbarui.');
-                // Di sini bisa kirim ke server
-            }
-
-            // Tampilkan tombol edit jika admin
+            // --- Tampilkan tombol admin ---
             if (isAdmin) {
-                document.getElementById('editToggle').style.display = 'flex';
+                document.getElementById('pilihUserBtn').style.display = 'inline-flex';
             }
 
-            document.getElementById('btnEdit').addEventListener('click', enterEditMode);
-            document.getElementById('btnSimpan').addEventListener('click', saveChanges);
+            // --- Render Daftar Akun ---
+            function renderAccounts() {
+                const container = document.getElementById('accountList');
+                const filtered = selectedUserId ? accounts.filter(a => a.userId === selectedUserId) : accounts;
+                if (filtered.length === 0) {
+                    container.innerHTML = '<div class="empty-state">Belum ada data akun.</div>';
+                    return;
+                }
+                container.innerHTML = filtered.map(acc => `
+                    <div class="account-item">
+                        <div class="account-header">
+                            <span class="account-game">🎮 ${acc.namaGame}</span>
+                            <div>
+                                <button class="btn btn-small edit-account-btn" data-id="${acc.id}">✏️</button>
+                                <button class="btn btn-small btn-danger delete-account-btn" data-id="${acc.id}">🗑</button>
+                            </div>
+                        </div>
+                        <div class="account-detail">
+                            <div><span class="detail-label">List Joki:</span> ${acc.listJoki}</div>
+                            <div><span class="detail-label">ID Game:</span> ${acc.idGame}</div>
+                            <div><span class="detail-label">Password:</span> ${isAdmin ? acc.passwordGame : '••••••'}</div>
+                            <div><span class="detail-label">Nickname:</span> ${acc.nickname}</div>
+                            <div><span class="detail-label">Server:</span> ${acc.server}</div>
+                            <div><span class="detail-label">Login Via:</span> ${acc.loginVia}</div>
+                            <div><span class="detail-label">Pembayaran:</span> ${acc.statusPembayaran}</div>
+                        </div>
+                    </div>
+                `).join('');
 
-            // Render awal
-            renderDisplay();
+                document.querySelectorAll('.edit-account-btn').forEach(b =>
+                    b.addEventListener('click', () => openAccountModal(parseInt(b.dataset.id))));
+                document.querySelectorAll('.delete-account-btn').forEach(b =>
+                    b.addEventListener('click', () => deleteAccount(parseInt(b.dataset.id))));
+            }
 
-            // Info debug
-            console.log('Detail Akun - User:', currentUser, 'Admin:', isAdmin);
+            // --- Modal Akun ---
+            const accountModal = document.getElementById('accountModal');
+            const accountModalTitle = document.getElementById('accountModalTitle');
+            const accountId = document.getElementById('accountId');
+            const namaGame = document.getElementById('namaGame');
+            const listJoki = document.getElementById('listJoki');
+            const idGame = document.getElementById('idGame');
+            const passwordGame = document.getElementById('passwordGame');
+            const nickname = document.getElementById('nickname');
+            const server = document.getElementById('server');
+            const loginVia = document.getElementById('loginVia');
+            const statusPembayaran = document.getElementById('statusPembayaran');
+
+            function openAccountModal(id = null) {
+                if (id) {
+                    const acc = accounts.find(a => a.id === id);
+                    if (!acc) return;
+                    accountId.value = acc.id;
+                    namaGame.value = acc.namaGame;
+                    listJoki.value = acc.listJoki;
+                    idGame.value = acc.idGame;
+                    passwordGame.value = acc.passwordGame;
+                    nickname.value = acc.nickname;
+                    server.value = acc.server;
+                    loginVia.value = acc.loginVia;
+                    statusPembayaran.value = acc.statusPembayaran;
+                    accountModalTitle.textContent = 'Edit Akun';
+                } else {
+                    accountId.value = '';
+                    namaGame.value = '';
+                    listJoki.value = '';
+                    idGame.value = '';
+                    passwordGame.value = '';
+                    nickname.value = '';
+                    server.value = '';
+                    loginVia.value = 'Google';
+                    statusPembayaran.value = 'Pending';
+                    accountModalTitle.textContent = 'Tambah Akun';
+                }
+                accountModal.style.display = 'flex';
+            }
+
+            document.getElementById('closeAccountModal').addEventListener('click', () => accountModal.style.display = 'none');
+            document.getElementById('saveAccount').addEventListener('click', () => {
+                const id = accountId.value ? parseInt(accountId.value) : Date.now();
+                const data = {
+                    id,
+                    userId: selectedUserId || currentUser.id,
+                    namaGame: namaGame.value.trim(),
+                    listJoki: listJoki.value.trim(),
+                    idGame: idGame.value.trim(),
+                    passwordGame: passwordGame.value.trim(),
+                    nickname: nickname.value.trim(),
+                    server: server.value.trim(),
+                    loginVia: loginVia.value,
+                    statusPembayaran: statusPembayaran.value
+                };
+                if (!data.namaGame || !data.listJoki) {
+                    showToast('Nama Game dan List Joki wajib diisi.', true);
+                    return;
+                }
+                const existing = accounts.find(a => a.id === id);
+                if (existing) {
+                    Object.assign(existing, data);
+                } else {
+                    accounts.push(data);
+                }
+                saveAccounts();
+                accountModal.style.display = 'none';
+                renderAccounts();
+                showToast('Akun disimpan.');
+            });
+
+            function deleteAccount(id) {
+                if (!confirm('Hapus akun ini?')) return;
+                accounts = accounts.filter(a => a.id !== id);
+                saveAccounts();
+                renderAccounts();
+                showToast('Akun dihapus.');
+            }
+
+            // --- Tambah Akun (cek user yang dipilih) ---
+            document.getElementById('addAccountBtn').addEventListener('click', () => {
+                if (isAdmin && !selectedUserId) {
+                    showToast('Silakan pilih user terlebih dahulu.', true);
+                    return;
+                }
+                openAccountModal();
+            });
+
+            // --- Modal Pilih User (Admin) ---
+            const userModal = document.getElementById('userModal');
+            const userList = document.getElementById('userList');
+
+            document.getElementById('pilihUserBtn').addEventListener('click', () => {
+                const users = JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+                userList.innerHTML = users.map(u => `
+                    <div class="account-item" style="cursor:pointer;" data-userid="${u.id}">
+                        <input type="radio" name="userRadio" value="${u.id}" ${selectedUserId === u.id ? 'checked' : ''}>
+                        <span style="color:#fff;">${u.username} (${u.id})</span>
+                    </div>
+                `).join('');
+                userModal.style.display = 'flex';
+                document.querySelectorAll('#userList .account-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        document.querySelectorAll('input[name="userRadio"]').forEach(r => r.checked = false);
+                        el.querySelector('input').checked = true;
+                    });
+                });
+            });
+
+            document.getElementById('closeUserModal').addEventListener('click', () => userModal.style.display = 'none');
+            document.getElementById('confirmUser').addEventListener('click', () => {
+                const checked = document.querySelector('input[name="userRadio"]:checked');
+                if (checked) {
+                    selectedUserId = checked.value;
+                    renderAccounts();
+                }
+                userModal.style.display = 'none';
+            });
+
+            // --- Init ---
+            renderAccounts();
         })();
     </script>
 </body>
