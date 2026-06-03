@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIROHA JOKI - Keluhan</title>
+    <title>OGURI STORE - Keluhan</title>
     <style>
         :root {
             --bg: #06060e;
@@ -47,7 +47,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .brand h2 {
             font-size: 1.3rem;
@@ -56,15 +58,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-actions {
-            display: flex;
-            gap: 8px;
-        }
         .btn {
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            padding: 10px 18px;
+            padding: 8px 16px;
             border-radius: var(--radius-pill);
             font-size: 0.8rem;
             font-weight: 600;
@@ -74,28 +72,16 @@
             align-items: center;
             gap: 6px;
             text-decoration: none;
+            white-space: nowrap;
         }
-        .btn:hover {
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #7c3aed);
-            border: none;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(168,85,247,0.3);
-        }
-        .btn-primary:hover {
-            box-shadow: 0 6px 20px rgba(168,85,247,0.45);
-            transform: translateY(-1px);
-        }
+        .btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #a855f7, #7c3aed); border: none; color: #fff; }
 
         .chat-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--shadow-glow);
             flex: 1;
             display: flex;
@@ -106,74 +92,78 @@
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding-right: 4px;
-            margin-bottom: 12px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
         .chat-messages::-webkit-scrollbar { width: 4px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
-        .message {
+        .message-row {
+            display: flex;
+            flex-direction: column;
             max-width: 80%;
+        }
+        .message-row.me { align-self: flex-end; align-items: flex-end; }
+        .message-row.other { align-self: flex-start; align-items: flex-start; }
+
+        .message-bubble {
             padding: 10px 14px;
             border-radius: 16px;
             font-size: 0.85rem;
             line-height: 1.4;
             word-wrap: break-word;
-            animation: fadeInMsg 0.2s;
+            position: relative;
         }
-        @keyframes fadeInMsg { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .message.user {
-            align-self: flex-end;
+        .message-row.me .message-bubble {
             background: rgba(168, 85, 247, 0.2);
             border: 1px solid rgba(168, 85, 247, 0.3);
             color: #fff;
+            border-bottom-right-radius: 4px;
         }
-        .message.admin {
-            align-self: flex-start;
+        .message-row.other .message-bubble {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.08);
             color: #d4d4e0;
+            border-bottom-left-radius: 4px;
         }
-        .message .meta {
-            font-size: 0.65rem;
+
+        .message-sender {
+            font-size: 0.7rem;
             color: #a0a0b8;
-            margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
+            margin-bottom: 2px;
+            font-weight: 500;
+            padding: 0 4px;
         }
 
         .chat-input-area {
             display: flex;
             gap: 8px;
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
         }
         .chat-input {
             flex: 1;
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             border-radius: var(--radius-pill);
-            padding: 12px 16px;
+            padding: 10px 16px;
             color: #fff;
             font-family: inherit;
             font-size: 0.9rem;
             outline: none;
-            transition: border 0.2s;
         }
         .chat-input:focus { border-color: var(--accent); }
         .send-btn {
             background: var(--accent);
             border: none;
             color: #fff;
-            padding: 12px 20px;
+            padding: 10px 18px;
             border-radius: var(--radius-pill);
             cursor: pointer;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
         }
         .send-btn:hover { background: #9333ea; }
 
@@ -184,18 +174,14 @@
             font-size: 0.9rem;
         }
 
-        /* Modal */
+        /* Modal Pilih User */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-            display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+            display: none; align-items: center; justify-content: center; z-index: 100;
         }
         .modal {
-            background: #1a1a2e;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius-lg);
-            width: 100%;
-            max-width: 360px;
-            padding: 24px;
+            background: #1a1a2e; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-lg); width: 90%; max-width: 360px; padding: 20px;
         }
         .modal h4 { color: #fff; margin-bottom: 16px; }
         .modal-list {
@@ -208,7 +194,7 @@
         .modal-item:hover { background: rgba(255,255,255,0.06); }
         .modal-item span { color: #fff; }
         .modal-item input[type="radio"] { accent-color: #a855f7; width: 18px; height: 18px; }
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
 
         .toast {
             position: fixed; top: 24px; left: 50%; transform: translateX(-50%) translateY(-120px);
@@ -218,10 +204,6 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.error { border-color: rgba(239,68,68,0.4); background: #1e1418; color: #fca5a5; }
-
-        @media (max-width: 480px) {
-            .message { max-width: 90%; }
-        }
     </style>
 </head>
 <body>
@@ -231,8 +213,8 @@
             <div class="brand">
                 <h2>📢 Keluhan</h2>
             </div>
-            <div class="header-actions">
-                <button class="btn" id="pilihUserBtn" style="display:none;">👥 Pilih User</button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button class="btn" id="pilihUserBtn" style="display: none;">👥 Pilih User</button>
                 <a href="dashboard.html" class="btn">⬅ Kembali</a>
             </div>
         </div>
@@ -246,8 +228,8 @@
         </div>
     </div>
 
-    <!-- Modal Pilih User (untuk admin) -->
-    <div id="modalOverlay" class="modal-overlay" style="display: none;">
+    <!-- Modal Pilih User (Admin) -->
+    <div class="modal-overlay" id="userModal">
         <div class="modal">
             <h4>Pilih User</h4>
             <div class="modal-list" id="userList"></div>
@@ -260,113 +242,100 @@
 
     <script>
         (function() {
-            // Simulasi user login
+            // --- User ---
             let currentUser = null;
-            try {
-                currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser'));
-            } catch(e) {}
-            if (!currentUser) {
-                // Untuk demo, set sebagai user biasa
-                currentUser = { id: 'user_demo', username: 'UserDemo', role: 'user' };
-                localStorage.setItem('shiroha_currentUser', JSON.stringify(currentUser));
-            }
-
+            try { currentUser = JSON.parse(localStorage.getItem('shiroha_currentUser')); } catch(e) {}
+            if (!currentUser) { window.location.href = 'index.html'; return; }
             const isAdmin = currentUser.role === 'admin';
-            let selectedUserId = isAdmin ? null : currentUser.id; // admin belum pilih user, user langsung ke dirinya
 
-            // Data chat dari localStorage
-            const STORAGE_KEY = 'shiroha_keluhan';
-            let chats = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            // --- Data Keluhan ---
+            const COMPLAINT_KEY = 'shiroha_keluhan';
+            let complaints = JSON.parse(localStorage.getItem(COMPLAINT_KEY)) || [];
+            function saveComplaints() { localStorage.setItem(COMPLAINT_KEY, JSON.stringify(complaints)); }
 
-            // DOM
+            // --- State ---
+            let selectedUserId = isAdmin ? null : currentUser.id;
+
+            // --- DOM ---
             const chatMessages = document.getElementById('chatMessages');
             const chatInput = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
             const pilihUserBtn = document.getElementById('pilihUserBtn');
-            const modalOverlay = document.getElementById('modalOverlay');
-            const userListDiv = document.getElementById('userList');
+            const userModal = document.getElementById('userModal');
+            const userList = document.getElementById('userList');
             const modalCancel = document.getElementById('modalCancel');
             const modalPilih = document.getElementById('modalPilih');
             const toast = document.getElementById('toast');
 
-            let toastTimer;
-            function showToast(msg, isError = false) {
-                clearTimeout(toastTimer);
+            // --- Toast ---
+            function showToast(msg, isErr) {
                 toast.textContent = msg;
-                toast.className = 'toast ' + (isError ? 'error' : '');
-                void toast.offsetWidth;
+                toast.className = 'toast' + (isErr ? ' error' : '');
                 toast.classList.add('show');
-                toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+                setTimeout(() => toast.classList.remove('show'), 2500);
             }
 
-            // Simpan chat ke localStorage
-            function saveChats() {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(chats));
+            // --- Fungsi ambil nickname dari shiroha_users ---
+            function getUserName(uid) {
+                const users = JSON.parse(localStorage.getItem('shiroha_users')) || [];
+                const found = users.find(u => u.id === uid);
+                return found ? found.username : uid;
             }
 
-            // Tampilkan pesan sesuai filter
-            function renderMessages() {
+            // --- Render chat ---
+            function renderChat() {
                 chatMessages.innerHTML = '';
-                let filteredChats = [];
-                if (isAdmin) {
-                    if (selectedUserId) {
-                        filteredChats = chats.filter(c => c.userId === selectedUserId || c.dari === 'admin');
-                        // Tampilkan juga pesan admin yang dikirim ke user tersebut (admin bisa reply ke user)
-                        // Sebenarnya chat disimpan dengan userId = user target, jadi admin ngirim dengan userId = selectedUserId
-                        filteredChats = chats.filter(c => c.userId === selectedUserId);
-                    } else {
-                        // belum pilih user, tampilkan semua chat (admin bisa lihat semua, tapi kita tampilkan pesan admin ke semua user campur)
-                        filteredChats = chats;
-                    }
-                } else {
-                    // User biasa hanya lihat chat miliknya
-                    filteredChats = chats.filter(c => c.userId === currentUser.id);
+                if (!selectedUserId) {
+                    chatMessages.innerHTML = '<div class="empty-chat">Silakan pilih user terlebih dahulu.</div>';
+                    return;
                 }
 
-                if (filteredChats.length === 0) {
+                const filtered = complaints.filter(c => c.userId === selectedUserId);
+                if (filtered.length === 0) {
                     chatMessages.innerHTML = '<div class="empty-chat">Belum ada percakapan.</div>';
                     return;
                 }
 
-                filteredChats.forEach(chat => {
+                filtered.forEach(msg => {
+                    const isMe = msg.from === currentUser.id;
+                    const rowClass = isMe ? 'me' : 'other';
+                    const senderName = isMe ? 'Anda' : getUserName(msg.from);
+
                     const msgDiv = document.createElement('div');
-                    msgDiv.className = 'message ' + (chat.dari === 'user' ? 'user' : 'admin');
-                    const waktu = new Date(chat.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    msgDiv.className = `message-row ${rowClass}`;
                     msgDiv.innerHTML = `
-                        <div class="meta">
-                            <span>${chat.dari === 'user' ? 'Anda' : 'Admin'}</span>
-                            <span>${waktu}</span>
-                        </div>
-                        <div>${chat.pesan}</div>
+                        <div class="message-sender">${senderName}</div>
+                        <div class="message-bubble">${escapeHtml(msg.text)}</div>
                     `;
                     chatMessages.appendChild(msgDiv);
                 });
-                // Scroll ke bawah
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Kirim pesan
+            function escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+
+            // --- Kirim pesan ---
             function sendMessage() {
-                const pesan = chatInput.value.trim();
-                if (!pesan) return;
-                
-                if (isAdmin && !selectedUserId) {
-                    showToast('Silakan pilih user terlebih dahulu.', true);
+                const text = chatInput.value.trim();
+                if (!text) return;
+                if (!selectedUserId) {
+                    showToast('Pilih user terlebih dahulu.', true);
                     return;
                 }
-
-                const targetUserId = isAdmin ? selectedUserId : currentUser.id;
-                const newChat = {
+                const msg = {
                     id: Date.now(),
-                    userId: targetUserId,
-                    dari: isAdmin ? 'admin' : 'user',
-                    pesan: pesan,
+                    userId: selectedUserId,
+                    from: currentUser.id,
+                    text: text,
                     timestamp: Date.now()
                 };
-                chats.push(newChat);
-                saveChats();
+                complaints.push(msg);
+                saveComplaints();
                 chatInput.value = '';
-                renderMessages();
+                renderChat();
             }
 
             sendBtn.addEventListener('click', sendMessage);
@@ -374,49 +343,42 @@
                 if (e.key === 'Enter') sendMessage();
             });
 
-            // Admin: tampilkan tombol pilih user
+            // --- Admin: pilih user ---
             if (isAdmin) {
                 pilihUserBtn.style.display = 'inline-flex';
             }
 
-            // Buka modal pilih user
             pilihUserBtn.addEventListener('click', () => {
-                // Kumpulkan userId unik dari chats
-                const userIds = [...new Set(chats.map(c => c.userId))];
-                userListDiv.innerHTML = '';
+                const userIds = [...new Set(complaints.map(c => c.userId))];
+                userList.innerHTML = '';
                 if (userIds.length === 0) {
-                    userListDiv.innerHTML = '<div style="color:#a0a0b8; text-align:center;">Belum ada user.</div>';
+                    userList.innerHTML = '<div style="color:#a0a0b8; text-align:center;">Belum ada keluhan.</div>';
                 } else {
                     userIds.forEach(uid => {
                         const div = document.createElement('div');
                         div.className = 'modal-item';
-                        div.innerHTML = `<input type="radio" name="userRadio" value="${uid}" ${selectedUserId === uid ? 'checked' : ''}> <span>${uid}</span>`;
-                        userListDiv.appendChild(div);
+                        div.innerHTML = `<input type="radio" name="userRadio" value="${uid}" ${selectedUserId === uid ? 'checked' : ''}> <span>${getUserName(uid)}</span>`;
+                        userList.appendChild(div);
                     });
                 }
-                modalOverlay.style.display = 'flex';
+                userModal.style.display = 'flex';
             });
 
-            modalCancel.addEventListener('click', () => {
-                modalOverlay.style.display = 'none';
-            });
-
+            modalCancel.addEventListener('click', () => userModal.style.display = 'none');
             modalPilih.addEventListener('click', () => {
-                const selectedRadio = document.querySelector('input[name="userRadio"]:checked');
-                if (selectedRadio) {
-                    selectedUserId = selectedRadio.value;
-                    renderMessages();
+                const checked = document.querySelector('input[name="userRadio"]:checked');
+                if (checked) {
+                    selectedUserId = checked.value;
+                    renderChat();
                 }
-                modalOverlay.style.display = 'none';
+                userModal.style.display = 'none';
+            });
+            userModal.addEventListener('click', (e) => {
+                if (e.target === userModal) userModal.style.display = 'none';
             });
 
-            // Tutup modal saat klik overlay
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) modalOverlay.style.display = 'none';
-            });
-
-            // Inisialisasi
-            renderMessages();
+            // --- Init ---
+            renderChat();
         })();
     </script>
 </body>
